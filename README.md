@@ -125,3 +125,7 @@ node scripts/build_catalog.mjs "catalog-import.json" "data/catalog.js"
 | `scripts/build_catalog.mjs` | JSON → 웹용 `catalog.js` 변환 |
 
 회사 정보는 `index.html`, 대표 색상은 `assets/styles.css`, 로고는 `assets/echo-trading-logo.svg`에서 수정할 수 있습니다.
+
+## 캐시 갱신 방식
+
+`assets/bootstrap.js`가 제품 데이터와 JavaScript 파일을 매 페이지 로드 시 고유 쿼리값으로 불러오도록 구성되어 있습니다. 따라서 GitHub Pages에서 `data/catalog.js`를 교체한 뒤 예전 데이터가 브라우저 캐시에 남아 `문의`로 표시되는 문제를 방지합니다.
