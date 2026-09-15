@@ -1,10 +1,10 @@
-/* 고객 화면. 데이터는 data/products.js에서만 관리합니다. */
+/* 고객 화면. data/catalog.js의 제품 데이터를 사용합니다. */
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
   const items = Array.isArray(window.ECHO_PRODUCTS) ? window.ECHO_PRODUCTS.filter(p => p.visible !== false) : [];
   const state = { catalogType: '', catalogGroup: '', category: '', query: '', subcategory: '', application: '', sort: 'name', page: 1 };
-  const pageSize = 20;
+  const pageSize = 50;
   const ko = text => String(text || '').split(';').map(s => s.includes(' / ') ? s.split(' / ').slice(1).join(' / ').trim() : s.trim()).filter(Boolean).join('; ');
   const tokens = value => ko(value).split(';').map(s => s.trim()).filter(Boolean);
   const normalized = value => String(value).normalize('NFKC').toLocaleLowerCase().replace(/\s+/g, '');
@@ -59,8 +59,9 @@
   function detail(p) {
     $('detail-code').textContent = p.id; $('detail-title').textContent = p.name;
     $('detail-category').textContent = [p.catalogType,p.catalogGroup,ko(p.category),ko(p.subcategory)].filter(Boolean).join(' / ');
-    const fields = [['지표성분',p.marker],['규격 / 함량',p.spec],['포장단위',p.packaging],['원산지',p.origin],['주요 특성',ko(p.function)],['어플리케이션',tokens(p.application).join(' · ')],['형태',ko(p.form)]];
+    const fields = [['지표성분',p.marker],['규격 / 함량',p.spec],['포장단위',p.packaging],['원산지',p.origin],['주요 특성',ko(p.function)],['어플리케이션',tokens(p.application).join(' · ')],['형태',ko(p.form)],['공정',ko(p.process)],['Stock 운용',p.stock]];
     $('detail-fields').replaceChildren();
+    if (p.efficacy) fields.splice(5,0,['효능',ko(p.efficacy)]);
     fields.forEach(([label,value]) => { const row = el('div'); row.append(el('dt',label),el('dd',value || '문의')); $('detail-fields').append(row); });
     $('detail').showModal();
   }

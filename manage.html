@@ -1,1 +1,47 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>제품 데이터 편집 | Echo Trading</title><link rel="stylesheet" href="assets/styles.css"><script src="data/products.js" defer></script><script src="assets/manage.js" defer></script><style>.manager{max-width:1200px;margin:40px auto;padding:0 24px}.manager h1{font-size:28px}.manager-note{font-size:14px;color:var(--muted)}.manager-toolbar{display:flex;gap:10px;margin:25px 0;flex-wrap:wrap}.manager-layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:25px}.manager-list{border:1px solid var(--line);padding:12px;background:white;border-radius:6px}.manager-list input{width:100%;padding:10px;border:1px solid var(--line)}#entries{max-height:65vh;overflow:auto;margin-top:12px}#entries button{display:block;width:100%;text-align:left;border:0;background:white;padding:10px;border-bottom:1px solid var(--line);font-size:14px}#entries button.selected{background:var(--pale);font-weight:bold}.manager form{padding:24px;background:white;border:1px solid var(--line);border-radius:6px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}.fields label{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:5px}.fields input,.fields textarea,.fields select{font:inherit;color:var(--ink);padding:10px;border:1px solid #bdccd5;border-radius:4px;width:100%}.fields textarea{height:80px;resize:vertical}.manager .secondary{padding:10px 16px;background:white;border:1px solid var(--line);border-radius:5px;font-size:14px}.check{display:block;margin:20px 0;font-size:14px}.manager-status{padding:12px;background:var(--pale);font-size:14px;margin:16px 0;min-height:46px}@media(max-width:700px){.manager-layout{grid-template-columns:1fr}#entries{max-height:200px}.fields{grid-template-columns:1fr}.manager{margin-top:20px}}</style></head><body><main class="manager"><p class="eyebrow">ECHO TRADING · CATALOG EDITOR</p><h1>제품 데이터 편집</h1><p class="manager-note">제품 선택 → 내용 수정 → 목록에 반영 → products.js 다운로드 순서로 작업하세요.<br>내려받은 파일을 웹사이트의 <strong>data/products.js</strong>와 교체하면 고객 화면에 반영됩니다. 이 화면 자체는 서버 데이터를 저장하지 않습니다.</p><div class="manager-toolbar"><button id="add" class="secondary">＋ 새 제품 추가</button><button id="download" class="primary">products.js 다운로드</button><button id="backup" class="secondary">JSON 백업</button><label class="secondary">JSON 불러오기 <input id="import" type="file" accept=".json,application/json" style="max-width:180px"></label><a href="index.html" class="secondary" target="_blank">고객 화면 열기 ↗</a></div><p id="status" class="manager-status" role="status">제품을 선택해 주세요. 브라우저를 닫기 전에 데이터 파일을 다운로드하세요.</p><div class="manager-layout"><section class="manager-list" aria-label="편집 제품 선택"><label class="sr-only" for="find">제품 검색</label><input type="search" id="find" placeholder="제품명 / 제품코드 검색"><div id="entries"></div></section><form id="edit"><div class="fields" id="fields"></div><label class="check"><input id="visible" type="checkbox" checked> 고객 목록에 표시</label><button class="primary" type="submit">목록에 반영</button><button class="secondary" id="remove" type="button">이 제품 삭제</button><p class="manager-note">주요 특성에는 확정된 정보만 입력하세요. 여러 적용 분야는 세미콜론(;)으로 구분합니다. 일반식품은 하위 분류에서 기능성부원료를 선택할 수 있습니다. 상위 분류 미지정 제품은 전체 제품에서 표시됩니다. 지표성분과 규격 / 함량은 별도 항목입니다.</p></form></div></main></body></html>
+<!doctype html>
+<html lang="ko" data-page="manage">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>제품 데이터 편집 | Echo Trading</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script src="data/catalog.js" defer>
+</script>
+<script src="assets/manage.js" defer>
+</script>
+<style>.manager{max-width:1200px;margin:40px auto;padding:0 24px}.manager h1{font-size:28px}.manager-note{font-size:14px;color:var(--muted)}.manager-toolbar{display:flex;gap:10px;margin:25px 0;flex-wrap:wrap}.manager-layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:25px}.manager-list{border:1px solid var(--line);padding:12px;background:white;border-radius:6px}.manager-list input{width:100%;padding:10px;border:1px solid var(--line)}#entries{max-height:65vh;overflow:auto;margin-top:12px}#entries button{display:block;width:100%;text-align:left;border:0;background:white;padding:10px;border-bottom:1px solid var(--line);font-size:14px}#entries button.selected{background:var(--pale);font-weight:bold}.manager form{padding:24px;background:white;border:1px solid var(--line);border-radius:6px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}.fields label{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:5px}.fields input,.fields textarea,.fields select{font:inherit;color:var(--ink);padding:10px;border:1px solid #bdccd5;border-radius:4px;width:100%}.fields textarea{height:80px;resize:vertical}.manager .secondary{padding:10px 16px;background:white;border:1px solid var(--line);border-radius:5px;font-size:14px}.check{display:block;margin:20px 0;font-size:14px}.manager-status{padding:12px;background:var(--pale);font-size:14px;margin:16px 0;min-height:46px}@media(max-width:700px){.manager-layout{grid-template-columns:1fr}#entries{max-height:200px}.fields{grid-template-columns:1fr}.manager{margin-top:20px}}</style>
+</head>
+<body>
+<main class="manager">
+<p class="eyebrow">ECHO TRADING · CATALOG EDITOR</p>
+<h1>제품 데이터 편집</h1>
+<p class="manager-note">제품 선택 → 내용 수정 → 목록에 반영 → 웹용 데이터 다운로드 순서로 작업하세요.<br>내려받은 파일을 웹사이트의 <strong>data/catalog.js</strong>와 교체하면 반영됩니다.</p>
+<div class="manager-toolbar">
+<button id="add" class="secondary">＋ 새 제품 추가</button>
+<button id="download" class="primary">웹용 데이터 다운로드</button>
+<button id="backup" class="secondary">JSON 백업</button>
+<label class="secondary">JSON 불러오기 <input id="import" type="file" accept=".json,application/json" style="max-width:180px">
+</label>
+<a href="index.html" class="secondary" target="_blank">고객 화면 열기 ↗</a>
+</div>
+<p id="status" class="manager-status" role="status">제품을 선택해 주세요. 브라우저를 닫기 전에 데이터 파일을 다운로드하세요.</p>
+<div class="manager-layout">
+<section class="manager-list" aria-label="편집 제품 선택">
+<label class="sr-only" for="find">제품 검색</label>
+<input type="search" id="find" placeholder="제품명 / 제품코드 검색">
+<div id="entries">
+</div>
+</section>
+<form id="edit">
+<div class="fields" id="fields">
+</div>
+<label class="check">
+<input id="visible" type="checkbox" checked> 고객 목록에 표시</label>
+<button class="primary" type="submit">목록에 반영</button>
+<button class="secondary" id="remove" type="button">이 제품 삭제</button>
+<p class="manager-note">주요 특성에는 확정된 정보만 입력하세요. 여러 적용 분야는 세미콜론(;)으로 구분합니다. 일반식품은 하위 분류에서 기능성부원료를 선택할 수 있습니다. 상위 분류 미지정 제품은 전체 제품에서 표시됩니다. 지표성분과 규격 / 함량은 별도 항목입니다.</p>
+</form>
+</div>
+</main>
+</body>
+</html>
