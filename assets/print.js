@@ -71,13 +71,20 @@
     header.append(logo,titleBox,pageMeta);page.append(header);
     if(pageNumber===1&&$('print-memo').value.trim())page.append(node('p',$('print-memo').value.trim(),'brochure-memo'));
     const table=node('table',undefined,'brochure-table'),head=node('thead'),labels=node('tr');
-    const first=node('th','제품명 / 코드');first.scope='col';labels.append(first);
-    cols.forEach(([,label])=>{const th=node('th',label);th.scope='col';labels.append(th);});head.append(labels);table.append(head);
+    const first=node('th','제품명 / 코드');first.scope='col';first.classList.add('brochure-col-name');labels.append(first);
+    cols.forEach(([key,label])=>{const th=node('th',label);th.scope='col';th.classList.add(`brochure-col-${key}`);th.dataset.field=key;labels.append(th);});head.append(labels);table.append(head);
     const body=node('tbody');
     products.forEach(p=>{
       const row=node('tr'),name=node('td');
+      name.classList.add('brochure-col-name');
       name.append(node('strong',p.name),node('small',`${p.id} · ${p.catalogType}${p.catalogGroup?` / ${p.catalogGroup}`:''}`,'brochure-code'));row.append(name);
-      cols.forEach(([key])=>{const cell=node('td'),content=node('span',valueFor(p,key),'brochure-cell-text');cell.append(content);row.append(cell);});body.append(row);
+      cols.forEach(([key])=>{
+        const cell=node('td'),content=node('span',valueFor(p,key),`brochure-cell-text brochure-text-${key}`);
+        cell.classList.add(`brochure-col-${key}`);
+        cell.dataset.field=key;
+        cell.append(content);
+        row.append(cell);
+      });body.append(row);
     });
     table.append(body);page.append(table);
     const footer=node('footer',undefined,'brochure-footer');footer.append(node('p','제품별 정확한 규격과 적용 조건은 담당자에게 문의해 주세요.'),node('p','Echo Trading Co.,Ltd · +82-70-8652-1774 · www.echotra.com'));
