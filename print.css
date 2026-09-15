@@ -6,3 +6,105 @@
 @media print{
 html,body{width:auto!important;height:auto!important}body.printing-selection{background:white!important;margin:0!important;padding:0!important}body.printing-selection>*:not(#print-sheet){display:none!important}body.printing-selection>#print-sheet{display:block!important;margin:0!important;padding:0!important}.printing-selection .brochure{width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}.printing-selection .brochure-page{width:100%;height:190mm;min-height:190mm;margin:0;padding:7mm 8mm 5mm;box-shadow:none;border-top-width:3px;break-after:page;page-break-after:always}.printing-selection .brochure-page:last-child{break-after:auto;page-break-after:auto}.printing-selection .brochure-table{display:table!important;width:100%!important;height:auto!important;align-self:start!important;table-layout:fixed!important}.printing-selection .brochure-table thead{display:table-header-group!important}.printing-selection .brochure-table tbody{display:table-row-group!important}.printing-selection .brochure-table tr{display:table-row!important;break-inside:avoid;page-break-inside:avoid}.printing-selection .brochure-table th,.printing-selection .brochure-table td{display:table-cell!important}.selection-toolbar,.product-selection,#print-dialog{display:none!important}
 }
+
+/* =========================================================
+   2026-09-15 PRINT 10-ROWS FIT FIX
+   - Prevent the 10th product row from being clipped
+   - Keep 10 products per A4 landscape page
+   ========================================================= */
+
+/* Let the table content define its real height instead of clipping inside
+   the grid track. */
+.brochure-page{
+  grid-template-rows:auto auto minmax(0,1fr) auto;
+}
+
+/* overflow:hidden on a native <table> can clip the bottom row in Chromium
+   when the table is used as a CSS-grid item. */
+.brochure-table{
+  height:auto !important;
+  overflow:visible !important;
+  align-self:start !important;
+}
+
+/* Compact the table enough for 10 product rows even when cells wrap. */
+.brochure-table th,
+.brochure-table td{
+  padding:1.15mm 1.7mm !important;
+}
+
+.brochure-table th{
+  font-size:6.9pt !important;
+  line-height:1.15 !important;
+}
+
+.brochure-table td{
+  font-size:6.7pt !important;
+  line-height:1.18 !important;
+}
+
+/* Product name: maximum 2 lines */
+.brochure-table td:first-child strong{
+  display:-webkit-box !important;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  font-size:7.1pt !important;
+  line-height:1.15 !important;
+}
+
+/* Code/category line: keep it to one line so it cannot enlarge a row. */
+.brochure-code{
+  margin-top:.4mm !important;
+  font-size:5.5pt !important;
+  line-height:1.1 !important;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Other cells: maximum 3 lines */
+.brochure-cell-text{
+  display:-webkit-box !important;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  overflow:hidden !important;
+}
+
+/* Re-create rounded outer corners without relying on table overflow:hidden. */
+.brochure-table thead th:first-child{border-top-left-radius:3mm}
+.brochure-table thead th:last-child{border-top-right-radius:3mm}
+.brochure-table tbody tr:last-child td:first-child{border-bottom-left-radius:3mm}
+.brochure-table tbody tr:last-child td:last-child{border-bottom-right-radius:3mm}
+
+@media print{
+  .printing-selection .brochure-page{
+    grid-template-rows:auto auto minmax(0,1fr) auto !important;
+    overflow:visible !important;
+  }
+
+  .printing-selection .brochure-table{
+    display:table !important;
+    width:100% !important;
+    height:auto !important;
+    overflow:visible !important;
+    align-self:start !important;
+    table-layout:fixed !important;
+  }
+
+  .printing-selection .brochure-table th,
+  .printing-selection .brochure-table td{
+    padding:1.15mm 1.7mm !important;
+  }
+
+  .printing-selection .brochure-table th{
+    font-size:6.9pt !important;
+    line-height:1.15 !important;
+  }
+
+  .printing-selection .brochure-table td{
+    font-size:6.7pt !important;
+    line-height:1.18 !important;
+  }
+}
+
