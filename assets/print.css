@@ -140,3 +140,16 @@ html,body{width:auto!important;height:auto!important}body.printing-selection{bac
 @media print{.printing-selection .compact-page{width:198mm;height:284mm;margin:0;padding:0;box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact;break-inside:avoid}.compact-table tr{break-inside:avoid}}
 .compact-table{display:table!important}.compact-table thead{display:table-header-group!important}.compact-table tbody{display:table-row-group!important}.compact-table tr{display:table-row!important}.compact-table td::before{content:none!important}
 .compact-header img{height:8mm;object-fit:contain}
+
+/* v7.1: independent physical pages; no flex fragmentation or paged measurement. */
+.compact-page{position:relative;display:block;height:282mm;min-height:0;max-height:none}
+.compact-content{position:absolute;left:0;right:0;top:15mm;bottom:7mm;height:auto;min-height:0}
+.compact-flow{display:flow-root;margin:0;padding:0;width:100%;font-size:inherit;line-height:inherit}
+.compact-footer{position:absolute;bottom:0;left:0;right:0;height:6mm;margin:0;padding:1mm 0;font-size:5.5pt;line-height:1.2}
+#print-measure{display:block!important;position:fixed!important;left:-10000px!important;top:0!important;width:198mm!important;height:282mm!important;visibility:hidden!important;pointer-events:none!important;contain:layout style;z-index:-9999}
+#print-measure .compact-page{display:block!important;width:198mm!important;height:282mm!important;margin:0!important;box-shadow:none!important;break-before:auto!important;break-after:auto!important}
+@media print{
+  .printing-selection .compact-page{display:block!important;position:relative!important;width:198mm!important;height:282mm!important;min-height:0!important;margin:0!important;break-after:page!important;page-break-after:always!important;break-inside:avoid!important}
+  .printing-selection .compact-page:last-child{break-after:auto!important;page-break-after:auto!important}
+  body.printing-selection>#print-measure{display:block!important}
+}
