@@ -32,7 +32,7 @@
   const fieldMemory={landscape:new Set(defaults),portrait:new Set(portraitFields.map(([key])=>key))};
   let fieldMode='landscape';
   function renderFields(){
-  $('print-columns').replaceChildren(node('legend',portrait()?'세로형 출력 항목 · 최소 1개 선택':'출력 항목 · 제품명과 제품코드는 항상 포함됩니다'));
+  $('print-columns').replaceChildren(node('legend',portrait()?'세로형 출력 항목 · No. 항상 포함 · 아래에서 최소 1개 선택':'출력 항목 · No., 제품명과 제품코드는 항상 포함됩니다'));
   (portrait()?portraitFields:fields).forEach(([key,title])=>{
     const label=node('label'),input=node('input');input.type='checkbox';input.value=key;input.checked=fieldMemory[fieldMode].has(key);
     input.addEventListener('change',()=>{const inputs=[...$('print-columns').querySelectorAll('input')];if(portrait()&&!inputs.some(i=>i.checked)){input.checked=true;return;}fieldMemory[fieldMode]=new Set(inputs.filter(i=>i.checked).map(i=>i.value));buildPreview();});label.append(input,node('span',title));$('print-columns').append(label);
@@ -73,7 +73,7 @@
   }
   function valueFor(p,key){return (['function','efficacy','application','process'].includes(key)?ko(p[key]):p[key])||'문의';}
   function chunks(values,size){const result=[];for(let i=0;i<values.length;i+=size)result.push(values.slice(i,i+size));return result;}
-  function buildPage(products,cols,pageNumber,pageTotal){
+  function buildPage(products,cols,pageNumber,pageTotal,startIndex){
     const page=node('article',undefined,'brochure-page'),header=node('header',undefined,'brochure-header');
     const logo=node('img');logo.src='assets/echo-trading-logo.svg';logo.alt='Echo Trading';logo.className='brochure-logo';
     const titleBox=node('div',undefined,'brochure-title');titleBox.append(node('p','PRODUCT CATALOG','brochure-kicker'),node('h1',$('print-title').value.trim()||'제품 소개자료'));
@@ -82,11 +82,13 @@
     header.append(logo,titleBox,pageMeta);page.append(header);
     if(pageNumber===1&&$('print-memo').value.trim())page.append(node('p',$('print-memo').value.trim(),'brochure-memo'));
     const table=node('table',undefined,'brochure-table'),head=node('thead'),labels=node('tr');
+    const numberHeader=node('th','No.','brochure-col-number');numberHeader.scope='col';labels.append(numberHeader);
     const first=node('th','제품명 / 코드');first.scope='col';first.classList.add('brochure-col-name');labels.append(first);
     cols.forEach(([key,label])=>{const th=node('th',label);th.scope='col';th.classList.add(`brochure-col-${key}`);th.dataset.field=key;labels.append(th);});head.append(labels);table.append(head);
     const body=node('tbody');
-    products.forEach(p=>{
+    products.forEach((p,rowIndex)=>{
       const row=node('tr'),name=node('td');
+      row.append(node('td',String(startIndex+rowIndex+1),'brochure-col-number'));
       name.classList.add('brochure-col-name');
       name.append(node('strong',p.name),node('small',`${p.id} · ${p.catalogType}${p.catalogGroup?` / ${p.catalogGroup}`:''}`,'brochure-code'));row.append(name);
       cols.forEach(([key])=>{
@@ -101,7 +103,7 @@
     const footer=node('footer',undefined,'brochure-footer');footer.append(node('p','제품별 정확한 규격과 적용 조건은 담당자에게 문의해 주세요.'),node('p','Echo Trading Co.,Ltd · +82-70-8652-1774 · www.echotra.com'));
     page.append(footer);return page;
   }
-  function buildCompactPage(products,cols,index,total){
+  function buildCompactPage(products,cols,index,total,startIndex){
     const page=node('article',undefined,'compact-page');
     const header=node('header',undefined,'compact-header'),logo=node('img');logo.src='assets/echo-trading-logo.svg';logo.alt='Echo Trading';
     header.append(logo,node('h1',$('print-title').value.trim()||'제품 소개자료'),node('span',`${index} / ${total}`));page.append(header);
@@ -110,9 +112,11 @@
     if(index===1&&$('print-memo').value.trim())flow.append(node('p',$('print-memo').value.trim(),'compact-memo'));
     const table=node('table',undefined,'compact-table'),group=node('colgroup'),head=node('thead'),labels=node('tr'),body=node('tbody');
     const weights={name:27,marker:15,efficacy:31,origin:8,application:19},sum=cols.reduce((n,[key])=>n+weights[key],0);
-    cols.forEach(([key,label])=>{const col=node('col');col.style.width=`${weights[key]/sum*100}%`;group.append(col);const th=node('th',label);th.scope='col';labels.append(th);});
+    const numberCol=node('col');numberCol.style.width='7mm';group.append(numberCol);
+    const numberHeader=node('th','No.','compact-col-number');numberHeader.scope='col';labels.append(numberHeader);
+    cols.forEach(([key,label])=>{const col=node('col');col.style.width=`${weights[key]/sum*191}mm`;group.append(col);const th=node('th',label);th.scope='col';labels.append(th);});
     head.append(labels);table.append(group,head,body);
-    products.forEach(p=>{const row=node('tr');row.dataset.productId=p.id;cols.forEach(([key])=>{const cell=node('td',key==='name'?p.name:valueFor(p,key));cell.dataset.field=key;row.append(cell);});body.append(row);});
+    products.forEach((p,rowIndex)=>{const row=node('tr');row.dataset.productId=p.id;row.append(node('td',String(startIndex+rowIndex+1),'compact-col-number'));cols.forEach(([key])=>{const cell=node('td',key==='name'?p.name:valueFor(p,key));cell.dataset.field=key;row.append(cell);});body.append(row);});
     flow.append(table);page.append(content);
     page.append(node('footer',`Echo Trading · 070-8652-1774 · www.echotra.com | ${products.length}개 제품 | 규격 및 적용 조건은 담당자에게 문의해 주세요.`,'compact-footer'));
     return page;
@@ -154,8 +158,8 @@
   function buildSheet(){
     const products=selected(),cols=columns(),sheet=node('div',undefined,'brochure');
     if(!products.length){sheet.append(node('p','출력할 제품 범위를 선택하거나 목록에서 제품을 담아 주세요.','brochure-empty'));return sheet;}
-    if(portrait()){sheet.classList.add('compact-brochure');const pages=chunks(products,Math.max(1,Math.ceil(products.length/Number($('print-page-count').value))));pages.forEach((items,i)=>sheet.append(buildCompactPage(items,cols,i+1,pages.length)));return sheet;}
-    const pages=chunks(products,10);pages.forEach((products,index)=>sheet.append(buildPage(products,cols,index+1,pages.length)));return sheet;
+    if(portrait()){sheet.classList.add('compact-brochure');const pages=chunks(products,Math.max(1,Math.ceil(products.length/Number($('print-page-count').value))));let offset=0;pages.forEach((items,i)=>{sheet.append(buildCompactPage(items,cols,i+1,pages.length,offset));offset+=items.length;});return sheet;}
+    const pages=chunks(products,10);pages.forEach((products,index)=>sheet.append(buildPage(products,cols,index+1,pages.length,index*10)));return sheet;
   }
   function buildPreview(){
     pageStyle.textContent=portrait()?'@page{size:A4 portrait;margin:6mm}':'@page{size:A4 landscape;margin:10mm}';
