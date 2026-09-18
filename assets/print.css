@@ -122,3 +122,21 @@ html,body{width:auto!important;height:auto!important}body.printing-selection{bac
     line-height:1.15 !important;
   }
 }
+
+/* Compact portrait: full text, measured sizing, explicit A4 pages. */
+.print-layout{border:1px solid #cdd9de;border-radius:8px;padding:14px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-size:13px}
+.print-layout label{display:flex;align-items:center;gap:8px}.print-layout p{flex-basis:100%;margin:0;color:#60717d;font-size:12px}.print-layout [hidden]{display:none!important}
+#print-preview.portrait-preview{min-width:760px}
+.compact-page{--compact-font:7pt;box-sizing:border-box;width:198mm;height:284mm;margin:0 auto 20px;padding:0;background:white;display:flex;flex-direction:column;gap:1.5mm;box-shadow:0 8px 24px #12304124;break-after:page;page-break-after:always;color:#183542;font-family:Arial,'Malgun Gothic',sans-serif}
+.compact-page:last-child{break-after:auto;page-break-after:auto;margin-bottom:0}
+.compact-header{display:flex;align-items:center;gap:5mm;border-bottom:1.5px solid #153d55;padding:2mm 0;flex:none}
+.compact-header img{width:32mm;height:auto}.compact-header h1{font-size:10pt;line-height:1.2;margin:0;flex:1;overflow-wrap:anywhere}.compact-header span{font-size:7pt;white-space:nowrap}
+.compact-content{flex:1;min-height:0;font-size:var(--compact-font);line-height:1.12}
+.compact-memo,.compact-customer{font-size:inherit;line-height:inherit;margin:0 0 1mm;white-space:pre-wrap;overflow-wrap:anywhere}
+.compact-table{width:100%;table-layout:fixed;border-collapse:collapse;margin:0;font-size:inherit;line-height:inherit}
+.compact-table th,.compact-table td{display:table-cell!important;width:auto!important;padding:.12em .35em!important;font-size:inherit!important;line-height:inherit!important;text-align:left;vertical-align:middle;border:0.4px solid #cbd5da;white-space:normal;overflow-wrap:anywhere;word-break:normal;color:#183542}
+.compact-table th{background:#153d55;color:white;font-weight:700}.compact-table td[data-field=name]{font-weight:700}.compact-table tr:nth-child(even){background:#f1f5f6}
+.compact-footer{flex:none;border-top:1px solid #cbd5da;padding:1mm 0;font-size:5.5pt;line-height:1.2;color:#526872}
+@media print{.printing-selection .compact-page{width:198mm;height:284mm;margin:0;padding:0;box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact;break-inside:avoid}.compact-table tr{break-inside:avoid}}
+.compact-table{display:table!important}.compact-table thead{display:table-header-group!important}.compact-table tbody{display:table-row-group!important}.compact-table tr{display:table-row!important}.compact-table td::before{content:none!important}
+.compact-header img{height:8mm;object-fit:contain}

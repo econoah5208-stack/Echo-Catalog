@@ -26,12 +26,23 @@
   ];
   const dialog=$('print-dialog');
 
-  fields.forEach(([key,title])=>{
-    const label=node('label'),input=node('input');input.type='checkbox';input.value=key;input.checked=defaults.has(key);
-    input.addEventListener('change',buildPreview);label.append(input,node('span',title));$('print-columns').append(label);
+  const portraitFields=[['name','제품명'],['marker','지표성분'],['efficacy','효능'],['origin','원산지'],['application','어플리케이션']];
+  const portrait=()=>$('print-portrait').checked;
+  const pageStyle=node('style');document.head.append(pageStyle);
+  const fieldMemory={landscape:new Set(defaults),portrait:new Set(portraitFields.map(([key])=>key))};
+  let fieldMode='landscape';
+  function renderFields(){
+  $('print-columns').replaceChildren(node('legend',portrait()?'세로형 출력 항목 · 최소 1개 선택':'출력 항목 · 제품명과 제품코드는 항상 포함됩니다'));
+  (portrait()?portraitFields:fields).forEach(([key,title])=>{
+    const label=node('label'),input=node('input');input.type='checkbox';input.value=key;input.checked=fieldMemory[fieldMode].has(key);
+    input.addEventListener('change',()=>{const inputs=[...$('print-columns').querySelectorAll('input')];if(portrait()&&!inputs.some(i=>i.checked)){input.checked=true;return;}fieldMemory[fieldMode]=new Set(inputs.filter(i=>i.checked).map(i=>i.value));buildPreview();});label.append(input,node('span',title));$('print-columns').append(label);
   });
+  }
+  renderFields();
+  $('print-portrait').addEventListener('change',()=>{fieldMode=portrait()?'portrait':'landscape';$('print-page-count-label').hidden=!portrait();renderFields();buildPreview();});
+  $('print-page-count').addEventListener('change',buildPreview);
   function selected(){return [...chosen].map(id=>byId.get(id)).filter(Boolean);}
-  function columns(){return fields.filter(([key])=>[...$('print-columns').querySelectorAll('input')].some(input=>input.value===key&&input.checked));}
+  function columns(){return (portrait()?portraitFields:fields).filter(([key])=>[...$('print-columns').querySelectorAll('input')].some(input=>input.value===key&&input.checked));}
   function stockMatches(p){const value=$('print-stock').value;return !value||stockValue(p)===value;}
   function presetById(id){return presets.find(([key])=>key===id)||presets[0];}
   function updatePresetButtons(){
@@ -90,23 +101,58 @@
     const footer=node('footer',undefined,'brochure-footer');footer.append(node('p','제품별 정확한 규격과 적용 조건은 담당자에게 문의해 주세요.'),node('p','Echo Trading Co.,Ltd · +82-70-8652-1774 · www.echotra.com'));
     page.append(footer);return page;
   }
+  function buildCompactPage(products,cols,index,total){
+    const page=node('article',undefined,'compact-page');
+    const header=node('header',undefined,'compact-header'),logo=node('img');logo.src='assets/echo-trading-logo.svg';logo.alt='Echo Trading';
+    header.append(logo,node('h1',$('print-title').value.trim()||'제품 소개자료'),node('span',`${index} / ${total}`));page.append(header);
+    const content=node('div',undefined,'compact-content');
+    if($('print-customer').value.trim())content.append(node('p',`${$('print-customer').value.trim()} 귀중`,'compact-customer'));
+    if(index===1&&$('print-memo').value.trim())content.append(node('p',$('print-memo').value.trim(),'compact-memo'));
+    const table=node('table',undefined,'compact-table'),group=node('colgroup'),head=node('thead'),labels=node('tr'),body=node('tbody');
+    const weights={name:27,marker:15,efficacy:31,origin:8,application:19},sum=cols.reduce((n,[key])=>n+weights[key],0);
+    cols.forEach(([key,label])=>{const col=node('col');col.style.width=`${weights[key]/sum*100}%`;group.append(col);const th=node('th',label);th.scope='col';labels.append(th);});
+    head.append(labels);table.append(group,head,body);
+    products.forEach(p=>{const row=node('tr');row.dataset.productId=p.id;cols.forEach(([key])=>{const cell=node('td',key==='name'?p.name:valueFor(p,key));cell.dataset.field=key;row.append(cell);});body.append(row);});
+    content.append(table);page.append(content);
+    page.append(node('footer',`Echo Trading · 070-8652-1774 · www.echotra.com | ${products.length}개 제품 | 규격 및 적용 조건은 담당자에게 문의해 주세요.`,'compact-footer'));
+    return page;
+  }
+  function fitCompact(root){
+    const pages=[...root.querySelectorAll('.compact-page')];
+    if(!pages.length||!pages[0].getBoundingClientRect().width)return;
+    let common=7;
+    pages.forEach(page=>{
+      const content=page.querySelector('.compact-content');let low=.5,high=7;
+      for(let i=0;i<14;i++){const size=(low+high)/2;page.style.setProperty('--compact-font',size+'pt');
+        if(content.scrollHeight<=content.clientHeight+0.5)low=size;else high=size;
+      }
+      common=Math.min(common,Math.floor(low*100)/100);
+    });
+    pages.forEach(page=>page.style.setProperty('--compact-font',common+'pt'));
+  }
   function buildSheet(){
     const products=selected(),cols=columns(),sheet=node('div',undefined,'brochure');
     if(!products.length){sheet.append(node('p','출력할 제품 범위를 선택하거나 목록에서 제품을 담아 주세요.','brochure-empty'));return sheet;}
+    if(portrait()){sheet.classList.add('compact-brochure');const pages=chunks(products,Math.max(1,Math.ceil(products.length/Number($('print-page-count').value))));pages.forEach((items,i)=>sheet.append(buildCompactPage(items,cols,i+1,pages.length)));return sheet;}
     const pages=chunks(products,10);pages.forEach((products,index)=>sheet.append(buildPage(products,cols,index+1,pages.length)));return sheet;
   }
   function buildPreview(){
+    pageStyle.textContent=portrait()?'@page{size:A4 portrait;margin:6mm}':'@page{size:A4 landscape;margin:10mm}';
+    $('print-preview').classList.toggle('portrait-preview',portrait());
+    $('print-help').textContent=portrait()?'A4 세로 · 여백 6mm · 배율 100%. PDF로 저장 시 브라우저 머리글·바닥글을 꺼 주세요. 모든 내용이 표시되며 글자 크기는 선택한 분량에 맞춰 조정됩니다.':'A4 가로 · 1페이지당 10개 제품. PDF로 저장 시 배경 그래픽 켜기, 브라우저 머리글·바닥글 끄기를 권장합니다.';
     $('print-chosen').replaceChildren();
     selected().forEach(p=>{const item=node('li');item.append(node('span',`${p.name} · ${p.id}`));const remove=node('button','제외');remove.type='button';remove.setAttribute('aria-label',`${p.name} 선택 제외`);remove.addEventListener('click',()=>{activePreset='';chosen.delete(p.id);sync();updatePresetButtons();buildPreview();});item.append(remove);$('print-chosen').append(item);});
-    $('print-preview').replaceChildren(buildSheet());$('print-now').disabled=!chosen.size;$('print-selection-total').textContent=`출력 제품 ${chosen.size}개 · ${Math.ceil(chosen.size/10)}페이지`;
+    $('print-preview').replaceChildren(buildSheet());fitCompact($('print-preview'));$('print-now').disabled=!chosen.size;$('print-selection-total').textContent=`출력 제품 ${chosen.size}개 · ${(portrait()?$('print-preview').querySelectorAll('.compact-page').length:Math.ceil(chosen.size/10))}페이지`;
   }
+  const previewObserver=new ResizeObserver(()=>fitCompact($('print-preview')));previewObserver.observe($('print-preview'));
+  document.fonts.ready.then(()=>fitCompact($('print-preview')));
   $('select-page').addEventListener('change',e=>{activePreset='';pageIds.forEach(id=>e.target.checked?chosen.add(id):chosen.delete(id));sync();updatePresetButtons();});
   $('clear-selection').addEventListener('click',()=>{activePreset='';chosen.clear();sync();updatePresetButtons();buildPreview();});
-  $('open-print').addEventListener('click',()=>{buildPreview();updatePresetButtons();dialog.showModal();});
+  $('open-print').addEventListener('click',()=>{buildPreview();updatePresetButtons();dialog.showModal();fitCompact($('print-preview'));});
   $('close-print').addEventListener('click',()=>dialog.close());
   ['print-title','print-customer','print-memo'].forEach(id=>$(id).addEventListener('input',buildPreview));
   function preparePrint(){
-    if(!chosen.size)return;$('print-sheet').replaceChildren(buildSheet());document.body.classList.add('printing-selection');
+    if(!chosen.size)return;$('print-sheet').replaceChildren(buildSheet());document.body.classList.add('printing-selection');fitCompact($('print-sheet'));
     if(dialog.open){returnToPreview=true;dialog.close();}if($('detail').open)$('detail').close();
     if(!oldTitle)oldTitle=document.title;document.title=$('print-title').value.trim()||'Echo Trading 제품 소개자료';
   }
