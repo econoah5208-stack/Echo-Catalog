@@ -157,3 +157,16 @@ html,body{width:auto!important;height:auto!important}body.printing-selection{bac
 /* Continuous numbering follows the current output selection, across all pages. */
 .brochure-table th.brochure-col-number,.brochure-table td.brochure-col-number{width:8mm!important;text-align:center!important;white-space:nowrap;font-variant-numeric:tabular-nums}
 .compact-table th.compact-col-number,.compact-table td.compact-col-number{text-align:center!important;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* v8: automatic portrait pagination, grouped classification columns. */
+.print-auto-pages{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:#eaf2f6;color:#153d55;font-size:12px;font-weight:800}
+.compact-table td.compact-group{font-weight:700;text-align:center!important;vertical-align:middle!important;color:#153d55;background:#eaf2f6!important;word-break:keep-all;overflow-wrap:anywhere}
+.compact-table td.compact-category{background:#f2f6f8!important;font-weight:650}
+.compact-table th[data-field="catalogType"],.compact-table th[data-field="category"]{text-align:center}
+.compact-table td[data-field="name"]{font-weight:700}
+.compact-table td[data-field="origin"]{text-align:center!important;word-break:keep-all}
+.compact-table{min-height:0}
+@media print{
+  .printing-selection .compact-table{height:var(--compact-table-height,auto);}
+  .printing-selection .compact-table td.compact-group{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+}

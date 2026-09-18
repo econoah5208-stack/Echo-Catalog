@@ -1,10 +1,14 @@
 (() => {
 'use strict';
 const $=id=>document.getElementById(id);
-const schema={id:'제품코드 *',name:'제품명 *',catalogType:'상위 분류',catalogGroup:'일반식품 하위 분류',category:'원료 카테고리 *',subcategory:'세부 분류',marker:'지표성분',spec:'규격 / 함량',packaging:'포장단위',origin:'원산지',function:'주요 특성',efficacy:'효능 (확정된 내용만 입력)',application:'어플리케이션',form:'형태',process:'공정',stock:'Stock 운용'};
-let products=structuredClone(window.ECHO_PRODUCTS||[]),selected=-1,dirty=false,formDirty=false;
+const schema={id:'제품코드 *',name:'제품명 *',catalogType:'국내 식품분류',catalogGroup:'일반식품 하위 분류',category:'대분류 *',subcategory:'상세 분류',marker:'지표성분',spec:'규격 / 함량',packaging:'포장단위',origin:'원산지',function:'주요 특성',efficacy:'효능 (확정된 내용만 입력)',application:'어플리케이션',form:'형태',process:'공정',stock:'Stock 운용'};
+const source=Array.isArray(window.ECHO_PRODUCTS)?window.ECHO_PRODUCTS:[];
+let products=JSON.parse(JSON.stringify(source)),selected=-1,dirty=false,formDirty=false;
+const typeRank={'건강기능식품':0,'일반식품':1,'식품첨가물':2};
+const ko=text=>String(text||'').includes(' / ')?String(text).split(' / ').slice(1).join(' / ').trim():String(text||'').trim();
+const compare=(a,b)=>(typeRank[a.catalogType]??9)-(typeRank[b.catalogType]??9)||ko(a.category).localeCompare(ko(b.category),'ko')||a.name.localeCompare(b.name,'ko')||a.id.localeCompare(b.id);
 for(const [key,label] of Object.entries(schema)){const wrap=document.createElement('label');wrap.textContent=label;const input=document.createElement(['catalogType','catalogGroup','stock'].includes(key)?'select':['function','efficacy','application'].includes(key)?'textarea':'input');input.id='field-'+key;if(['catalogType','catalogGroup','stock'].includes(key)){const values=key==='catalogType'?['','건강기능식품','일반식품','식품첨가물']:key==='catalogGroup'?['','일반원료','기능성부원료']:['미정','운용','미운용'];values.forEach(v=>input.add(new Option(v||'미지정',v)));}input.required=['id','name','category'].includes(key);wrap.append(input);$('fields').append(wrap);}
-function list(){const query=$('find').value.trim().toLowerCase();$('entries').replaceChildren();products.forEach((p,i)=>{if(!`${p.id} ${p.name}`.toLowerCase().includes(query))return;const b=document.createElement('button');b.type='button';b.textContent=`${p.id} · ${p.name}${p.visible===false?' (숨김)':''}`;b.className=selected===i?'selected':'';b.addEventListener('click',()=>{if(formDirty&&!confirm('현재 입력 중인 내용을 버리고 다른 제품을 열까요?'))return;choose(i);});$('entries').append(b);});}
+function list(){const query=$('find').value.trim().toLowerCase();$('entries').replaceChildren();products.map((p,i)=>({p,i})).sort((a,b)=>compare(a.p,b.p)).forEach(({p,i})=>{if(!`${p.id} ${p.name}`.toLowerCase().includes(query))return;const b=document.createElement('button');b.type='button';b.textContent=`${p.id} · ${p.name}${p.visible===false?' (숨김)':''}`;b.className=selected===i?'selected':'';b.addEventListener('click',()=>{if(formDirty&&!confirm('현재 입력 중인 내용을 버리고 다른 제품을 열까요?'))return;choose(i);});$('entries').append(b);});}
 function choose(i){selected=i;for(const key of Object.keys(schema))$('field-'+key).value=products[i]?.[key]||'';$('visible').checked=products[i]?.visible!==false;formDirty=false;list();}
 function say(text){$('status').textContent=text;}
 $('find').addEventListener('input',list);
@@ -18,5 +22,5 @@ $('download').addEventListener('click',()=>{if(!ready())return;const content='//
 $('backup').addEventListener('click',()=>{if(!ready())return;download('echo-products-backup.json',JSON.stringify(products,null,2),'application/json');say('JSON 백업을 다운로드했습니다. 회사 내부 기준 파일로 보관해 주세요.');});
 $('import').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const rows=JSON.parse(await file.text());const ids=new Set();if(!Array.isArray(rows))throw Error();const safe=rows.map(p=>{if(!p||typeof p!=='object'||Array.isArray(p))throw Error();for(const key of Object.keys(schema))if(p[key]!==undefined&&typeof p[key]!=='string')throw Error();if(!p.id?.trim()||!p.name?.trim()||!p.category?.trim()||ids.has(p.id.trim()))throw Error();if(p.catalogType&&!['건강기능식품','일반식품','식품첨가물'].includes(p.catalogType))throw Error();if(p.catalogGroup&&!['일반원료','기능성부원료'].includes(p.catalogGroup))throw Error();if(p.stock&&!['미정','운용','미운용'].includes(p.stock))throw Error();ids.add(p.id.trim());return {...Object.fromEntries(Object.keys(schema).map(k=>[k,(p[k]||'').trim()])),stock:p.stock||'미정',visible:p.visible!==false};});if(!confirm(`현재 편집 목록을 ${safe.length}개 제품으로 교체할까요?`))return;products=safe;dirty=true;choose(-1);say(`${products.length}개 제품을 불러왔습니다. 웹용 데이터를 다운로드해 주세요.`);}catch{say('파일을 읽지 못했습니다. 편집기에서 내려받은 JSON 백업과 중복되지 않는 제품코드를 확인해 주세요.');}finally{e.target.value='';}});
 window.addEventListener('beforeunload',e=>{if(dirty||formDirty){e.preventDefault();e.returnValue='';}});
-choose(products.length?0:-1);
+if(source.length){choose(0);say(`데이터베이스 기준 ${products.length}개 제품을 불러왔습니다. 제품을 선택해 수정할 수 있습니다.`);}else{choose(-1);say('제품 데이터를 불러오지 못했습니다. data/catalog.js 파일을 확인해 주세요.');}
 })();

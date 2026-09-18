@@ -161,3 +161,10 @@ node scripts/build_catalog.mjs "catalog-import.json" "data/catalog.js"
 ## 세로형 열 너비 조정
 
 No. 7mm는 유지하고, 나머지 공간의 배분을 제품명 23%, 지표성분 22%, 효능 25%, 원산지 8%, 어플리케이션 22%로 조정했습니다. 일부 항목을 제외하면 선택된 항목의 비중에 따라 재배분합니다.
+
+## v8 portrait / Manage update (2026-09-18)
+- `data/catalog.js` refreshed from `회사제품 데이터베이스_임종훈(6).xlsx` (385 products).
+- Manage page loads the current catalog automatically and uses database-aligned labels: 국내 식품분류 / 대분류 / 상세 분류.
+- Portrait output defaults to 제품명 / 분류 / 지표성분 / 원산지 / 어플리케이션.
+- Portrait output always fixes No. → 국내 식품분류 → 대분류, merges repeated classification cells with rowspan, and sorts 건강기능식품 → 일반식품 → 식품첨가물; then 대분류 가나다순 → 제품명 가나다순.
+- Portrait pagination is automatic: maximum 50 products per A4 page, minimum practical page count, with table height expanded to fill the printable area.
