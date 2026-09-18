@@ -168,3 +168,13 @@ No. 7mm는 유지하고, 나머지 공간의 배분을 제품명 23%, 지표성�
 - Portrait output defaults to 제품명 / 분류 / 지표성분 / 원산지 / 어플리케이션.
 - Portrait output always fixes No. → 국내 식품분류 → 대분류, merges repeated classification cells with rowspan, and sorts 건강기능식품 → 일반식품 → 식품첨가물; then 대분류 가나다순 → 제품명 가나다순.
 - Portrait pagination is automatic: maximum 50 products per A4 page, minimum practical page count, with table height expanded to fill the printable area.
+
+## v8.2 인쇄 레이아웃 업데이트
+
+- A4 가로형도 자동 최소 장수 계산 방식으로 변경
+- 가로형 페이지당 최대 25개 제품
+- 선택 품목을 페이지별로 균등 분배하고 표를 인쇄 가능 영역 끝까지 자동 확장
+- 가로형 고정 열: No. / 국내 식품분류 / 대분류 / 제품명·코드
+- 국내 식품분류 및 대분류는 페이지 안의 연속 항목을 rowspan으로 자동 병합
+- 정렬 기준은 건강기능식품 → 일반식품 → 식품첨가물, 대분류 가나다순, 제품명 가나다순 유지
+- 세로형 최대 50개 및 기존 자동 분량 계산 로직 유지

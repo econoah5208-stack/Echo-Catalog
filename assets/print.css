@@ -170,3 +170,137 @@ html,body{width:auto!important;height:auto!important}body.printing-selection{bac
   .printing-selection .compact-table{height:var(--compact-table-height,auto);}
   .printing-selection .compact-table td.compact-group{print-color-adjust:exact;-webkit-print-color-adjust:exact}
 }
+
+/* v8.2: automatic landscape pagination, 25-item cap, grouped fixed columns. */
+.brochure-page.landscape-auto{
+  --landscape-font:6.65pt;
+  --landscape-head-font:6.6pt;
+  height:190mm;
+  min-height:190mm;
+  max-height:190mm;
+  overflow:hidden;
+  grid-template-rows:auto auto minmax(0,1fr) auto !important;
+}
+.landscape-auto .brochure-table{
+  width:100%!important;
+  min-height:0;
+  height:auto;
+  overflow:visible!important;
+  align-self:start!important;
+  table-layout:fixed!important;
+}
+.landscape-auto .brochure-table th,
+.landscape-auto .brochure-table td{
+  padding:.45mm .72mm!important;
+  line-height:1.08!important;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  vertical-align:middle!important;
+}
+.landscape-auto .brochure-table th{
+  font-size:var(--landscape-head-font)!important;
+}
+.landscape-auto .brochure-table td{
+  font-size:var(--landscape-font)!important;
+}
+.landscape-auto .brochure-table th.brochure-col-name,
+.landscape-auto .brochure-table td.brochure-col-name{
+  width:auto!important;
+}
+.landscape-auto .brochure-table td.brochure-col-name strong{
+  display:block!important;
+  overflow:visible!important;
+  -webkit-box-orient:initial!important;
+  -webkit-line-clamp:unset!important;
+  font-size:calc(var(--landscape-font) + .25pt)!important;
+  line-height:1.08!important;
+}
+.landscape-auto .brochure-code{
+  display:block!important;
+  margin-top:.2mm!important;
+  font-size:calc(var(--landscape-font) - .75pt)!important;
+  line-height:1.05!important;
+  white-space:nowrap;
+  overflow:hidden!important;
+  text-overflow:ellipsis;
+}
+.landscape-auto .brochure-cell-text,
+.landscape-auto .brochure-text-efficacy{
+  display:block!important;
+  overflow:visible!important;
+  -webkit-box-orient:initial!important;
+  -webkit-line-clamp:unset!important;
+  max-height:none!important;
+  font-size:inherit!important;
+  line-height:inherit!important;
+}
+.landscape-auto .brochure-group{
+  font-weight:700;
+  text-align:center!important;
+  vertical-align:middle!important;
+  color:#153d55!important;
+  background:#eaf2f6!important;
+  word-break:keep-all!important;
+  overflow-wrap:anywhere;
+}
+.landscape-auto .brochure-category{
+  background:#f2f6f8!important;
+  font-weight:650;
+}
+.landscape-auto .brochure-table th[data-field="catalogType"],
+.landscape-auto .brochure-table th[data-field="category"]{
+  text-align:center;
+}
+.landscape-auto .brochure-table td[data-field="origin"],
+.landscape-auto .brochure-table td[data-field="stock"]{
+  text-align:center!important;
+  word-break:keep-all;
+}
+#print-measure-landscape{
+  display:block!important;
+  position:fixed!important;
+  left:-10000px!important;
+  top:0!important;
+  width:277mm!important;
+  height:190mm!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  contain:layout style;
+  z-index:-9999;
+}
+#print-measure-landscape .brochure-page{
+  display:grid!important;
+  width:277mm!important;
+  height:190mm!important;
+  min-height:190mm!important;
+  max-height:190mm!important;
+  margin:0!important;
+  box-shadow:none!important;
+  break-before:auto!important;
+  break-after:auto!important;
+}
+@media print{
+  .printing-selection .brochure-page.landscape-auto{
+    width:100%!important;
+    height:190mm!important;
+    min-height:190mm!important;
+    max-height:190mm!important;
+    overflow:hidden!important;
+  }
+  .printing-selection .landscape-auto .brochure-table{
+    height:var(--landscape-table-height,auto);
+  }
+  .printing-selection .landscape-auto .brochure-group{
+    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact;
+  }
+  body.printing-selection>#print-measure-landscape{display:block!important}
+}
+/* Keep landscape grid tracks stable even when the optional memo is absent. */
+.landscape-auto>.brochure-header{grid-row:1}
+.landscape-auto>.brochure-memo{grid-row:2}
+.landscape-auto>.brochure-table{grid-row:3}
+.landscape-auto>.brochure-footer{grid-row:4}
+/* Stretch the fitted landscape table across its complete grid row. */
+.landscape-auto>.brochure-table{align-self:stretch!important;height:auto!important}
