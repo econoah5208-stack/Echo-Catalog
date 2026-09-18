@@ -111,7 +111,7 @@
     if($('print-customer').value.trim())flow.append(node('p',`${$('print-customer').value.trim()} 귀중`,'compact-customer'));
     if(index===1&&$('print-memo').value.trim())flow.append(node('p',$('print-memo').value.trim(),'compact-memo'));
     const table=node('table',undefined,'compact-table'),group=node('colgroup'),head=node('thead'),labels=node('tr'),body=node('tbody');
-    const weights={name:27,marker:15,efficacy:31,origin:8,application:19},sum=cols.reduce((n,[key])=>n+weights[key],0);
+    const weights={name:23,marker:22,efficacy:25,origin:8,application:22},sum=cols.reduce((n,[key])=>n+weights[key],0);
     const numberCol=node('col');numberCol.style.width='7mm';group.append(numberCol);
     const numberHeader=node('th','No.','compact-col-number');numberHeader.scope='col';labels.append(numberHeader);
     cols.forEach(([key,label])=>{const col=node('col');col.style.width=`${weights[key]/sum*191}mm`;group.append(col);const th=node('th',label);th.scope='col';labels.append(th);});
