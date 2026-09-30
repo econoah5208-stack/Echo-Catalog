@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 const $=id=>document.getElementById(id);
-const schema={id:'제품코드 *',name:'제품명 *',catalogType:'국내 식품분류',catalogGroup:'일반식품 하위 분류',category:'대분류 *',subcategory:'상세 분류',marker:'지표성분',spec:'규격 / 함량',packaging:'포장단위',origin:'원산지',function:'주요 특성',efficacy:'효능 (확정된 내용만 입력)',application:'어플리케이션',form:'형태',process:'공정',stock:'Stock 운용'};
+const schema={id:'제품코드 *',name:'제품명 *',catalogType:'국내 식품분류',catalogGroup:'일반식품 하위 분류',category:'대분류 *',subcategory:'소분류',marker:'지표성분',spec:'규격 / 함량',packaging:'포장단위',origin:'원산지',function:'주요 특성',efficacy:'효능 (확정된 내용만 입력)',application:'어플리케이션',form:'형태',process:'공정',stock:'Stock 운용'};
 const source=Array.isArray(window.ECHO_PRODUCTS)?window.ECHO_PRODUCTS:[];
 let products=JSON.parse(JSON.stringify(source)),selected=-1,dirty=false,formDirty=false;
 const typeRank={'건강기능식품':0,'일반식품':1,'식품첨가물':2};

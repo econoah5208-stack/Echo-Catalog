@@ -42,7 +42,7 @@
   }
   selectOptions('application', items.flatMap(p => tokens(p.application)), '전체 적용 분야');
   function refreshSubcategories() {
-    selectOptions('subcategory', scope().filter(p => !state.category || p.category === state.category).map(p => ko(p.subcategory)), '전체 세부 분류');
+    selectOptions('subcategory', scope().filter(p => !state.category || p.category === state.category).map(p => ko(p.subcategory)), '전체 소분류');
   }
   function categories() {
     $('categories').replaceChildren();

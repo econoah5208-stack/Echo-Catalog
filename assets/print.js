@@ -26,7 +26,7 @@
   ];
   const dialog=$('print-dialog');
 
-  const portraitFields=[['name','제품명'],['subcategory','분류'],['marker','지표성분'],['origin','원산지'],['application','어플리케이션']];
+  const portraitFields=[['name','제품명'],['subcategory','소분류'],['marker','지표성분'],['origin','원산지'],['application','어플리케이션']];
   const portrait=()=>$('print-portrait').checked;
   const pageStyle=node('style');document.head.append(pageStyle);
   const fieldMemory={landscape:new Set(defaults),portrait:new Set(portraitFields.map(([key])=>key))};

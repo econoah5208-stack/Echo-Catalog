@@ -5,7 +5,7 @@ import argparse, json, re
 from pathlib import Path
 import openpyxl
 
-FIELDS = {'제품코드':'id','아이템':'name','대분류':'category','상세 분류':'subcategory','지표성분':'marker','수치':'spec','기능':'function','사용처(Application)':'application','형태':'form','공정':'process','원산지':'origin','포장':'packaging','Stock 운용':'stock'}
+FIELDS = {'제품코드':'id','아이템':'name','대분류':'category','소분류':'subcategory','지표성분':'marker','수치':'spec','기능':'function','사용처(Application)':'application','형태':'form','공정':'process','원산지':'origin','포장':'packaging','Stock 운용':'stock'}
 
 # 일반식품 중 기능성 콘셉트로 운용하는 품목. BE 계열은 아래에서 일괄 처리합니다.
 FUNCTIONAL_GENERAL_IDS = {
@@ -20,7 +20,10 @@ FUNCTIONAL_GENERAL_IDS = {
 def convert(source):
     workbook=openpyxl.load_workbook(source,data_only=True,read_only=True)
     sheet=workbook['제품마스터']
-    rows=sheet.iter_rows(values_only=True); headers=next(rows)
+    rows=sheet.iter_rows(values_only=True); headers=list(next(rows))
+    # Accept the previous template while preferring the current column name.
+    if '소분류' not in headers and '상세 분류' in headers:
+        headers[headers.index('상세 분류')]='소분류'
     missing=set(FIELDS)-set(headers)
     if missing: raise ValueError('필수 열이 없습니다: '+', '.join(sorted(missing)))
     products=[]; review=[]; ids=set()
