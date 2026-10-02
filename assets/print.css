@@ -304,3 +304,6 @@ html,body{width:auto!important;height:auto!important}body.printing-selection{bac
 .landscape-auto>.brochure-footer{grid-row:4}
 /* Stretch the fitted landscape table across its complete grid row. */
 .landscape-auto>.brochure-table{align-self:stretch!important;height:auto!important}
+
+/* Original white logo on a permanent dark SVG background; keep its proportions. */
+.brochure-logo{width:29mm!important;height:auto!important;max-height:15mm;object-fit:contain;justify-self:start}.compact-header img{width:24mm!important;height:auto!important;max-height:12mm;object-fit:contain}

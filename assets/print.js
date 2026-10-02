@@ -91,7 +91,7 @@
   }
   function buildPage(products,cols,pageNumber,pageTotal,startIndex){
     const page=node('article',undefined,'brochure-page landscape-auto'),header=node('header',undefined,'brochure-header');
-    const logo=node('img');logo.src='assets/echo-trading-logo.svg';logo.alt='Echo Trading';logo.className='brochure-logo';
+    const logo=node('img');logo.src='assets/echo-trading-logo.svg?v=20261001-company-v9';logo.alt='Echo Trading';logo.className='brochure-logo';
     const titleBox=node('div',undefined,'brochure-title');titleBox.append(node('p','PRODUCT CATALOG','brochure-kicker'),node('h1',$('print-title').value.trim()||'제품 소개자료'));
     const customer=$('print-customer').value.trim();if(customer)titleBox.append(node('p',`${customer} 귀중`,'brochure-customer'));
     const pageMeta=node('div',undefined,'brochure-page-meta');pageMeta.append(node('strong',`${pageNumber}`),node('span',`/ ${pageTotal}`));
@@ -174,7 +174,7 @@
   }
   function buildCompactPage(products,cols,index,total,startIndex){
     const page=node('article',undefined,'compact-page');
-    const header=node('header',undefined,'compact-header'),logo=node('img');logo.src='assets/echo-trading-logo.svg';logo.alt='Echo Trading';
+    const header=node('header',undefined,'compact-header'),logo=node('img');logo.src='assets/echo-trading-logo.svg?v=20261001-company-v9';logo.alt='Echo Trading';
     header.append(logo,node('h1',$('print-title').value.trim()||'제품 소개자료'),node('span',`${index} / ${total}`));page.append(header);
     const content=node('div',undefined,'compact-content'),flow=node('div',undefined,'compact-flow');content.append(flow);
     if($('print-customer').value.trim())flow.append(node('p',`${$('print-customer').value.trim()} 귀중`,'compact-customer'));
@@ -269,6 +269,7 @@
     const pages=$('print-preview').querySelectorAll(portrait()?'.compact-page':'.brochure-page').length;
     $('print-selection-total').textContent=`출력 제품 ${chosen.size}개 · ${pages}페이지`;
     $('print-page-count-label').textContent=`전체 분량 · ${pages}장 자동`;
+    window.dispatchEvent(new CustomEvent('echo:selectionchange'));
   }
   // Layout uses physical page dimensions; viewport resizing does not change print sizing.
   document.fonts.ready.then(()=>{if(portrait())fitCompact($('print-preview'));else fitLandscape($('print-preview'));});
@@ -292,6 +293,6 @@
     catch(error){finishPrint();window.alert(error.message);}
   });
   window.addEventListener('beforeprint',preparePrint);window.addEventListener('afterprint',finishPrint);
-  window.EchoPrint={createCheckbox,setPage(products){pageIds=products.map(p=>p.id);sync();}};
+  window.EchoPrint={createCheckbox,getSelection(){return selected().sort(printSort).map(p=>({...p}));},getColumns(){return columns();},setPage(products){pageIds=products.map(p=>p.id);sync();}};
   updatePresetButtons();buildPreview();sync();
 })();
