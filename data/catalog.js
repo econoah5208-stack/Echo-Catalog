@@ -2542,8 +2542,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "효모 유래 비오틴 공급원으로서 영양소 대사 및 피부·모발 건강 관리 지원",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2580,8 +2580,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "뼈·치아 건강 및 정상적인 근육·신경 기능 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2618,8 +2618,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "효모 유래 구리 공급원으로서 에너지 대사·결합조직 및 항산화 건강 지원",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2637,8 +2637,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "비타민 B9 공급을 통한 세포 분열·혈액 생성 및 태아 신경관의 정상적인 발달에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2656,8 +2656,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "정상적인 혈당 대사 및 탄수화물·지방·단백질 대사 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2675,8 +2675,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "요오드 공급을 통한 정상적인 갑상선 기능 및 에너지 대사 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2694,8 +2694,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "헤모글로빈 형성과 산소 운반에 필요한 철 공급",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2713,8 +2713,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "헤모글로빈 형성과 산소 운반에 필요한 철 공급",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2732,8 +2732,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "에너지 대사, 근육·신경 기능 및 뼈 건강 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2751,8 +2751,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "에너지 대사, 근육·신경 기능 및 뼈 건강 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2770,8 +2770,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "정상적인 효소 기능 및 아미노산·대사 과정 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2789,8 +2789,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "비타민 B3 공급을 통한 에너지 대사 및 피부·신경 기능 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2808,8 +2808,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "셀레늄 공급을 통한 항산화 작용 및 세포 보호에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2827,8 +2827,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "셀레늄 공급을 통한 항산화 작용 및 세포 보호에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2884,8 +2884,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "비타민 B1 공급을 통한 탄수화물·에너지 대사 및 정상적인 신경 기능 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2903,8 +2903,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "비타민 B1 공급을 통한 탄수화물·에너지 대사 및 정상적인 신경 기능 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2922,8 +2922,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "비타민 B12 공급을 통한 정상적인 혈액 생성·신경 기능 및 에너지 대사 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2941,8 +2941,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "비타민 B2 공급을 통한 에너지 생성 및 정상적인 세포 대사 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2960,8 +2960,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "비타민 B2 공급을 통한 에너지 생성 및 정상적인 세포 대사 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2979,8 +2979,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "비타민 B3 공급을 통한 에너지 대사 및 피부·신경 기능 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -2998,8 +2998,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "에너지 대사 및 정상적인 영양소 대사 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -3017,8 +3017,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "에너지 대사 및 정상적인 영양소 대사 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -3036,8 +3036,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "단백질·아미노산 대사 및 신경·혈액 건강 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -3055,8 +3055,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "단백질·아미노산 대사 및 신경·혈액 건강 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -3074,8 +3074,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "세포 분열·혈액 생성 및 태아 신경관의 정상적인 발달에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -3093,8 +3093,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "칼슘 흡수·뼈 건강 및 정상적인 면역 기능 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -3112,8 +3112,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "항산화 작용 및 세포 보호에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -3131,8 +3131,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "정상적인 면역 기능 및 세포 성장·분열 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {
@@ -3150,8 +3150,8 @@ window.ECHO_PRODUCTS = [
     "packaging": "",
     "stock": "미정",
     "efficacy": "정상적인 면역 기능 및 세포 성장·분열 유지에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
+    "catalogType": "일반식품",
+    "catalogGroup": "일반원료",
     "visible": true
   },
   {

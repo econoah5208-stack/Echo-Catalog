@@ -21,7 +21,7 @@
     ['vitamin-mineral','비타민·미네랄 전체',p=>/(vitamin|비타민|mineral|미네랄|칼슘|calcium|마그네슘|magnesium|아연|zinc|셀레늄|selenium|철분|iron|구리|copper|망간|manganese|몰리브덴|molybdenum|크롬|chromium|요오드|iodine|엽산|folic)/i.test(corpus(p))],
     ['liquid-process','농축액·추출액·퓨레 전체',p=>/(concentrated|농축|extracted|추출|puree|퓨레)/i.test(corpus(p))],
     ['powder','분말 전체',p=>/(powder|분말|파우더)/i.test(corpus(p))],
-    ['foodform','효모·유산균 유래 FoodForm 전체',p=>String(p.id||'').toUpperCase().startsWith('FM')],
+    ['foodform','효모,유산균 유래 전체',p=>p.category==='유산균·효모'||/효모/.test(p.name||'')],
     ['stock','Stock 운용 제품',p=>stockValue(p)==='운용'],
   ];
   const dialog=$('print-dialog');
