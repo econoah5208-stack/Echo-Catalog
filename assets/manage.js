@@ -8,8 +8,15 @@ const typeRank={'건강기능식품':0,'일반식품':1,'식품첨가물':2};
 const ko=text=>String(text||'').includes(' / ')?String(text).split(' / ').slice(1).join(' / ').trim():String(text||'').trim();
 const compare=(a,b)=>(typeRank[a.catalogType]??9)-(typeRank[b.catalogType]??9)||ko(a.category).localeCompare(ko(b.category),'ko')||a.name.localeCompare(b.name,'ko')||a.id.localeCompare(b.id);
 for(const [key,label] of Object.entries(schema)){const wrap=document.createElement('label');wrap.textContent=label;const input=document.createElement(['catalogType','catalogGroup','stock'].includes(key)?'select':['function','efficacy','application'].includes(key)?'textarea':'input');input.id='field-'+key;if(['catalogType','catalogGroup','stock'].includes(key)){const values=key==='catalogType'?['','건강기능식품','일반식품','식품첨가물']:key==='catalogGroup'?['','일반원료','기능성부원료']:['미정','운용','미운용'];values.forEach(v=>input.add(new Option(v||'미지정',v)));}input.required=['id','name','category'].includes(key);wrap.append(input);$('fields').append(wrap);}
+// 대분류 입력 보조: 기존 대분류 목록(datalist)과 원료 분야 연결 상태 안내. 데이터 구조는 바꾸지 않습니다.
+const categoryList=document.createElement('datalist');categoryList.id='category-options';
+[...new Set(source.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ko')).forEach(c=>categoryList.append(new Option(c)));
+document.body.append(categoryList);$('field-category').setAttribute('list','category-options');
+const areaHint=document.createElement('span');areaHint.className='field-hint';areaHint.id='area-hint';areaHint.setAttribute('aria-live','polite');$('field-category').parentElement.append(areaHint);
+function showArea(){const tax=window.EchoTaxonomy;if(!tax){areaHint.textContent='';return;}const category=$('field-category').value.trim();if(!category){areaHint.textContent='';areaHint.classList.remove('is-warning');return;}const group=tax.group(tax.groupOf({category,subcategory:$('field-subcategory').value.trim()}));areaHint.textContent=group?`원료 분야: ${group.no} ${group.name}`:'원료 분야에 연결되지 않은 대분류입니다. data/taxonomy.js에 추가해야 고객 화면의 원료 분야 메뉴에 표시됩니다.';areaHint.classList.toggle('is-warning',!group);}
+$('field-category').addEventListener('input',showArea);$('field-subcategory').addEventListener('input',showArea);
 function list(){const query=$('find').value.trim().toLowerCase();$('entries').replaceChildren();products.map((p,i)=>({p,i})).sort((a,b)=>compare(a.p,b.p)).forEach(({p,i})=>{if(!`${p.id} ${p.name}`.toLowerCase().includes(query))return;const b=document.createElement('button');b.type='button';b.textContent=`${p.id} · ${p.name}${p.visible===false?' (숨김)':''}`;b.className=selected===i?'selected':'';b.addEventListener('click',()=>{if(formDirty&&!confirm('현재 입력 중인 내용을 버리고 다른 제품을 열까요?'))return;choose(i);});$('entries').append(b);});}
-function choose(i){selected=i;for(const key of Object.keys(schema))$('field-'+key).value=products[i]?.[key]||'';$('visible').checked=products[i]?.visible!==false;formDirty=false;list();}
+function choose(i){selected=i;for(const key of Object.keys(schema))$('field-'+key).value=products[i]?.[key]||'';$('visible').checked=products[i]?.visible!==false;formDirty=false;showArea();list();}
 function say(text){$('status').textContent=text;}
 $('find').addEventListener('input',list);
 $('edit').addEventListener('input',()=>formDirty=true);

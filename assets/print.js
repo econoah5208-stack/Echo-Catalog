@@ -25,6 +25,13 @@
     ['stock','Stock 운용 제품',p=>stockValue(p)==='운용'],
   ];
   const dialog=$('print-dialog');
+  // 회사 정보는 data/site-config.js 에서만 관리합니다(헤더·푸터·PDF 공통).
+  const site=window.ECHO_SITE||{},contact=site.contact||{},company=site.company||{};
+  const companyName=company.nameEn||'Echo Trading Co.,Ltd';
+  const contactLine=[contact.tel&&`TEL ${contact.tel.label}`,contact.email&&contact.email.label,contact.web&&contact.web.label].filter(Boolean).join(' · ');
+  const printDate=()=>{const d=new Date();return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;};
+  const changeListeners=new Set();
+  const notify=()=>changeListeners.forEach(fn=>{try{fn(chosen);}catch(error){console.error(error);}});
 
   const portraitFields=[['name','제품명'],['subcategory','소분류'],['marker','지표성분'],['origin','원산지'],['application','어플리케이션']];
   const portrait=()=>$('print-portrait').checked;
@@ -71,9 +78,10 @@
   $('print-stock').addEventListener('change',()=>{if(activePreset)applyPreset(activePreset);else{updatePresetButtons();buildPreview();}});
   function sync(){
     $('selection-count').textContent=`${chosen.size}개 선택`;$('clear-selection').disabled=!chosen.size;
-    document.querySelectorAll('input[data-product-select]').forEach(input=>{input.checked=chosen.has(input.dataset.productSelect);});
+    document.querySelectorAll('input[data-product-select]').forEach(input=>{const on=chosen.has(input.dataset.productSelect);input.checked=on;const row=input.closest('tr');if(row)row.classList.toggle('is-selected',on);});
     const count=pageIds.filter(id=>chosen.has(id)).length;
     $('select-page').checked=pageIds.length>0&&count===pageIds.length;$('select-page').indeterminate=count>0&&count<pageIds.length;$('select-page').disabled=!pageIds.length;
+    notify();
   }
   function createCheckbox(p){
     const wrap=node('label',undefined,'product-selection'),input=node('input');input.type='checkbox';input.dataset.productSelect=p.id;input.checked=chosen.has(p.id);
@@ -92,7 +100,7 @@
   function buildPage(products,cols,pageNumber,pageTotal,startIndex){
     const page=node('article',undefined,'brochure-page landscape-auto'),header=node('header',undefined,'brochure-header');
     const logo=node('img');logo.src='assets/echo-trading-logo.svg';logo.alt='Echo Trading';logo.className='brochure-logo';
-    const titleBox=node('div',undefined,'brochure-title');titleBox.append(node('p','PRODUCT CATALOG','brochure-kicker'),node('h1',$('print-title').value.trim()||'제품 소개자료'));
+    const titleBox=node('div',undefined,'brochure-title');titleBox.append(node('p',company.slogan||'Global Ingredients. Reliable Solutions.','brochure-kicker'),node('h1',$('print-title').value.trim()||'제품 소개자료'));
     const customer=$('print-customer').value.trim();if(customer)titleBox.append(node('p',`${customer} 귀중`,'brochure-customer'));
     const pageMeta=node('div',undefined,'brochure-page-meta');pageMeta.append(node('strong',`${pageNumber}`),node('span',`/ ${pageTotal}`));
     header.append(logo,titleBox,pageMeta);page.append(header);
@@ -131,7 +139,7 @@
       body.append(row);
     });
     page.append(table);
-    const footer=node('footer',undefined,'brochure-footer');footer.append(node('p','제품별 정확한 규격과 적용 조건은 담당자에게 문의해 주세요.'),node('p',`Echo Trading Co.,Ltd · +82-70-8652-1774 · www.echotra.com · ${products.length}개 제품`));
+    const footer=node('footer',undefined,'brochure-footer');footer.append(node('p',`제품별 정확한 규격과 적용 조건은 담당자에게 문의해 주세요. · 출력일 ${printDate()}`),node('p',[companyName,contactLine,`${products.length}개 제품`].filter(Boolean).join(' · ')));
     page.append(footer);return page;
   }
   function landscapeAvailableHeight(page,table){
@@ -145,7 +153,8 @@
     const originals=[...root.querySelectorAll('.landscape-auto')];
     if(!originals.length)return true;
     const host=node('div');host.id='print-measure-landscape';host.setAttribute('aria-hidden','true');document.body.append(host);
-    const minFont=4.4,maxFont=6.65;let common=maxFont,fits=true;
+    // safety: 실제 인쇄 엔진의 줄바꿈 차이로 마지막 행이 잘리지 않도록 표 아래에 약 1.6mm 여유를 둡니다.
+    const minFont=4.4,maxFont=6.65,safety=6;let common=maxFont,fits=true;
     try{
       originals.forEach(original=>{
         const page=original.cloneNode(true);host.replaceChildren(page);
@@ -153,12 +162,12 @@
         page.style.setProperty('--landscape-font',minFont+'pt');
         page.style.setProperty('--landscape-head-font',Math.max(4.4,minFont-.05)+'pt');
         let available=landscapeAvailableHeight(page,table);
-        if(available<=0||table.getBoundingClientRect().height>available+0.5){fits=false;return;}
+        if(available<=safety||table.getBoundingClientRect().height>available-safety){fits=false;return;}
         let low=minFont,high=maxFont;
         for(let i=0;i<14;i++){
           const size=(low+high)/2;page.style.setProperty('--landscape-font',size+'pt');page.style.setProperty('--landscape-head-font',Math.max(4.4,size-.05)+'pt');
           available=landscapeAvailableHeight(page,table);
-          if(table.getBoundingClientRect().height<=available+0.5)low=size;else high=size;
+          if(table.getBoundingClientRect().height<=available-safety)low=size;else high=size;
         }
         common=Math.min(common,Math.floor(low*100)/100);
       });
@@ -204,7 +213,7 @@
       cols.forEach(([key])=>{const cell=node('td',key==='name'?p.name:valueFor(p,key));cell.dataset.field=key;row.append(cell);});body.append(row);
     });
     flow.append(table);page.append(content);
-    page.append(node('footer',`Echo Trading · 070-8652-1774 · www.echotra.com | ${products.length}개 제품 | 규격 및 적용 조건은 담당자에게 문의해 주세요.`,'compact-footer'));
+    page.append(node('footer',`${[companyName,contactLine].filter(Boolean).join(' · ')} | ${products.length}개 제품 | 출력일 ${printDate()} | 규격 및 적용 조건은 담당자에게 문의해 주세요.`,'compact-footer'));
     return page;
   }
   function fitCompact(root){
@@ -236,7 +245,8 @@
         const content=page.querySelector('.compact-content'),flow=page.querySelector('.compact-flow'),table=page.querySelector('.compact-table');
         table.style.height='auto';
         const tableTop=table.offsetTop;
-        const target=Math.max(table.getBoundingClientRect().height,content.clientHeight-tableTop);
+        // offsetHeight 는 미리보기 확대·축소(transform)의 영향을 받지 않습니다.
+        const target=Math.max(table.offsetHeight,content.clientHeight-tableTop);
         table.style.height=Math.floor(target)+'px';
       });
       return true;
@@ -252,6 +262,7 @@
     return sheet;
   }
   function buildPreview(){
+    resetZoom();
     pageStyle.textContent=portrait()?'@page{size:A4 portrait;margin:6mm}':'@page{size:A4 landscape;margin:10mm}';
     $('print-preview').classList.toggle('portrait-preview',portrait());
     $('print-help').textContent=portrait()
@@ -269,12 +280,37 @@
     const pages=$('print-preview').querySelectorAll(portrait()?'.compact-page':'.brochure-page').length;
     $('print-selection-total').textContent=`출력 제품 ${chosen.size}개 · ${pages}페이지`;
     $('print-page-count-label').textContent=`전체 분량 · ${pages}장 자동`;
+    if(dialog.open)applyZoom();
+  }
+  // 미리보기 배율: 화면 표시용 transform 만 바꾸며 A4 페이지의 실제 크기(mm)는 그대로 둡니다.
+  let zoom=1,zoomMode='fit';
+  function resetZoom(){
+    const sizer=$('print-preview-sizer'),preview=$('print-preview');if(!sizer)return;
+    sizer.classList.remove('is-scaled');sizer.style.width='';sizer.style.height='';preview.style.transform='';preview.style.width='';
+  }
+  function applyZoom(){
+    const sizer=$('print-preview-sizer'),preview=$('print-preview'),scroll=$('print-preview-scroll');if(!sizer)return;
+    resetZoom();
+    const w=preview.offsetWidth,h=preview.offsetHeight;if(!w||!h)return;
+    if(zoomMode==='fit'){const style=getComputedStyle(scroll),available=scroll.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);zoom=Math.min(1,Math.max(.3,available/w));}
+    if(Math.abs(zoom-1)>.005){sizer.classList.add('is-scaled');sizer.style.width=`${Math.ceil(w*zoom)}px`;sizer.style.height=`${Math.ceil(h*zoom)}px`;preview.style.width=`${w}px`;preview.style.transform=`scale(${zoom})`;}
+    $('preview-zoom-value').textContent=`${Math.round(zoom*100)}%`;
+    $('preview-zoom-fit').setAttribute('aria-pressed',String(zoomMode==='fit'));
+  }
+  function stepZoom(delta){zoomMode='manual';zoom=Math.min(1.5,Math.max(.3,Math.round((zoom+delta)*10)/10));applyZoom();}
+  if($('preview-zoom-in')){
+    $('preview-zoom-in').addEventListener('click',()=>stepZoom(.1));
+    $('preview-zoom-out').addEventListener('click',()=>stepZoom(-.1));
+    $('preview-zoom-fit').addEventListener('click',()=>{zoomMode='fit';applyZoom();});
+    let resizeTimer=0;window.addEventListener('resize',()=>{if(!dialog.open||zoomMode!=='fit')return;clearTimeout(resizeTimer);resizeTimer=setTimeout(applyZoom,150);});
   }
   // Layout uses physical page dimensions; viewport resizing does not change print sizing.
   document.fonts.ready.then(()=>{if(portrait())fitCompact($('print-preview'));else fitLandscape($('print-preview'));});
   $('select-page').addEventListener('change',e=>{activePreset='';pageIds.forEach(id=>e.target.checked?chosen.add(id):chosen.delete(id));sync();updatePresetButtons();buildPreview();});
   $('clear-selection').addEventListener('click',()=>{activePreset='';chosen.clear();sync();updatePresetButtons();buildPreview();});
-  $('open-print').addEventListener('click',()=>{buildPreview();updatePresetButtons();dialog.showModal();if(portrait())fitCompact($('print-preview'));else fitLandscape($('print-preview'));});
+  function openDialog(){resetZoom();buildPreview();updatePresetButtons();dialog.showModal();if(portrait())fitCompact($('print-preview'));else fitLandscape($('print-preview'));zoomMode='fit';applyZoom();}
+  $('open-print').addEventListener('click',openDialog);
+  document.querySelectorAll('[data-open-print]').forEach(button=>button.addEventListener('click',openDialog));
   $('close-print').addEventListener('click',()=>dialog.close());
   ['print-title','print-customer','print-memo'].forEach(id=>$(id).addEventListener('input',buildPreview));
   function preparePrint(){
@@ -292,6 +328,7 @@
     catch(error){finishPrint();window.alert(error.message);}
   });
   window.addEventListener('beforeprint',preparePrint);window.addEventListener('afterprint',finishPrint);
-  window.EchoPrint={createCheckbox,setPage(products){pageIds=products.map(p=>p.id);sync();}};
+  function setChosen(id,on){if(!byId.has(id))return;activePreset='';if(on)chosen.add(id);else chosen.delete(id);sync();updatePresetButtons();buildPreview();}
+  window.EchoPrint={createCheckbox,setPage(products){pageIds=products.map(p=>p.id);sync();},isChosen:id=>chosen.has(id),setChosen,open:openDialog,onChange(fn){changeListeners.add(fn);return()=>changeListeners.delete(fn);}};
   updatePresetButtons();buildPreview();sync();
 })();

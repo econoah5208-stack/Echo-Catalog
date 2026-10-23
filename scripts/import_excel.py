@@ -1,23 +1,24 @@
-"""Local Excel -> public products.js. Usage: python scripts/import_excel.py source.xlsx
+"""Local Excel -> public catalog JSON. Usage: python scripts/import_excel.py source.xlsx --output catalog-import.json --review review.json
 Requires openpyxl. Original workbook and private review report must remain outside the repository.
 """
 import argparse, json, re
+from collections import Counter
 from pathlib import Path
 import openpyxl
 
 FIELDS = {'제품코드':'id','아이템':'name','대분류':'category','소분류':'subcategory','지표성분':'marker','수치':'spec','기능':'function','사용처(Application)':'application','형태':'form','공정':'process','원산지':'origin','포장':'packaging','Stock 운용':'stock'}
 
-# 일반식품 중 기능성 콘셉트로 운용하는 품목. BE 계열은 아래에서 일괄 처리합니다.
-FUNCTIONAL_GENERAL_IDS = {
-    'AF0008','AF0010','AF0011','AF0012','AF0014','AF0017','AF0019','CH0003','CH0004',
-    'DC0001','DC0006','EN0001','FM0039','FM0040','FM0041','FM0042','FM0043','FM0044','FM0045',
-    'MX0001','MX0015','MX0021','MX0022','MX0024','PF0026','PF0058','PF0059','PR0002','PR0005',
-    'PR0017','PR0018','PR0019','PR0021','PR0022','PR0023','PR0027','PR0032','PR0033','PR0034',
-    'PR0035','UN0001','UN0002','UN0003','UN0004','UN0005','UN0006','UN0008','UN0009','UN0010',
-    'UN0011','UN0012'
-}
+# 일반식품 하위 분류 기준은 코드 밖의 설정 파일에서 관리합니다.
+# 우선순위: ① Excel '일반식품 하위분류' 열 ② functionalPrefixes ③ functionalIds ④ 일반원료
+GROUP_CONFIG = Path(__file__).with_name('general_food_groups.json')
+GROUP_COLUMNS = ('일반식품 하위분류', '일반식품 하위 분류')
 
-def convert(source):
+def load_group_rules(path=GROUP_CONFIG):
+    config = json.loads(Path(path).read_text(encoding='utf-8'))
+    return tuple(config.get('functionalPrefixes', [])), set(config.get('functionalIds', []))
+
+def convert(source, group_config=GROUP_CONFIG):
+    functional_prefixes, functional_ids = load_group_rules(group_config)
     workbook=openpyxl.load_workbook(source,data_only=True,read_only=True)
     sheet=workbook['제품마스터']
     rows=sheet.iter_rows(values_only=True); headers=list(next(rows))
@@ -61,7 +62,13 @@ def convert(source):
             raise ValueError(f'{rownum}행 국내 식품분류 오류: {catalog_type or "빈 값"}')
         group=''
         if catalog_type=='일반식품':
-            group='기능성부원료' if p['id'].startswith('BE') or p['id'] in FUNCTIONAL_GENERAL_IDS else '일반원료'
+            explicit=next((str(raw.get(col) or '').strip() for col in GROUP_COLUMNS if str(raw.get(col) or '').strip()), '')
+            if explicit:
+                if explicit not in ('일반원료','기능성부원료'):
+                    raise ValueError(f'{rownum}행 일반식품 하위분류 오류: {explicit}')
+                group=explicit
+            else:
+                group='기능성부원료' if p['id'].startswith(functional_prefixes) or p['id'] in functional_ids else '일반원료'
         stock=p['stock'] or '미정'
         if stock not in ['미정','운용','미운용']:
             issue('stock','Stock 운용 값이 미정/운용/미운용이 아님. 미정으로 처리');stock='미정'
@@ -74,9 +81,15 @@ if __name__=='__main__':
     parser.add_argument('source',type=Path)
     parser.add_argument('--output',type=Path,default=Path.cwd()/'catalog-import.json')
     parser.add_argument('--review',type=Path,help='Private review JSON path outside the public repository')
-    args=parser.parse_args();products,review=convert(args.source)
+    parser.add_argument('--groups',type=Path,default=GROUP_CONFIG,help='일반식품 하위 분류 기준 JSON')
+    args=parser.parse_args();products,review=convert(args.source,args.groups)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(products,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     if args.review:
         args.review.write_text(json.dumps(review,ensure_ascii=False,indent=2),encoding='utf-8')
+    types=Counter(p['catalogType'] for p in products)
+    groups=Counter(p['catalogGroup'] for p in products if p['catalogType']=='일반식품')
     print(f'{len(products)} products exported; {len(review)} review entries. No manufacturer/supplier fields exported.')
+    print('국내 식품분류: '+' / '.join(f'{k} {v}' for k,v in types.items()))
+    print('일반식품 하위 분류: '+' / '.join(f'{k} {v}' for k,v in groups.items()))
+    print('다음 단계: node scripts/build_catalog.mjs <output.json> data/catalog.js 후 node scripts/verify_catalog.mjs 로 점검하세요.')

@@ -1,306 +1,237 @@
-.selection-toolbar{display:flex;align-items:center;gap:16px;padding:14px 16px;margin:0 0 18px;background:#eaf2f6;border:1px solid #cedfe9;border-radius:8px;flex-wrap:wrap}.selection-toolbar label{display:flex;gap:7px;align-items:center;font-size:13px}.selection-toolbar input,.product-selection input,#print-columns input{width:17px;height:17px;accent-color:#176987}.selection-toolbar strong{font-size:14px;color:#153d55}.selection-toolbar .primary{margin-left:auto;padding:9px 16px}.selection-toolbar button:disabled{opacity:.45;cursor:default}.product-selection{display:flex;align-items:center;gap:6px;font-size:12px;color:#60717d;margin-bottom:8px;width:fit-content;cursor:pointer}
-#print-dialog{width:min(1180px,calc(100% - 24px));max-height:94vh;padding:0;border:0;border-radius:18px;box-shadow:0 24px 70px rgba(18,48,65,.24)}#print-dialog::backdrop{background:rgba(13,34,47,.58);backdrop-filter:blur(3px)}.print-dialog-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:26px 30px 20px;border-bottom:1px solid #dce5ea}.print-dialog-heading p{margin:0 0 5px;color:#176987;font-size:11px;font-weight:800;letter-spacing:.16em}.print-dialog-heading h2{font-size:25px;margin:0;color:#153d55}.print-dialog-heading button{background:#f1f5f7;border:0;border-radius:50%;width:38px;height:38px;font-size:24px;color:#49616e}.print-settings{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:22px 30px}.print-settings>label{display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:700;color:#39515f}.print-settings input,.print-settings textarea,.print-settings select{border:1px solid #bdccd5;border-radius:7px;padding:10px 11px;font:inherit;background:white;color:#203b4a}.print-settings input:focus,.print-settings textarea:focus,.print-settings select:focus{outline:3px solid rgba(23,105,135,.13);border-color:#176987}.print-settings .wide{grid-column:1/-1}.print-settings textarea{min-height:62px;resize:vertical}.print-preset-fieldset{border:0;margin:0;padding:0}.print-preset-fieldset legend{font-size:13px;font-weight:800;color:#39515f;margin-bottom:9px}.print-presets{display:flex;flex-wrap:wrap;gap:8px}.print-preset{border:1px solid #b8ccd7;border-radius:999px;background:white;color:#274b5d;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer}.print-preset:hover{border-color:#176987}.print-preset.active{background:#153d55;color:white;border-color:#153d55}.print-range-controls{display:grid;grid-template-columns:minmax(180px,280px) 1fr;align-items:end;gap:16px}.print-range-controls label{display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:700;color:#39515f}.print-range-note{margin:0 0 11px;color:#60717d;font-size:12px}#print-columns{display:flex;flex-wrap:wrap;gap:10px 20px;border:0;margin:0;padding:0}#print-columns legend{font-size:13px;font-weight:800;margin-bottom:8px;color:#39515f}#print-columns label{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:500}.print-actions{display:flex;gap:18px;align-items:center;margin:0;padding:18px 30px;background:#f5f8f9;border-top:1px solid #dce5ea;position:sticky;bottom:0;z-index:2}.print-actions p{font-size:12px;color:#60717d;margin:0;flex:1}.print-actions button:disabled{opacity:.4}.print-picked{border:1px solid #dce4e9;border-radius:8px;padding:11px 14px;font-size:13px;margin:0}.print-picked summary{cursor:pointer;font-weight:700}#print-chosen{max-height:180px;overflow:auto;padding-left:22px}#print-chosen li{padding:5px 0}#print-chosen button{margin-left:12px;font-size:12px;border:0;border-radius:4px;background:#edf2f5;padding:4px 8px}.print-preview-scroll{background:#dfe5e8;border-top:1px solid #d2dde2;padding:22px;overflow:auto}#print-preview{min-width:1040px}#print-sheet{display:none}
-.brochure{font-family:Arial,"Malgun Gothic",sans-serif;color:#183542}.brochure-page{box-sizing:border-box;width:277mm;min-height:190mm;margin:0 auto 20px;background:white;padding:8mm 9mm 6mm;display:grid;grid-template-rows:auto auto 1fr auto;box-shadow:0 8px 24px rgba(18,48,65,.14);border-top:4px solid #153d55;break-after:page;page-break-after:always}.brochure-page:last-child{margin-bottom:0;break-after:auto;page-break-after:auto}.brochure-header{display:grid;grid-template-columns:48mm 1fr auto;align-items:center;gap:8mm;padding-bottom:4mm;border-bottom:1px solid #cad7dd}.brochure-logo{display:block;width:47mm;height:auto}.brochure-title{min-width:0}.brochure-kicker{margin:0 0 1mm;color:#62a82f;font-size:7.5pt;font-weight:800;letter-spacing:.16em}.brochure-title h1{margin:0;color:#153d55;font-size:17pt;line-height:1.15;letter-spacing:-.04em}.brochure-customer{margin:1.5mm 0 0;color:#5d727d;font-size:8pt}.brochure-page-meta{display:flex;align-items:baseline;gap:1.5mm;color:#78909b}.brochure-page-meta strong{color:#153d55;font-size:16pt}.brochure-page-meta span{font-size:8pt}.brochure-memo{box-sizing:border-box;margin:3mm 0 0;padding:2.2mm 3mm;background:#f1f6f7;border-left:2.5px solid #62a82f;color:#465e69;font-size:7.5pt;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}.brochure-table{width:100%;height:auto;margin-top:3.5mm;align-self:start;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid #cdd9de;border-radius:3mm;overflow:hidden}.brochure-table thead{display:table-header-group}.brochure-table tbody{display:table-row-group}.brochure-table tr{display:table-row}.brochure-table th,.brochure-table td{display:table-cell!important;box-sizing:border-box;width:auto!important;border:0;border-right:1px solid #dce5e9;border-bottom:1px solid #dce5e9;padding:1.7mm 2.2mm;vertical-align:middle;text-align:left;overflow-wrap:anywhere}.brochure-table th:last-child,.brochure-table td:last-child{border-right:0}.brochure-table tbody tr:last-child td{border-bottom:0}.brochure-table th{background:#153d55;color:white;font-size:7.3pt;font-weight:700;line-height:1.2}.brochure-table td{color:#294652;font-size:7.1pt;line-height:1.3}.brochure-table tbody tr:nth-child(even){background:#f4f7f8}.brochure-table th.brochure-col-name,.brochure-table td.brochure-col-name{width:26%!important}.brochure-table td.brochure-col-name strong{display:block;color:#153d55;font-size:7.6pt;line-height:1.25}.brochure-code{display:block;margin-top:.8mm;color:#768993;font-size:5.9pt;line-height:1.2}.brochure-cell-text{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:3}.brochure-footer{display:flex;align-items:flex-end;justify-content:space-between;gap:8mm;padding-top:3mm;color:#6d8089;font-size:6.4pt;line-height:1.35}.brochure-footer p{margin:0}.brochure-footer p:last-child{text-align:right;color:#153d55;font-weight:700}.brochure-empty{margin:20px;background:white;border-radius:8px;padding:30px;text-align:center;color:#60717d}
-@media(max-width:600px){.selection-toolbar{gap:10px}.selection-toolbar .primary{width:100%;margin-left:0}.selection-toolbar .text-button{margin-left:auto}#print-dialog{padding:0}.print-dialog-heading{padding:20px 16px 16px}.print-settings{grid-template-columns:1fr;padding:18px 16px}.print-settings .wide{grid-column:1}.print-range-controls{grid-template-columns:1fr}.print-actions{gap:10px;padding:15px 16px}.print-actions p{flex-basis:100%}.print-preview-scroll{padding:10px}.print-preset{font-size:11px}}
-@page{size:A4 landscape;margin:10mm}
-@media print{
-html,body{width:auto!important;height:auto!important}body.printing-selection{background:white!important;margin:0!important;padding:0!important}body.printing-selection>*:not(#print-sheet){display:none!important}body.printing-selection>#print-sheet{display:block!important;margin:0!important;padding:0!important}.printing-selection .brochure{width:100%;print-color-adjust:exact;-webkit-print-color-adjust:exact}.printing-selection .brochure-page{width:100%;height:190mm;min-height:190mm;margin:0;padding:7mm 8mm 5mm;box-shadow:none;border-top-width:3px;break-after:page;page-break-after:always}.printing-selection .brochure-page:last-child{break-after:auto;page-break-after:auto}.printing-selection .brochure-table{display:table!important;width:100%!important;height:auto!important;align-self:start!important;table-layout:fixed!important}.printing-selection .brochure-table thead{display:table-header-group!important}.printing-selection .brochure-table tbody{display:table-row-group!important}.printing-selection .brochure-table tr{display:table-row!important;break-inside:avoid;page-break-inside:avoid}.printing-selection .brochure-table th,.printing-selection .brochure-table td{display:table-cell!important}.selection-toolbar,.product-selection,#print-dialog{display:none!important}
-}
+/* =========================================================
+   Echo Trading — 제품 소개자료(인쇄 / PDF) 스타일 v9.0
+   색상은 assets/styles.css 의 :root 변수만 사용합니다.
+   ⚠ 페이지 크기(mm), 패딩, 측정용 영역(#print-measure*) 규칙은 자동 분량·글자 크기 계산과 연결되어 있습니다.
+     레이아웃 수치를 바꾸면 반드시 가로/세로 출력 페이지 수와 넘침을 다시 확인하세요.
+   ========================================================= */
 
+/* ---------- 출력 설정 대화상자(화면) ---------- */
+.print-dialog { width: min(1180px, calc(100% - 24px)); max-height: 94vh; padding: 0; }
+.print-dialog-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 24px 30px 18px; border-top: 4px solid var(--orange); border-bottom: 1px solid var(--line); }
+.print-dialog-heading h2 { font-size: 24px; }
+.print-dialog-heading button { display: grid; place-items: center; flex-shrink: 0; width: 42px; height: 42px; border: 0; border-radius: 50%; background: var(--bg); color: var(--ink); }
+.print-dialog-heading button:hover { background: var(--tint); color: var(--orange-strong); }
+.print-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; padding: 22px 30px; }
+.print-settings > label { display: flex; flex-direction: column; gap: 7px; font-size: 14px; font-weight: 700; color: var(--ink); }
+.print-settings input:not([type="checkbox"]), .print-settings textarea, .print-settings select { width: 100%; border: 1px solid var(--line-strong); border-radius: var(--radius-s); padding: 10px 12px; background-color: var(--surface); color: var(--ink); font-size: 15px; font-weight: 400; }
+.print-settings input:not([type="checkbox"]) { height: 44px; }
+.print-settings input:focus, .print-settings textarea:focus, .print-settings select:focus { outline: 3px solid var(--tint); border-color: var(--orange-strong); }
+.print-settings .wide { grid-column: 1 / -1; }
+.print-settings textarea { min-height: 72px; resize: vertical; }
+.print-preset-fieldset { margin: 0; padding: 0; border: 0; }
+.print-preset-fieldset legend, #print-columns legend, .print-layout legend { margin-bottom: 10px; padding: 0; font-size: 14px; font-weight: 700; color: var(--ink); }
+.print-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.print-preset { min-height: 38px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: var(--radius-s); background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.print-preset:hover { border-color: var(--ink); }
+.print-preset.active { background: var(--ink); border-color: var(--ink); color: var(--on-dark); }
+.print-range-controls { display: grid; grid-template-columns: minmax(180px, 280px) 1fr; align-items: end; gap: 16px; margin-top: 14px; }
+.print-range-controls label { display: flex; flex-direction: column; gap: 7px; font-size: 14px; font-weight: 700; color: var(--ink); }
+.print-range-note { margin: 0 0 11px; font-size: 13px; color: var(--ink-2); }
+#print-columns { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 0; padding: 0; border: 0; }
+#print-columns label { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 500; }
+.print-actions { position: sticky; bottom: 0; z-index: 2; display: flex; align-items: center; gap: 18px; margin: 0; padding: 16px 30px; border-top: 1px solid var(--line); background: var(--bg); }
+.print-actions p { flex: 1; margin: 0; font-size: 13px; color: var(--ink-2); }
+.print-actions .button { flex-shrink: 0; }
+.print-picked { margin: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius-s); font-size: 14px; }
+.print-picked summary { font-weight: 700; }
+#print-chosen { max-height: 180px; margin: 8px 0 0; padding-left: 22px; overflow: auto; }
+#print-chosen li { padding: 4px 0; }
+#print-chosen button { margin-left: 12px; padding: 3px 9px; border: 1px solid var(--line); border-radius: var(--radius-s); background: var(--surface); font-size: 12px; }
+#print-chosen button:hover { border-color: var(--orange-strong); color: var(--orange-strong); }
+.print-layout { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin: 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius-s); font-size: 14px; }
+.print-layout label { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.print-layout p { flex-basis: 100%; margin: 0; font-size: 13px; color: var(--ink-2); }
+.print-layout [hidden] { display: none !important; }
+.print-auto-pages { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: var(--radius-s); background: var(--tint); color: var(--orange-strong); font-size: 13px; font-weight: 700; }
+.print-preview-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 12px 30px; border-top: 1px solid var(--line); background: var(--surface); font-size: 13px; }
+.print-preview-toolbar__label { font-weight: 700; margin-right: 4px; }
+.print-preview-toolbar button { min-width: 38px; height: 36px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: var(--radius-s); background: var(--surface); font-size: 14px; font-weight: 700; }
+.print-preview-toolbar button:hover { border-color: var(--ink); }
+.print-preview-toolbar output { min-width: 48px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+.print-preview-toolbar__hint { flex-basis: 100%; color: var(--ink-2); }
+.print-preview-scroll { padding: 22px; overflow: auto; background: var(--line); border-top: 1px solid var(--line); max-height: 80vh; }
+.print-preview-sizer { position: relative; margin: 0 auto; }
+.print-preview-sizer.is-scaled { overflow: hidden; }
+.print-preview-sizer.is-scaled #print-preview { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+#print-preview { min-width: 1040px; }
+#print-sheet { display: none; }
+
+/* ---------- A4 가로형 소개자료 ---------- */
+.brochure, .brochure-page { font-family: var(--font-print); color: var(--ink); word-break: normal; }
+.brochure-page { box-sizing: border-box; width: 277mm; min-height: 190mm; margin: 0 auto 20px; background: var(--surface); padding: 8mm 9mm 6mm; display: grid; grid-template-rows: auto auto 1fr auto; line-height: 1.35; box-shadow: var(--shadow-page); border-top: 4px solid var(--orange); break-after: page; page-break-after: always; }
+.brochure-page:last-child { margin-bottom: 0; break-after: auto; page-break-after: auto; }
+.brochure-header { display: grid; grid-template-columns: 48mm 1fr auto; align-items: center; gap: 8mm; padding-bottom: 4mm; border-bottom: 1px solid var(--orange); }
+.brochure-logo { display: block; width: 47mm; height: auto; }
+.brochure-title { min-width: 0; }
+.brochure-kicker { margin: 0 0 1mm; color: var(--orange-strong); font-size: 7.5pt; font-weight: 700; font-style: italic; }
+.brochure-title h1 { margin: 0; color: var(--ink); font-size: 17pt; line-height: 1.15; letter-spacing: -.04em; }
+.brochure-customer { margin: 1.5mm 0 0; color: var(--ink-2); font-size: 8pt; }
+.brochure-page-meta { display: flex; align-items: baseline; gap: 1.5mm; color: var(--ink-2); }
+.brochure-page-meta strong { color: var(--orange); font-size: 16pt; }
+.brochure-page-meta span { font-size: 8pt; }
+.brochure-memo { box-sizing: border-box; margin: 3mm 0 0; padding: 2.2mm 3mm; background: var(--bg); border-left: 2.5px solid var(--orange); color: var(--ink); font-size: 7.5pt; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+.brochure-table { width: 100%; height: auto; margin-top: 3.5mm; align-self: start; border-collapse: separate; border-spacing: 0; table-layout: fixed; border: 1px solid var(--line); border-radius: 1.5mm; overflow: hidden; }
+.brochure-table thead { display: table-header-group; }
+.brochure-table tbody { display: table-row-group; }
+.brochure-table tr { display: table-row; }
+.brochure-table th, .brochure-table td { display: table-cell !important; box-sizing: border-box; width: auto !important; border: 0; border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); padding: 1.7mm 2.2mm; vertical-align: middle; text-align: left; overflow-wrap: anywhere; }
+.brochure-table th:last-child, .brochure-table td:last-child { border-right: 0; }
+.brochure-table tbody tr:last-child td { border-bottom: 0; }
+.brochure-table th { background: var(--tint); color: var(--ink); border-bottom: 1px solid var(--orange); font-size: 7.3pt; font-weight: 700; line-height: 1.2; }
+.brochure-table td { color: var(--ink); font-size: 7.1pt; line-height: 1.3; }
+.brochure-table tbody tr:nth-child(even) { background: var(--print-zebra); }
+.brochure-table th.brochure-col-name, .brochure-table td.brochure-col-name { width: 26% !important; }
+.brochure-table td.brochure-col-name strong { display: block; color: var(--ink); font-size: 7.6pt; line-height: 1.25; }
+.brochure-code { display: block; margin-top: .8mm; color: var(--ink-2); font-size: 5.9pt; line-height: 1.2; }
+.brochure-cell-text { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+.brochure-footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 8mm; padding-top: 2.4mm; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 6.4pt; line-height: 1.35; }
+.brochure-footer p { margin: 0; }
+.brochure-footer p:last-child { text-align: right; color: var(--ink); font-weight: 700; }
+.brochure-empty { margin: 20px; background: var(--surface); border-radius: var(--radius-m); padding: 30px; text-align: center; color: var(--ink-2); }
+@media (max-width: 720px) {
+  .print-dialog-heading { padding: 18px 16px 14px; }
+  .print-dialog-heading h2 { font-size: 21px; }
+  .print-settings { grid-template-columns: 1fr; padding: 18px 16px; }
+  .print-settings .wide { grid-column: 1; }
+  .print-range-controls { grid-template-columns: 1fr; }
+  .print-actions { position: static; flex-wrap: wrap; gap: 10px; padding: 14px 16px; }
+  .print-actions .button { flex: 1 1 100%; }
+  .print-actions p { flex-basis: 100%; }
+  .print-preview-toolbar { padding: 12px 16px; }
+  .print-preview-scroll { padding: 10px; max-height: 70vh; }
+  .print-preset { font-size: 13px; }
+}
+@page { size: A4 landscape; margin: 10mm; }
+@media print {
+  html, body { width: auto !important; height: auto !important; }
+  body.printing-selection { background: var(--surface) !important; margin: 0 !important; padding: 0 !important; }
+  body.printing-selection > *:not(#print-sheet) { display: none !important; }
+  body.printing-selection > #print-sheet { display: block !important; margin: 0 !important; padding: 0 !important; }
+  .printing-selection .brochure { width: 100%; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .printing-selection .brochure-page { width: 100%; height: 190mm; min-height: 190mm; margin: 0; padding: 7mm 8mm 5mm; box-shadow: none; border-top-width: 3px; break-after: page; page-break-after: always; }
+  .printing-selection .brochure-page:last-child { break-after: auto; page-break-after: auto; }
+  .printing-selection .brochure-table { display: table !important; width: 100% !important; height: auto !important; align-self: start !important; table-layout: fixed !important; }
+  .printing-selection .brochure-table thead { display: table-header-group !important; }
+  .printing-selection .brochure-table tbody { display: table-row-group !important; }
+  .printing-selection .brochure-table tr { display: table-row !important; break-inside: avoid; page-break-inside: avoid; }
+  .printing-selection .brochure-table th, .printing-selection .brochure-table td { display: table-cell !important; }
+  .selection-toolbar, .product-selection, #print-dialog { display: none !important; }
+}
 
 /* =========================================================
-   2026-09-15 PRINT 10-ROWS + EFFICACY CLIP FIX
+   2026-09-15 PRINT 10-ROWS + EFFICACY CLIP FIX (유지)
    ========================================================= */
-.brochure-page{
-  grid-template-rows:auto auto minmax(0,1fr) auto !important;
-}
-
-.brochure-table{
-  height:auto !important;
-  overflow:visible !important;
-  align-self:start !important;
-}
-
-.brochure-table th,
-.brochure-table td{
-  padding:1.10mm 1.65mm !important;
-}
-
-.brochure-table th{
-  font-size:6.9pt !important;
-  line-height:1.15 !important;
-}
-
-.brochure-table td{
-  font-size:6.65pt !important;
-  line-height:1.17 !important;
-}
-
-.brochure-table td.brochure-col-name strong{
-  display:-webkit-box !important;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
-  overflow:hidden;
-  font-size:7.05pt !important;
-  line-height:1.14 !important;
-}
-
-.brochure-code{
-  margin-top:.35mm !important;
-  font-size:5.45pt !important;
-  line-height:1.08 !important;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
+.brochure-page { grid-template-rows: auto auto minmax(0, 1fr) auto !important; }
+.brochure-table { height: auto !important; overflow: visible !important; align-self: start !important; }
+.brochure-table th, .brochure-table td { padding: 1.10mm 1.65mm !important; }
+.brochure-table th { font-size: 6.9pt !important; line-height: 1.15 !important; }
+.brochure-table td { font-size: 6.65pt !important; line-height: 1.17 !important; }
+.brochure-table td.brochure-col-name strong { display: -webkit-box !important; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 7.05pt !important; line-height: 1.14 !important; }
+.brochure-code { margin-top: .35mm !important; font-size: 5.45pt !important; line-height: 1.08 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* 기본 셀은 3줄 제한 유지 */
-.brochure-cell-text{
-  display:-webkit-box !important;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:3;
-  overflow:hidden !important;
-}
-
-/* 효능은 별도 처리:
-   마지막 행에서 line-clamp 때문에 글자 하단이 잘리는 Chromium 현상 방지 */
-.brochure-table td.brochure-col-efficacy{
-  vertical-align:top !important;
-  padding-top:1.0mm !important;
-  padding-bottom:1.35mm !important;
-}
-
-.brochure-text-efficacy{
-  display:block !important;
-  overflow:visible !important;
-  -webkit-box-orient:initial !important;
-  -webkit-line-clamp:unset !important;
-  max-height:none !important;
-  font-size:6.10pt !important;
-  line-height:1.16 !important;
-}
-
+.brochure-cell-text { display: -webkit-box !important; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden !important; }
+/* 효능은 별도 처리: 마지막 행에서 line-clamp 때문에 글자 하단이 잘리는 Chromium 현상 방지 */
+.brochure-table td.brochure-col-efficacy { vertical-align: top !important; padding-top: 1.0mm !important; padding-bottom: 1.35mm !important; }
+.brochure-text-efficacy { display: block !important; overflow: visible !important; -webkit-box-orient: initial !important; -webkit-line-clamp: unset !important; max-height: none !important; font-size: 6.10pt !important; line-height: 1.16 !important; }
 /* overflow:hidden 제거 후 둥근 모서리 복원 */
-.brochure-table thead th:first-child{border-top-left-radius:3mm}
-.brochure-table thead th:last-child{border-top-right-radius:3mm}
-.brochure-table tbody tr:last-child td:first-child{border-bottom-left-radius:3mm}
-.brochure-table tbody tr:last-child td:last-child{border-bottom-right-radius:3mm}
-
-@media print{
-  .printing-selection .brochure-page{
-    grid-template-rows:auto auto minmax(0,1fr) auto !important;
-    overflow:visible !important;
-  }
-
-  .printing-selection .brochure-table{
-    display:table !important;
-    width:100% !important;
-    height:auto !important;
-    overflow:visible !important;
-    align-self:start !important;
-    table-layout:fixed !important;
-  }
-
-  .printing-selection .brochure-table th,
-  .printing-selection .brochure-table td{
-    padding:1.05mm 1.60mm !important;
-  }
-
-  .printing-selection .brochure-table td.brochure-col-efficacy{
-    vertical-align:top !important;
-    padding-top:.95mm !important;
-    padding-bottom:1.30mm !important;
-  }
-
-  .printing-selection .brochure-text-efficacy{
-    display:block !important;
-    overflow:visible !important;
-    -webkit-box-orient:initial !important;
-    -webkit-line-clamp:unset !important;
-    max-height:none !important;
-    font-size:6.0pt !important;
-    line-height:1.15 !important;
-  }
+.brochure-table thead th:first-child { border-top-left-radius: 1.5mm; }
+.brochure-table thead th:last-child { border-top-right-radius: 1.5mm; }
+.brochure-table tbody tr:last-child td:first-child { border-bottom-left-radius: 1.5mm; }
+.brochure-table tbody tr:last-child td:last-child { border-bottom-right-radius: 1.5mm; }
+@media print {
+  .printing-selection .brochure-page { grid-template-rows: auto auto minmax(0, 1fr) auto !important; overflow: visible !important; }
+  .printing-selection .brochure-table { display: table !important; width: 100% !important; height: auto !important; overflow: visible !important; align-self: start !important; table-layout: fixed !important; }
+  .printing-selection .brochure-table th, .printing-selection .brochure-table td { padding: 1.05mm 1.60mm !important; }
+  .printing-selection .brochure-table td.brochure-col-efficacy { vertical-align: top !important; padding-top: .95mm !important; padding-bottom: 1.30mm !important; }
+  .printing-selection .brochure-text-efficacy { display: block !important; overflow: visible !important; -webkit-box-orient: initial !important; -webkit-line-clamp: unset !important; max-height: none !important; font-size: 6.0pt !important; line-height: 1.15 !important; }
 }
 
-/* Compact portrait: full text, measured sizing, explicit A4 pages. */
-.print-layout{border:1px solid #cdd9de;border-radius:8px;padding:14px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-size:13px}
-.print-layout label{display:flex;align-items:center;gap:8px}.print-layout p{flex-basis:100%;margin:0;color:#60717d;font-size:12px}.print-layout [hidden]{display:none!important}
-#print-preview.portrait-preview{min-width:760px}
-.compact-page{--compact-font:7pt;box-sizing:border-box;width:198mm;height:284mm;margin:0 auto 20px;padding:0;background:white;display:flex;flex-direction:column;gap:1.5mm;box-shadow:0 8px 24px #12304124;break-after:page;page-break-after:always;color:#183542;font-family:Arial,'Malgun Gothic',sans-serif}
-.compact-page:last-child{break-after:auto;page-break-after:auto;margin-bottom:0}
-.compact-header{display:flex;align-items:center;gap:5mm;border-bottom:1.5px solid #153d55;padding:2mm 0;flex:none}
-.compact-header img{width:32mm;height:auto}.compact-header h1{font-size:10pt;line-height:1.2;margin:0;flex:1;overflow-wrap:anywhere}.compact-header span{font-size:7pt;white-space:nowrap}
-.compact-content{flex:1;min-height:0;font-size:var(--compact-font);line-height:1.12}
-.compact-memo,.compact-customer{font-size:inherit;line-height:inherit;margin:0 0 1mm;white-space:pre-wrap;overflow-wrap:anywhere}
-.compact-table{width:100%;table-layout:fixed;border-collapse:collapse;margin:0;font-size:inherit;line-height:inherit}
-.compact-table th,.compact-table td{display:table-cell!important;width:auto!important;padding:.12em .35em!important;font-size:inherit!important;line-height:inherit!important;text-align:left;vertical-align:middle;border:0.4px solid #cbd5da;white-space:normal;overflow-wrap:anywhere;word-break:normal;color:#183542}
-.compact-table th{background:#153d55;color:white;font-weight:700}.compact-table td[data-field=name]{font-weight:700}.compact-table tr:nth-child(even){background:#f1f5f6}
-.compact-footer{flex:none;border-top:1px solid #cbd5da;padding:1mm 0;font-size:5.5pt;line-height:1.2;color:#526872}
-@media print{.printing-selection .compact-page{width:198mm;height:284mm;margin:0;padding:0;box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact;break-inside:avoid}.compact-table tr{break-inside:avoid}}
-.compact-table{display:table!important}.compact-table thead{display:table-header-group!important}.compact-table tbody{display:table-row-group!important}.compact-table tr{display:table-row!important}.compact-table td::before{content:none!important}
-.compact-header img{height:8mm;object-fit:contain}
+/* ---------- A4 세로 압축 목록: 전체 내용, 실측 글자 크기, 독립 A4 페이지 ---------- */
+#print-preview.portrait-preview { min-width: 760px; }
+.compact-page { --compact-font: 7pt; box-sizing: border-box; width: 198mm; height: 284mm; margin: 0 auto 20px; padding: 0; background: var(--surface); display: flex; flex-direction: column; gap: 1.5mm; box-shadow: var(--shadow-page); break-after: page; page-break-after: always; color: var(--ink); font-family: var(--font-print); word-break: normal; line-height: 1.35; }
+.compact-page:last-child { break-after: auto; page-break-after: auto; margin-bottom: 0; }
+.compact-header { display: flex; align-items: center; gap: 5mm; border-bottom: 1.5px solid var(--orange); padding: 2mm 0; flex: none; }
+.compact-header img { width: 32mm; height: auto; }
+.compact-header h1 { font-size: 10pt; line-height: 1.2; margin: 0; flex: 1; overflow-wrap: anywhere; color: var(--ink); }
+.compact-header span { font-size: 7pt; white-space: nowrap; color: var(--ink-2); }
+.compact-content { flex: 1; min-height: 0; font-size: var(--compact-font); line-height: 1.12; }
+.compact-memo, .compact-customer { font-size: inherit; line-height: inherit; margin: 0 0 1mm; white-space: pre-wrap; overflow-wrap: anywhere; }
+.compact-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 0; font-size: inherit; line-height: inherit; }
+.compact-table th, .compact-table td { display: table-cell !important; width: auto !important; padding: .12em .35em !important; font-size: inherit !important; line-height: inherit !important; text-align: left; vertical-align: middle; border: .4px solid var(--line-strong); white-space: normal; overflow-wrap: anywhere; word-break: normal; color: var(--ink); }
+.compact-table th { background: var(--tint); color: var(--ink); font-weight: 700; border-bottom: 1px solid var(--orange); }
+.compact-table td[data-field=name] { font-weight: 700; }
+.compact-table tr:nth-child(even) { background: var(--print-zebra); }
+.compact-footer { flex: none; border-top: 1px solid var(--line-strong); padding: 1mm 0; font-size: 5.5pt; line-height: 1.2; color: var(--ink-2); }
+@media print {
+  .printing-selection .compact-page { width: 198mm; height: 284mm; margin: 0; padding: 0; box-shadow: none; print-color-adjust: exact; -webkit-print-color-adjust: exact; break-inside: avoid; }
+  .compact-table tr { break-inside: avoid; }
+}
+.compact-table { display: table !important; }
+.compact-table thead { display: table-header-group !important; }
+.compact-table tbody { display: table-row-group !important; }
+.compact-table tr { display: table-row !important; }
+.compact-table td::before { content: none !important; }
+.compact-header img { height: 8mm; object-fit: contain; }
 
 /* v7.1: independent physical pages; no flex fragmentation or paged measurement. */
-.compact-page{position:relative;display:block;height:282mm;min-height:0;max-height:none}
-.compact-content{position:absolute;left:0;right:0;top:15mm;bottom:7mm;height:auto;min-height:0}
-.compact-flow{display:flow-root;margin:0;padding:0;width:100%;font-size:inherit;line-height:inherit}
-.compact-footer{position:absolute;bottom:0;left:0;right:0;height:6mm;margin:0;padding:1mm 0;font-size:5.5pt;line-height:1.2}
-#print-measure{display:block!important;position:fixed!important;left:-10000px!important;top:0!important;width:198mm!important;height:282mm!important;visibility:hidden!important;pointer-events:none!important;contain:layout style;z-index:-9999}
-#print-measure .compact-page{display:block!important;width:198mm!important;height:282mm!important;margin:0!important;box-shadow:none!important;break-before:auto!important;break-after:auto!important}
-@media print{
-  .printing-selection .compact-page{display:block!important;position:relative!important;width:198mm!important;height:282mm!important;min-height:0!important;margin:0!important;break-after:page!important;page-break-after:always!important;break-inside:avoid!important}
-  .printing-selection .compact-page:last-child{break-after:auto!important;page-break-after:auto!important}
-  body.printing-selection>#print-measure{display:block!important}
+.compact-page { position: relative; display: block; height: 282mm; min-height: 0; max-height: none; }
+.compact-content { position: absolute; left: 0; right: 0; top: 15mm; bottom: 7mm; height: auto; min-height: 0; }
+.compact-flow { display: flow-root; margin: 0; padding: 0; width: 100%; font-size: inherit; line-height: inherit; }
+.compact-footer { position: absolute; bottom: 0; left: 0; right: 0; height: 6mm; margin: 0; padding: 1mm 0; font-size: 5.5pt; line-height: 1.2; }
+#print-measure { display: block !important; position: fixed !important; left: -10000px !important; top: 0 !important; width: 198mm !important; height: 282mm !important; visibility: hidden !important; pointer-events: none !important; contain: layout style; z-index: -9999; }
+#print-measure .compact-page { display: block !important; width: 198mm !important; height: 282mm !important; margin: 0 !important; box-shadow: none !important; break-before: auto !important; break-after: auto !important; }
+@media print {
+  .printing-selection .compact-page { display: block !important; position: relative !important; width: 198mm !important; height: 282mm !important; min-height: 0 !important; margin: 0 !important; break-after: page !important; page-break-after: always !important; break-inside: avoid !important; }
+  .printing-selection .compact-page:last-child { break-after: auto !important; page-break-after: auto !important; }
+  body.printing-selection > #print-measure { display: block !important; }
 }
 
 /* Continuous numbering follows the current output selection, across all pages. */
-.brochure-table th.brochure-col-number,.brochure-table td.brochure-col-number{width:8mm!important;text-align:center!important;white-space:nowrap;font-variant-numeric:tabular-nums}
-.compact-table th.compact-col-number,.compact-table td.compact-col-number{text-align:center!important;white-space:nowrap;font-variant-numeric:tabular-nums}
+.brochure-table th.brochure-col-number, .brochure-table td.brochure-col-number { width: 8mm !important; text-align: center !important; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.compact-table th.compact-col-number, .compact-table td.compact-col-number { text-align: center !important; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 /* v8: automatic portrait pagination, grouped classification columns. */
-.print-auto-pages{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:#eaf2f6;color:#153d55;font-size:12px;font-weight:800}
-.compact-table td.compact-group{font-weight:700;text-align:center!important;vertical-align:middle!important;color:#153d55;background:#eaf2f6!important;word-break:keep-all;overflow-wrap:anywhere}
-.compact-table td.compact-category{background:#f2f6f8!important;font-weight:650}
-.compact-table th[data-field="catalogType"],.compact-table th[data-field="category"]{text-align:center}
-.compact-table td[data-field="name"]{font-weight:700}
-.compact-table td[data-field="origin"]{text-align:center!important;word-break:keep-all}
-.compact-table{min-height:0}
-@media print{
-  .printing-selection .compact-table{height:var(--compact-table-height,auto);}
-  .printing-selection .compact-table td.compact-group{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+.compact-table td.compact-group { font-weight: 700; text-align: center !important; vertical-align: middle !important; color: var(--ink); background: var(--tint-soft) !important; word-break: keep-all; overflow-wrap: anywhere; }
+.compact-table td.compact-category { background: var(--bg) !important; font-weight: 650; }
+.compact-table th[data-field="catalogType"], .compact-table th[data-field="category"] { text-align: center; }
+.compact-table td[data-field="name"] { font-weight: 700; }
+.compact-table td[data-field="origin"] { text-align: center !important; word-break: keep-all; }
+.compact-table { min-height: 0; }
+@media print {
+  .printing-selection .compact-table { height: var(--compact-table-height, auto); }
+  .printing-selection .compact-table td.compact-group { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }
 
 /* v8.2: automatic landscape pagination, 25-item cap, grouped fixed columns. */
-.brochure-page.landscape-auto{
-  --landscape-font:6.65pt;
-  --landscape-head-font:6.6pt;
-  height:190mm;
-  min-height:190mm;
-  max-height:190mm;
-  overflow:hidden;
-  grid-template-rows:auto auto minmax(0,1fr) auto !important;
-}
-.landscape-auto .brochure-table{
-  width:100%!important;
-  min-height:0;
-  height:auto;
-  overflow:visible!important;
-  align-self:start!important;
-  table-layout:fixed!important;
-}
-.landscape-auto .brochure-table th,
-.landscape-auto .brochure-table td{
-  padding:.45mm .72mm!important;
-  line-height:1.08!important;
-  white-space:normal;
-  overflow-wrap:anywhere;
-  word-break:normal;
-  vertical-align:middle!important;
-}
-.landscape-auto .brochure-table th{
-  font-size:var(--landscape-head-font)!important;
-}
-.landscape-auto .brochure-table td{
-  font-size:var(--landscape-font)!important;
-}
-.landscape-auto .brochure-table th.brochure-col-name,
-.landscape-auto .brochure-table td.brochure-col-name{
-  width:auto!important;
-}
-.landscape-auto .brochure-table td.brochure-col-name strong{
-  display:block!important;
-  overflow:visible!important;
-  -webkit-box-orient:initial!important;
-  -webkit-line-clamp:unset!important;
-  font-size:calc(var(--landscape-font) + .25pt)!important;
-  line-height:1.08!important;
-}
-.landscape-auto .brochure-code{
-  display:block!important;
-  margin-top:.2mm!important;
-  font-size:calc(var(--landscape-font) - .75pt)!important;
-  line-height:1.05!important;
-  white-space:nowrap;
-  overflow:hidden!important;
-  text-overflow:ellipsis;
-}
-.landscape-auto .brochure-cell-text,
-.landscape-auto .brochure-text-efficacy{
-  display:block!important;
-  overflow:visible!important;
-  -webkit-box-orient:initial!important;
-  -webkit-line-clamp:unset!important;
-  max-height:none!important;
-  font-size:inherit!important;
-  line-height:inherit!important;
-}
-.landscape-auto .brochure-group{
-  font-weight:700;
-  text-align:center!important;
-  vertical-align:middle!important;
-  color:#153d55!important;
-  background:#eaf2f6!important;
-  word-break:keep-all!important;
-  overflow-wrap:anywhere;
-}
-.landscape-auto .brochure-category{
-  background:#f2f6f8!important;
-  font-weight:650;
-}
-.landscape-auto .brochure-table th[data-field="catalogType"],
-.landscape-auto .brochure-table th[data-field="category"]{
-  text-align:center;
-}
-.landscape-auto .brochure-table td[data-field="origin"],
-.landscape-auto .brochure-table td[data-field="stock"]{
-  text-align:center!important;
-  word-break:keep-all;
-}
-#print-measure-landscape{
-  display:block!important;
-  position:fixed!important;
-  left:-10000px!important;
-  top:0!important;
-  width:277mm!important;
-  height:190mm!important;
-  visibility:hidden!important;
-  pointer-events:none!important;
-  contain:layout style;
-  z-index:-9999;
-}
-#print-measure-landscape .brochure-page{
-  display:grid!important;
-  width:277mm!important;
-  height:190mm!important;
-  min-height:190mm!important;
-  max-height:190mm!important;
-  margin:0!important;
-  box-shadow:none!important;
-  break-before:auto!important;
-  break-after:auto!important;
-}
-@media print{
-  .printing-selection .brochure-page.landscape-auto{
-    width:100%!important;
-    height:190mm!important;
-    min-height:190mm!important;
-    max-height:190mm!important;
-    overflow:hidden!important;
-  }
-  .printing-selection .landscape-auto .brochure-table{
-    height:var(--landscape-table-height,auto);
-  }
-  .printing-selection .landscape-auto .brochure-group{
-    print-color-adjust:exact;
-    -webkit-print-color-adjust:exact;
-  }
-  body.printing-selection>#print-measure-landscape{display:block!important}
+.brochure-page.landscape-auto { --landscape-font: 6.65pt; --landscape-head-font: 6.6pt; height: 190mm; min-height: 190mm; max-height: 190mm; overflow: hidden; grid-template-rows: auto auto minmax(0, 1fr) auto !important; }
+.landscape-auto .brochure-table { width: 100% !important; min-height: 0; height: auto; overflow: visible !important; align-self: start !important; table-layout: fixed !important; }
+.landscape-auto .brochure-table th, .landscape-auto .brochure-table td { padding: .45mm .72mm !important; line-height: 1.08 !important; white-space: normal; overflow-wrap: anywhere; word-break: normal; vertical-align: middle !important; }
+.landscape-auto .brochure-table th { font-size: var(--landscape-head-font) !important; }
+.landscape-auto .brochure-table td { font-size: var(--landscape-font) !important; }
+.landscape-auto .brochure-table th.brochure-col-name, .landscape-auto .brochure-table td.brochure-col-name { width: auto !important; }
+.landscape-auto .brochure-table td.brochure-col-name strong { display: block !important; overflow: visible !important; -webkit-box-orient: initial !important; -webkit-line-clamp: unset !important; font-size: calc(var(--landscape-font) + .25pt) !important; line-height: 1.08 !important; }
+.landscape-auto .brochure-code { display: block !important; margin-top: .2mm !important; font-size: calc(var(--landscape-font) - .75pt) !important; line-height: 1.05 !important; white-space: nowrap; overflow: hidden !important; text-overflow: ellipsis; }
+.landscape-auto .brochure-cell-text, .landscape-auto .brochure-text-efficacy { display: block !important; overflow: visible !important; -webkit-box-orient: initial !important; -webkit-line-clamp: unset !important; max-height: none !important; font-size: inherit !important; line-height: inherit !important; }
+.landscape-auto .brochure-group { font-weight: 700; text-align: center !important; vertical-align: middle !important; color: var(--ink) !important; background: var(--tint-soft) !important; word-break: keep-all !important; overflow-wrap: anywhere; }
+.landscape-auto .brochure-category { background: var(--bg) !important; font-weight: 650; }
+.landscape-auto .brochure-table th[data-field="catalogType"], .landscape-auto .brochure-table th[data-field="category"] { text-align: center; }
+.landscape-auto .brochure-table td[data-field="origin"], .landscape-auto .brochure-table td[data-field="stock"] { text-align: center !important; word-break: keep-all; }
+#print-measure-landscape { display: block !important; position: fixed !important; left: -10000px !important; top: 0 !important; width: 277mm !important; height: 190mm !important; visibility: hidden !important; pointer-events: none !important; contain: layout style; z-index: -9999; }
+#print-measure-landscape .brochure-page { display: grid !important; width: 277mm !important; height: 190mm !important; min-height: 190mm !important; max-height: 190mm !important; margin: 0 !important; box-shadow: none !important; break-before: auto !important; break-after: auto !important; }
+@media print {
+  .printing-selection .brochure-page.landscape-auto { width: 100% !important; height: 190mm !important; min-height: 190mm !important; max-height: 190mm !important; overflow: hidden !important; }
+  .printing-selection .landscape-auto .brochure-table { height: var(--landscape-table-height, auto); }
+  .printing-selection .landscape-auto .brochure-group { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  body.printing-selection > #print-measure-landscape { display: block !important; }
+  /* v9.0 수정: 인쇄 전용 효능 셀 여백(.95mm/1.30mm)이 자동 맞춤 측정값(.45mm)보다 커서
+     효능 항목을 선택하면 페이지 하단 행이 잘리던 문제(v8.4부터 존재)를 막습니다. 화면 측정과 같은 값을 사용합니다. */
+  .printing-selection .landscape-auto .brochure-table td.brochure-col-efficacy { padding: .45mm .72mm !important; vertical-align: middle !important; }
+  .printing-selection .landscape-auto .brochure-text-efficacy { font-size: inherit !important; line-height: inherit !important; }
 }
 /* Keep landscape grid tracks stable even when the optional memo is absent. */
-.landscape-auto>.brochure-header{grid-row:1}
-.landscape-auto>.brochure-memo{grid-row:2}
-.landscape-auto>.brochure-table{grid-row:3}
-.landscape-auto>.brochure-footer{grid-row:4}
+.landscape-auto > .brochure-header { grid-row: 1; }
+.landscape-auto > .brochure-memo { grid-row: 2; }
+.landscape-auto > .brochure-table { grid-row: 3; }
+.landscape-auto > .brochure-footer { grid-row: 4; }
 /* Stretch the fitted landscape table across its complete grid row. */
-.landscape-auto>.brochure-table{align-self:stretch!important;height:auto!important}
+.landscape-auto > .brochure-table { align-self: stretch !important; height: auto !important; }
