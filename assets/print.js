@@ -54,7 +54,7 @@
   function renderBodyFields(){
     const note=node('p','','print-field-note');
     $('print-columns').replaceChildren(node('legend','인체 기능형 출력 항목 · NO. / 제품명은 고정 · 아래 항목은 선택'));
-    const groups=[['sub','제품명 아래 표시'],['feature','기능 / 특징 열'],['col',`추가 열 (최대 ${BodyPrint.MAX_COLS}개)`]];
+    const groups=[['sub','제품명 아래 표시'],['feature','기능 / 특징 열'],['col',`추가 열 (최대 ${BodyPrint.MAX_COLS}개)`],['page','페이지 구성']];
     groups.forEach(([kind,title])=>{
       $('print-columns').append(node('p',title,'print-field-group'));
       BodyPrint.FIELDS.filter(f=>f[2]===kind).forEach(([key,label])=>{
@@ -307,10 +307,10 @@
     $('print-preview').classList.toggle('portrait-preview',portrait()||body);
     $('print-preview').classList.toggle('body-preview',body);
     if($('print-layout-note'))$('print-layout-note').textContent=body
-      ?'인체 기능 분류별로 페이지를 나누고, 실제 행 높이를 측정해 페이지당 최대 22개까지 배치합니다. 글자 크기는 줄이지 않으며 설명이 길면 페이지가 늘어납니다. 분류는 원료 탐색용 참고 분류입니다.'
+      ?'인체 기능·원료 종류 분류별로 묶어 출력합니다. 한 분류가 끝나고 여백이 남으면 다음 분류를 같은 페이지에 이어 배치해 종이를 아낍니다(분류마다 새 페이지는 아래 「페이지 구성」에서 선택). 실제 행 높이를 측정해 페이지당 최대 22개까지 배치하며 글자 크기는 줄이지 않습니다. 분류는 원료 탐색용 참고 분류입니다.'
       :'가로형은 페이지당 최대 25개, 세로형은 최대 50개까지 배치합니다. 두 방향 모두 필요한 최소 장수를 자동 계산하고 각 페이지 표 높이를 인쇄영역에 맞춰 자동 확장합니다.';
     $('print-help').textContent=body
-      ?'A4 세로 · 인체 기능 분류별 페이지 · 페이지당 최대 22개 · 순번은 출력 목록 기준 1부터 연속. 인쇄창에서 용지 A4, 배율 100%(기본), 배경 그래픽 켜기를 선택해 주세요.'
+      ?'A4 세로 · 분류별 배치(여백이 남으면 여러 분류를 한 페이지에) · 페이지당 최대 22개 · 순번은 출력 목록 기준 1부터 연속. 인쇄창에서 용지 A4, 배율 100%(기본), 배경 그래픽 켜기를 선택해 주세요.'
       :portrait()
       ?'A4 세로 · 페이지당 최대 50개 · 최소 장수 자동 계산 · No./국내 식품분류/대분류 고정. PDF 저장 시 브라우저 머리글·바닥글을 꺼 주세요.'
       :'A4 가로 · 페이지당 최대 25개 · 최소 장수 자동 계산 · No./국내 식품분류/대분류/제품명·코드 고정 · 분류 셀 자동 병합. PDF 저장 시 배경 그래픽을 켜고 브라우저 머리글·바닥글을 꺼 주세요.';

@@ -36,19 +36,19 @@ window.ECHO_SITE = {
     { value: '2010', unit: '년', label: '식품원료 사업 시작', source: '회사소개서 2026 p.4 (2010.09)' },
     { auto: 'products', unit: '개', label: '등록 제품', source: 'data/catalog.js 자동 집계' },
     { auto: 'originCountries', unit: '개국', label: '등록 원료의 해외 원산지', source: 'data/catalog.js 원산지 자동 집계' },
-    { value: '61', unit: '개사', label: '홈페이지 게시 해외 파트너', source: '회사소개서 2026 p.5·p.19' }
+    { value: '65', unit: '개사', label: '홈페이지 게시 해외 파트너', source: '회사소개서 2026 p.5·p.19 (2026-10-23 갱신)' }
   ],
 
   /* 해외 파트너 지역 분포(회사소개서 2026 p.19). 업체명은 공개 승인 전까지 표시하지 않습니다. */
   partners: {
-    total: 61,
+    total: 65,
     basis: '홈페이지 게시 해외 파트너 기준',
-    source: '회사소개서 2026 p.19',
+    source: '회사소개서 2026 p.19 (2026-10-23 갱신: 4개사 추가, Briess 제외·Senson Oy 추가)',
     regions: [
-      { id: 'asia', name: '아시아', en: 'Asia', count: 22 },
-      { id: 'europe', name: '유럽', en: 'Europe', count: 20 },
+      { id: 'asia', name: '아시아', en: 'Asia', count: 24 },
+      { id: 'europe', name: '유럽', en: 'Europe', count: 21 },
       { id: 'north-america', name: '북미', en: 'North America', count: 13 },
-      { id: 'south-america', name: '남미', en: 'South America', count: 3 },
+      { id: 'south-america', name: '남미', en: 'South America', count: 4 },
       { id: 'oceania', name: '오세아니아', en: 'Oceania', count: 3 }
     ]
   },
@@ -57,11 +57,11 @@ window.ECHO_SITE = {
      표시하지 않으려면 show 를 false 로 바꾸세요. */
   domesticClients: {
     show: true,
-    source: '회사소개서 2026 p.18',
+    source: '회사소개서 2026 p.18 (2026-10-23 갱신: 판매 거래처 반영, 동진제약 제외)',
     segments: [
-      { name: '일반식품 고객사', en: 'Food & Beverage', count: 20 },
-      { name: '건강기능식품 고객사', en: 'Health Functional Food', count: 13 },
-      { name: 'OEM·ODM 고객사', en: 'OEM · ODM', count: 13 }
+      { name: '일반식품 고객사', en: 'Food & Beverage', count: 37 },
+      { name: '건강기능식품 고객사', en: 'Health Functional Food', count: 36 },
+      { name: 'OEM·ODM 고객사', en: 'OEM · ODM', count: 14 }
     ]
   },
 

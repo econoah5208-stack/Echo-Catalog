@@ -253,7 +253,7 @@
 .body-title h1 { margin-top: .6mm; font-size: 14pt; line-height: 1.15; letter-spacing: -.03em; color: var(--ink); overflow-wrap: anywhere; }
 .body-sub { margin-top: .8mm; font-size: 7pt; color: var(--ink-2); }
 .body-meta { text-align: right; white-space: nowrap; }
-.body-meta__area { display: block; font-size: 7.6pt; font-weight: 700; color: var(--ink); }
+.body-meta__area { display: block; max-width: 64mm; margin-left: auto; font-size: 7.6pt; font-weight: 700; line-height: 1.3; color: var(--ink); white-space: normal; }
 .body-meta__page { display: block; margin-top: .6mm; font-size: 7pt; color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .body-meta__page strong { font-size: 13pt; color: var(--orange); }
 .body-memo { grid-row: 2; margin-bottom: 3mm !important; padding: 2mm 3mm; background: var(--bg); border-left: .6mm solid var(--orange); font-size: 7.6pt; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -285,6 +285,7 @@
 .body-legend .dot--off { background: var(--surface); box-shadow: inset 0 0 0 .3mm var(--ink-3); }
 .body-legend__note { margin-top: .8mm !important; }
 .body-list { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.body-section + .body-section { margin-top: 4.5mm; }
 .body-band { display: flex; align-items: center; justify-content: space-between; gap: 3mm; flex: none; height: 11mm; padding: 0 4mm; background: var(--orange); color: var(--on-dark); border-radius: 1mm 1mm 0 0; }
 .body-band--general { background: var(--ink); }
 .body-band--review { background: var(--ink-2); }

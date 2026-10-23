@@ -93,6 +93,8 @@ if (bfData && bf) {
     else entry.slice(1).forEach(t => { if (!areaIds.has(t)) errors.push(`${id} 보조 태그 값 오류: ${t}`); if (t === entry[0]) warnings.push(`${id} 보조 태그가 대표 분류와 같습니다: ${t}`); });
   });
   bfData.areas.filter(a => a.kind === 'body').forEach(a => { if (!bfData.anchors[a.anchor]) errors.push(`인체 그래픽 위치가 없는 분류: ${a.id} (${a.anchor})`); });
+  const ys = bfData.areas.filter(a => a.kind === 'body' && bfData.anchors[a.anchor]).map(a => bfData.anchors[a.anchor].y);
+  if (ys.some((y, i) => i && y <= ys[i - 1])) warnings.push('인체 그래픽 위치가 분류 번호 순서(위→아래)가 아닙니다 — 한 페이지에 여러 분류가 나오면 연결선이 교차할 수 있습니다');
   products.forEach(p => { const c = bf.classify(p); bodyCounts[c.primary] = (bodyCounts[c.primary] || 0) + 1; if (!c.mapped) warnings.push(`${p.id} 인체 기능 분류 미지정 → '기타 · 분류 확인 필요'로 출력`); });
   const bodyTotal = Object.values(bodyCounts).reduce((a, b) => a + b, 0);
   if (bodyTotal !== products.length) errors.push(`인체 기능 분류 합계(${bodyTotal})가 전체 제품 수와 다릅니다`);
@@ -128,7 +130,7 @@ line('대분류', `${categories.length}개`);
 line('원료 분야(8)', tax.groups.map(g => `${g.no} ${g.name} ${areaCounts[g.id]}`).join(' · '));
 line('원료 분야 합계', `${areaTotal}개`);
 line('해외 원산지 국가', `${countries.size}개국`);
-if (bfData) line('인체 기능 분류(14)', bfData.areas.map(a => `${a.no} ${a.name} ${bodyCounts[a.id] || 0}`).join(' · '));
+if (bfData) line(`인체 기능 분류(${bfData.areas.length})`, bfData.areas.map(a => `${a.no} ${a.name} ${bodyCounts[a.id] || 0}`).join(' · '));
 line('Stock 운용', Object.entries(count(products, p => p.stock)).map(([k, v]) => `${k} ${v}`).join(' / '));
 if (warnings.length) { console.log(`\n확인 필요 ${warnings.length}건`); warnings.forEach(w => console.log('  - ' + w)); }
 if (errors.length) { console.log(`\n오류 ${errors.length}건`); errors.forEach(e => console.log('  ✕ ' + e)); process.exit(1); }
