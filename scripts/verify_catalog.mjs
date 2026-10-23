@@ -20,7 +20,7 @@ const option = name => { const i = args.indexOf(name); return i >= 0 ? args[i + 
 
 const context = { window: {} };
 vm.createContext(context);
-for (const file of ['data/catalog.js', 'data/taxonomy.js', 'data/site-config.js']) {
+for (const file of ['data/catalog.js', 'data/taxonomy.js', 'data/site-config.js', 'data/body-functions.js']) {
   vm.runInContext(await readFile(path.join(root, file), 'utf8'), context, { filename: file });
 }
 const products = context.window.ECHO_PRODUCTS;
@@ -82,6 +82,22 @@ products.forEach(p => ['name', 'marker', 'spec', 'packaging', 'origin', 'applica
   if (suspicious.test(String(p[field] || ''))) warnings.push(`${p.id} ${field} 공개값 확인: "${p[field]}"`);
 }));
 
+// 6-1. 인체 기능 분류(data/body-functions.js) — 인체 기능형 카탈로그 출력용
+const bfData = context.window.ECHO_BODY_FUNCTIONS, bf = context.window.EchoBodyFunctions;
+const bodyCounts = {};
+if (bfData && bf) {
+  const areaIds = new Set(bfData.areas.map(a => a.id));
+  Object.entries(bfData.products).forEach(([id, entry]) => {
+    if (!ids.includes(id)) warnings.push(`body-functions.js 에만 있는 제품코드: ${id}`);
+    if (!Array.isArray(entry) || !areaIds.has(entry[0])) errors.push(`${id} 인체 기능 대표 분류 값 오류: ${JSON.stringify(entry)}`);
+    else entry.slice(1).forEach(t => { if (!areaIds.has(t)) errors.push(`${id} 보조 태그 값 오류: ${t}`); if (t === entry[0]) warnings.push(`${id} 보조 태그가 대표 분류와 같습니다: ${t}`); });
+  });
+  bfData.areas.filter(a => a.kind === 'body').forEach(a => { if (!bfData.anchors[a.anchor]) errors.push(`인체 그래픽 위치가 없는 분류: ${a.id} (${a.anchor})`); });
+  products.forEach(p => { const c = bf.classify(p); bodyCounts[c.primary] = (bodyCounts[c.primary] || 0) + 1; if (!c.mapped) warnings.push(`${p.id} 인체 기능 분류 미지정 → '기타 · 분류 확인 필요'로 출력`); });
+  const bodyTotal = Object.values(bodyCounts).reduce((a, b) => a + b, 0);
+  if (bodyTotal !== products.length) errors.push(`인체 기능 분류 합계(${bodyTotal})가 전체 제품 수와 다릅니다`);
+} else warnings.push('data/body-functions.js 를 불러오지 못했습니다(인체 기능형 출력 불가)');
+
 // 7. Excel 변환 결과와 비교
 const compareFile = option('--compare');
 if (compareFile) {
@@ -112,6 +128,7 @@ line('대분류', `${categories.length}개`);
 line('원료 분야(8)', tax.groups.map(g => `${g.no} ${g.name} ${areaCounts[g.id]}`).join(' · '));
 line('원료 분야 합계', `${areaTotal}개`);
 line('해외 원산지 국가', `${countries.size}개국`);
+if (bfData) line('인체 기능 분류(14)', bfData.areas.map(a => `${a.no} ${a.name} ${bodyCounts[a.id] || 0}`).join(' · '));
 line('Stock 운용', Object.entries(count(products, p => p.stock)).map(([k, v]) => `${k} ${v}`).join(' / '));
 if (warnings.length) { console.log(`\n확인 필요 ${warnings.length}건`); warnings.forEach(w => console.log('  - ' + w)); }
 if (errors.length) { console.log(`\n오류 ${errors.length}건`); errors.forEach(e => console.log('  ✕ ' + e)); process.exit(1); }

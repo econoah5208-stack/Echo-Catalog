@@ -34,9 +34,15 @@
   const notify=()=>changeListeners.forEach(fn=>{try{fn(chosen);}catch(error){console.error(error);}});
 
   const portraitFields=[['name','제품명'],['subcategory','소분류'],['marker','지표성분'],['origin','원산지'],['application','어플리케이션']];
-  const portrait=()=>$('print-portrait').checked;
+  // 출력 레이아웃: landscape(A4 가로 상세) · compact(A4 세로 압축) · body(A4 세로 인체 기능형, assets/print-body.js)
+  const layoutRadios=[...document.querySelectorAll('input[name="print-layout"]')];
+  const BodyPrint=window.EchoBodyPrint||null;
+  if(!BodyPrint){const r=layoutRadios.find(x=>x.value==='body');if(r){r.disabled=true;r.closest('label').hidden=true;}}
+  const layoutMode=()=>{const r=layoutRadios.find(x=>x.checked);return r?r.value:'landscape';};
+  const portrait=()=>layoutMode()==='compact';
+  const bodyMode=()=>layoutMode()==='body'&&!!BodyPrint;
   const pageStyle=node('style');document.head.append(pageStyle);
-  const fieldMemory={landscape:new Set(defaults),portrait:new Set(portraitFields.map(([key])=>key))};
+  const fieldMemory={landscape:new Set(defaults),portrait:new Set(portraitFields.map(([key])=>key)),body:new Set(BodyPrint?BodyPrint.DEFAULTS:[])};
   const typeRank={'건강기능식품':0,'일반식품':1,'식품첨가물':2};
   let fieldMode='landscape';
   function printSort(a,b){
@@ -45,7 +51,28 @@
       ||a.name.localeCompare(b.name,'ko')
       ||a.id.localeCompare(b.id);
   }
+  function renderBodyFields(){
+    const note=node('p','','print-field-note');
+    $('print-columns').replaceChildren(node('legend','인체 기능형 출력 항목 · NO. / 제품명은 고정 · 아래 항목은 선택'));
+    const groups=[['sub','제품명 아래 표시'],['feature','기능 / 특징 열'],['col',`추가 열 (최대 ${BodyPrint.MAX_COLS}개)`]];
+    groups.forEach(([kind,title])=>{
+      $('print-columns').append(node('p',title,'print-field-group'));
+      BodyPrint.FIELDS.filter(f=>f[2]===kind).forEach(([key,label])=>{
+        const wrap=node('label'),input=node('input');input.type='checkbox';input.value=key;input.checked=fieldMemory.body.has(key);
+        input.addEventListener('change',()=>{
+          const inputs=[...$('print-columns').querySelectorAll('input')];
+          const extra=inputs.filter(i=>i.checked&&BodyPrint.FIELDS.some(f=>f[0]===i.value&&f[2]==='col'));
+          if(kind==='col'&&input.checked&&extra.length>BodyPrint.MAX_COLS){input.checked=false;note.textContent=`세로형 표의 가독성을 위해 추가 열은 최대 ${BodyPrint.MAX_COLS}개까지 선택할 수 있습니다.`;note.classList.add('is-warning');return;}
+          note.textContent='';note.classList.remove('is-warning');
+          fieldMemory.body=new Set(inputs.filter(i=>i.checked).map(i=>i.value));buildPreview();
+        });
+        wrap.append(input,node('span',label));$('print-columns').append(wrap);
+      });
+    });
+    $('print-columns').append(note);
+  }
   function renderFields(){
+    if(bodyMode()){renderBodyFields();return;}
     const legend=portrait()
       ?'세로형 출력 항목 · No. / 국내 식품분류 / 대분류는 고정 · 아래 항목은 선택'
       :'가로형 출력 항목 · No. / 국내 식품분류 / 대분류 / 제품명·코드는 고정 · 아래 항목은 선택';
@@ -57,7 +84,15 @@
   }
   renderFields();
   $('print-page-count-label').hidden=false;
-  $('print-portrait').addEventListener('change',()=>{fieldMode=portrait()?'portrait':'landscape';renderFields();buildPreview();});
+  layoutRadios.forEach(radio=>radio.addEventListener('change',()=>{
+    if(!radio.checked)return;
+    fieldMode=bodyMode()?'body':portrait()?'portrait':'landscape';
+    // 자료 제목: 기본값을 쓰는 중이면 레이아웃에 맞는 기본 제목으로 바꿉니다(직접 입력한 제목은 유지).
+    const title=$('print-title'),bodyTitle=BodyPrint?BodyPrint.DEFAULT_TITLE:'';
+    if(bodyMode()&&title.value.trim()==='제품 소개자료')title.value=bodyTitle;
+    else if(!bodyMode()&&bodyTitle&&title.value.trim()===bodyTitle)title.value='제품 소개자료';
+    renderFields();buildPreview();
+  }));
   function selected(){return [...chosen].map(id=>byId.get(id)).filter(Boolean);}
   function columns(){return (portrait()?portraitFields:fields).filter(([key])=>[...$('print-columns').querySelectorAll('input')].some(input=>input.value===key&&input.checked));}
   function stockMatches(p){const value=$('print-stock').value;return !value||stockValue(p)===value;}
@@ -252,7 +287,11 @@
       return true;
     }finally{host.remove();}
   }
+  function buildBodySheet(){
+    return BodyPrint.build(selected(),{fields:fieldMemory.body,title:$('print-title').value.trim()||BodyPrint.DEFAULT_TITLE,customer:$('print-customer').value.trim(),memo:$('print-memo').value.trim(),companyName,contactLine,printDate:printDate()});
+  }
   function buildSheet(pageCountOverride=null){
+    if(bodyMode())return buildBodySheet();
     const products=selected().sort(printSort),cols=columns(),sheet=node('div',undefined,'brochure');
     if(!products.length){sheet.append(node('p','출력할 제품 범위를 선택하거나 목록에서 제품을 담아 주세요.','brochure-empty'));return sheet;}
     const maxPerPage=portrait()?50:25;
@@ -263,21 +302,29 @@
   }
   function buildPreview(){
     resetZoom();
-    pageStyle.textContent=portrait()?'@page{size:A4 portrait;margin:6mm}':'@page{size:A4 landscape;margin:10mm}';
-    $('print-preview').classList.toggle('portrait-preview',portrait());
-    $('print-help').textContent=portrait()
+    const body=bodyMode();
+    pageStyle.textContent=body?'@page{size:A4 portrait;margin:0}':portrait()?'@page{size:A4 portrait;margin:6mm}':'@page{size:A4 landscape;margin:10mm}';
+    $('print-preview').classList.toggle('portrait-preview',portrait()||body);
+    $('print-preview').classList.toggle('body-preview',body);
+    if($('print-layout-note'))$('print-layout-note').textContent=body
+      ?'인체 기능 분류별로 페이지를 나누고, 실제 행 높이를 측정해 페이지당 최대 22개까지 배치합니다. 글자 크기는 줄이지 않으며 설명이 길면 페이지가 늘어납니다. 분류는 원료 탐색용 참고 분류입니다.'
+      :'가로형은 페이지당 최대 25개, 세로형은 최대 50개까지 배치합니다. 두 방향 모두 필요한 최소 장수를 자동 계산하고 각 페이지 표 높이를 인쇄영역에 맞춰 자동 확장합니다.';
+    $('print-help').textContent=body
+      ?'A4 세로 · 인체 기능 분류별 페이지 · 페이지당 최대 22개 · 순번은 출력 목록 기준 1부터 연속. 인쇄창에서 용지 A4, 배율 100%(기본), 배경 그래픽 켜기를 선택해 주세요.'
+      :portrait()
       ?'A4 세로 · 페이지당 최대 50개 · 최소 장수 자동 계산 · No./국내 식품분류/대분류 고정. PDF 저장 시 브라우저 머리글·바닥글을 꺼 주세요.'
       :'A4 가로 · 페이지당 최대 25개 · 최소 장수 자동 계산 · No./국내 식품분류/대분류/제품명·코드 고정 · 분류 셀 자동 병합. PDF 저장 시 배경 그래픽을 켜고 브라우저 머리글·바닥글을 꺼 주세요.';
     $('print-chosen').replaceChildren();
     selected().sort(printSort).forEach(p=>{const item=node('li');item.append(node('span',`${p.name} · ${p.id}`));const remove=node('button','제외');remove.type='button';remove.setAttribute('aria-label',`${p.name} 선택 제외`);remove.addEventListener('click',()=>{activePreset='';chosen.delete(p.id);sync();updatePresetButtons();buildPreview();});item.append(remove);$('print-chosen').append(item);});
-    if(chosen.size){
+    if(chosen.size&&body)$('print-preview').replaceChildren(buildBodySheet());
+    else if(chosen.size){
       const maxPerPage=portrait()?50:25,fit=portrait()?fitCompact:fitLandscape;
       let pageCount=Math.max(1,Math.ceil(chosen.size/maxPerPage)),ok=false;
       while(pageCount<=chosen.size&&!ok){$('print-preview').replaceChildren(buildSheet(pageCount));ok=fit($('print-preview'));if(!ok)pageCount++;}
       if(!ok){$('print-preview').replaceChildren(buildSheet(chosen.size));fit($('print-preview'));}
     }else $('print-preview').replaceChildren(buildSheet());
     $('print-now').disabled=!chosen.size;
-    const pages=$('print-preview').querySelectorAll(portrait()?'.compact-page':'.brochure-page').length;
+    const pages=$('print-preview').querySelectorAll(body?BodyPrint.pageSelector:portrait()?'.compact-page':'.brochure-page').length;
     $('print-selection-total').textContent=`출력 제품 ${chosen.size}개 · ${pages}페이지`;
     $('print-page-count-label').textContent=`전체 분량 · ${pages}장 자동`;
     if(dialog.open)applyZoom();
@@ -305,10 +352,10 @@
     let resizeTimer=0;window.addEventListener('resize',()=>{if(!dialog.open||zoomMode!=='fit')return;clearTimeout(resizeTimer);resizeTimer=setTimeout(applyZoom,150);});
   }
   // Layout uses physical page dimensions; viewport resizing does not change print sizing.
-  document.fonts.ready.then(()=>{if(portrait())fitCompact($('print-preview'));else fitLandscape($('print-preview'));});
+  document.fonts.ready.then(()=>{if(bodyMode()){if(chosen.size)buildPreview();}else if(portrait())fitCompact($('print-preview'));else fitLandscape($('print-preview'));});
   $('select-page').addEventListener('change',e=>{activePreset='';pageIds.forEach(id=>e.target.checked?chosen.add(id):chosen.delete(id));sync();updatePresetButtons();buildPreview();});
   $('clear-selection').addEventListener('click',()=>{activePreset='';chosen.clear();sync();updatePresetButtons();buildPreview();});
-  function openDialog(){resetZoom();buildPreview();updatePresetButtons();dialog.showModal();if(portrait())fitCompact($('print-preview'));else fitLandscape($('print-preview'));zoomMode='fit';applyZoom();}
+  function openDialog(){resetZoom();buildPreview();updatePresetButtons();dialog.showModal();if(bodyMode()){/* 측정은 build 단계에서 완료 */}else if(portrait())fitCompact($('print-preview'));else fitLandscape($('print-preview'));zoomMode='fit';applyZoom();}
   $('open-print').addEventListener('click',openDialog);
   document.querySelectorAll('[data-open-print]').forEach(button=>button.addEventListener('click',openDialog));
   $('close-print').addEventListener('click',()=>dialog.close());
@@ -319,8 +366,9 @@
     $('print-sheet').replaceChildren(sheet);printPrepared=true;document.body.classList.add('printing-selection');
     if(dialog.open){returnToPreview=true;dialog.close();}if($('detail').open)$('detail').close();
     if(!oldTitle)oldTitle=document.title;document.title=$('print-title').value.trim()||'Echo Trading 제품 소개자료';
+    document.body.classList.toggle('printing-body-catalog',bodyMode());
   }
-  function finishPrint(){printPrepared=false;document.body.classList.remove('printing-selection');if(oldTitle){document.title=oldTitle;oldTitle='';}if(returnToPreview){returnToPreview=false;dialog.showModal();}}
+  function finishPrint(){printPrepared=false;document.body.classList.remove('printing-selection','printing-body-catalog');if(oldTitle){document.title=oldTitle;oldTitle='';}if(returnToPreview){returnToPreview=false;dialog.showModal();}}
   $('print-now').addEventListener('click',async()=>{
     if(!chosen.size)return;
     await document.fonts.ready;
