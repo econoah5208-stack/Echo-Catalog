@@ -1313,7 +1313,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0051",
-    "name": "세인트존스워트 추출분말(멜라토닌함량 2%)",
+    "name": "세인트존스워트추출분말(멜라토닌2%)",
     "category": "식물추출물",
     "subcategory": "허브추출물",
     "marker": "Melatonin / 멜라토닌",
@@ -3498,7 +3498,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "LI0007",
-    "name": "정제어유",
+    "name": "정제어유 (Refined Fish oil 18/12 TG)",
     "category": "유지류",
     "subcategory": "어유",
     "marker": "EPA; DHA",
