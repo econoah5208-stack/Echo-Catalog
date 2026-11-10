@@ -151,7 +151,8 @@ line('해외 원산지 국가', `${countries.size}개국`);
 if (bfData) line(`인체 기능 분류(${bfData.areas.length})`, bfData.areas.map(a => `${a.no} ${a.name} ${bodyCounts[a.id] || 0}`).join(' · '));
 line('Stock 운용', Object.entries(count(products, p => p.stock)).map(([k, v]) => `${k} ${v}`).join(' / '));
 if (printSummary) {
-  line('Foodform® 제품', `${printSummary.foodform}개 (인쇄 시 별도 페이지)`);
+  const ffGroups = pr.foodformGroup ? pr.FOODFORM_GROUPS.map(g => `${g.label} ${pr.siteProducts(products).items.filter(p => pr.isFoodform(p) && pr.foodformGroup(p).id === g.id).length}`).join(' · ') : '';
+  line('Foodform® 제품', `${printSummary.foodform}개 (인쇄 시 별도 페이지${ffGroups ? ' · ' + ffGroups : ''})`);
   line('같은 제품명 중복', `${printSummary.groups.length}묶음 · ${printSummary.removed}개 숨김 → ${printSummary.out}개 (${printSummary.hideOnSite ? '홈페이지 목록·인쇄 모두' : '인쇄에서만'})`);
   if (args.includes('--duplicates')) printSummary.groups.forEach(g => console.log(`    ${g[0].id} ${g[0].name.replace(/\s+/g, ' ')}  ← 숨김 ${g.slice(1).map(p => p.id + (p.name !== g[0].name ? ` (${p.name.replace(/\s+/g, ' ')})` : '')).join(', ')}`));
 }

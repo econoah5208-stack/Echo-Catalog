@@ -69,9 +69,20 @@
   function printSections(items){
     const sorted=items.slice().sort(printSort);
     if(!foodformOn())return [{key:'main',label:'',products:sorted}];
-    const foodform={key:'foodform',label:`${Rules.FOODFORM_LABEL} 제품`,products:sorted.filter(Rules.isFoodform)};
+    // Foodform® 구역은 효모 유래 → 유산균 유래 → 배양·식물농축 순, 구분 안에서는 제품명 순(data/catalog-rules.js FOODFORM_GROUPS)
+    const ffOrder=p=>Rules.foodformGroup?Rules.foodformGroup(p).order:0;
+    const foodform={key:'foodform',label:`${Rules.FOODFORM_LABEL} 제품`,products:sorted.filter(Rules.isFoodform).sort((a,b)=>ffOrder(a)-ffOrder(b)||a.name.localeCompare(b.name,'ko')||a.id.localeCompare(b.id))};
     const main={key:'main',label:'',products:sorted.filter(p=>!Rules.isFoodform(p))};
     return (foodformEnd()?[main,foodform]:[foodform,main]).filter(s=>s.products.length);
+  }
+  /* 표의 두 번째 분류 열: 일반 페이지는 대분류, Foodform® 페이지는 Foodform® 구분(효모 유래 / 유산균 유래 / 배양·식물농축) */
+  function groupColumn(section){
+    const ff=!!(section&&section.key==='foodform'&&Rules&&Rules.foodformGroup);
+    return {
+      label:ff?`${Rules.FOODFORM_LABEL} 구분`:'대분류',
+      key:p=>ff?Rules.foodformGroup(p).id:p.category,
+      text:p=>ff?Rules.foodformGroup(p).label:(ko(p.category)||'문의'),
+    };
   }
   function renderBodyFields(){
     const note=node('p','','print-field-note');
@@ -172,7 +183,8 @@
     // Foodform® 페이지: 국내 식품분류·대분류가 한두 값으로 병합되므로 그 폭을 줄이고 긴 영문 제품명에 폭을 더 줍니다(한 장 배치 시 글자 크기 확보).
     if(section&&section.key==='foodform')Object.assign(weights,{catalogType:8,category:8,name:29});
     const numberCol=node('col');numberCol.style.width='8mm';group.append(numberCol);
-    const fixedCols=[['catalogType','국내 식품분류'],['category','대분류'],['name','제품명 / 코드']];
+    const grp=groupColumn(section);
+    const fixedCols=[['catalogType','국내 식품분류'],['category',grp.label],['name','제품명 / 코드']];
     const totalWeight=fixedCols.concat(cols).reduce((n,[key])=>n+(weights[key]||12),0);
     const availableWidth=251;
     const numberHeader=node('th','No.','brochure-col-number');numberHeader.scope='col';labels.append(numberHeader);
@@ -189,9 +201,9 @@
         let span=1;while(rowIndex+span<products.length&&products[rowIndex+span].catalogType===p.catalogType)span++;
         const cell=node('td',p.catalogType||'문의','brochure-group brochure-catalog-type');cell.rowSpan=span;cell.dataset.field='catalogType';row.append(cell);
       }
-      if(!prev||prev.catalogType!==p.catalogType||prev.category!==p.category){
-        let span=1;while(rowIndex+span<products.length&&products[rowIndex+span].catalogType===p.catalogType&&products[rowIndex+span].category===p.category)span++;
-        const cell=node('td',ko(p.category)||'문의','brochure-group brochure-category');cell.rowSpan=span;cell.dataset.field='category';row.append(cell);
+      if(!prev||prev.catalogType!==p.catalogType||grp.key(prev)!==grp.key(p)){
+        let span=1;while(rowIndex+span<products.length&&products[rowIndex+span].catalogType===p.catalogType&&grp.key(products[rowIndex+span])===grp.key(p))span++;
+        const cell=node('td',grp.text(p),'brochure-group brochure-category');cell.rowSpan=span;cell.dataset.field='category';row.append(cell);
       }
       const name=node('td');name.classList.add('brochure-col-name');name.dataset.field='name';
       name.append(node('strong',p.name),node('small',p.id,'brochure-code'));row.append(name);
@@ -265,8 +277,10 @@
     if(index===1&&$('print-memo').value.trim())flow.append(node('p',$('print-memo').value.trim(),'compact-memo'));
     const table=node('table',undefined,'compact-table'),group=node('colgroup'),head=node('thead'),labels=node('tr'),body=node('tbody');
     const weights={catalogType:11,category:17,name:20,subcategory:16,marker:18,origin:8,application:20};
+    if(section&&section.key==='foodform')Object.assign(weights,{catalogType:8,category:10,name:30}); // Foodform® 페이지: 병합 열을 줄이고 영문 제품명 폭 확보
     const numberCol=node('col');numberCol.style.width='7mm';group.append(numberCol);
-    const fixedCols=[['catalogType','국내 식품분류'],['category','대분류']];
+    const grp=groupColumn(section);
+    const fixedCols=[['catalogType','국내 식품분류'],['category',grp.label]];
     const totalWeight=fixedCols.concat(cols).reduce((n,[key])=>n+(weights[key]||14),0);
     const numberHeader=node('th','No.','compact-col-number');numberHeader.scope='col';labels.append(numberHeader);
     fixedCols.concat(cols).forEach(([key,label])=>{
@@ -281,9 +295,9 @@
         let span=1;while(rowIndex+span<products.length&&products[rowIndex+span].catalogType===p.catalogType)span++;
         const cell=node('td',p.catalogType,'compact-group compact-catalog-type');cell.rowSpan=span;cell.dataset.field='catalogType';row.append(cell);
       }
-      if(!prev||prev.catalogType!==p.catalogType||prev.category!==p.category){
-        let span=1;while(rowIndex+span<products.length&&products[rowIndex+span].catalogType===p.catalogType&&products[rowIndex+span].category===p.category)span++;
-        const cell=node('td',ko(p.category)||'문의','compact-group compact-category');cell.rowSpan=span;cell.dataset.field='category';row.append(cell);
+      if(!prev||prev.catalogType!==p.catalogType||grp.key(prev)!==grp.key(p)){
+        let span=1;while(rowIndex+span<products.length&&products[rowIndex+span].catalogType===p.catalogType&&grp.key(products[rowIndex+span])===grp.key(p))span++;
+        const cell=node('td',grp.text(p),'compact-group compact-category');cell.rowSpan=span;cell.dataset.field='category';row.append(cell);
       }
       cols.forEach(([key])=>{const cell=node('td',key==='name'?p.name:valueFor(p,key));cell.dataset.field=key;row.append(cell);});body.append(row);
     });
@@ -331,7 +345,7 @@
     }finally{host.remove();}
   }
   function buildBodySheet(){
-    const foodform=foodformOn()?{position:foodformEnd()?'end':'start',label:Rules.FOODFORM_LABEL,match:Rules.isFoodform}:null;
+    const foodform=foodformOn()?{position:foodformEnd()?'end':'start',label:Rules.FOODFORM_LABEL,match:Rules.isFoodform,group:Rules.foodformGroup||null,groups:Rules.FOODFORM_GROUPS||null}:null;
     return BodyPrint.build(printable().items,{fields:fieldMemory.body,title:$('print-title').value.trim()||BodyPrint.DEFAULT_TITLE,customer:$('print-customer').value.trim(),memo:$('print-memo').value.trim(),companyName,contactLine,printDate:printDate(),foodform});
   }
   const maxPerPage=()=>portrait()?50:25;

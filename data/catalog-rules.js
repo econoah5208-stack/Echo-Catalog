@@ -22,6 +22,7 @@
  * 2. Foodform® 별도 페이지 — 인쇄 / PDF
  *    제품명에 'Foodform'이 들어간 제품(띄어쓰기·대소문자 무시: Food Form, FOODFORM 도 포함)을 한데 모아
  *    다른 제품과 섞지 않고 별도 페이지에 출력합니다. 위치(맨 앞 / 맨 뒤)는 출력 설정 창에서 고릅니다.
+ *    출력물에서는 효모 유래 / 유산균 유래 / 배양·식물농축 3개로 나눠 이 순서로 싣습니다(FOODFORM_GROUPS).
  *
  * 3. sameProduct — 이름 표기가 달라도 같은 제품(직접 지정). 묶음 안에서 대표 1개만 보여 줍니다.
  *    가능하면 Excel 제품명을 같게 고치는 것을 권장합니다(2026-11-10 Excel 수정으로 기존 지정 3묶음 중 2묶음이 자동 처리됨).
@@ -49,6 +50,21 @@
   var nameKey = function (p) { return tidy(p.name); };
   var specKey = function (p) { return tidy(p.spec); };
   var isFoodform = function (p) { return /foodform/.test(compact(p && p.name)); };
+
+  /* Foodform® 출력 구분(v9.5): 제품명 기준 3개. 순서대로 출력합니다.
+     - 효모 유래: 이름에 'in Yeast'        (소분류 영양효모)
+     - 유산균 유래: 이름에 'Lactobacillus'  (소분류 유산균 배양물)
+     - 배양·식물농축: 그 밖의 Foodform®     (소분류 영양성분 함유 배양물 · 식물농축물) */
+  var FOODFORM_GROUPS = [
+    { id: 'yeast', no: 'FF1', label: '효모 유래', title: 'Foodform® 효모 유래 원료', en: 'FOODFORM® IN YEAST' },
+    { id: 'lactobacillus', no: 'FF2', label: '유산균 유래', title: 'Foodform® 유산균 유래 원료', en: 'FOODFORM® LACTOBACILLUS' },
+    { id: 'other', no: 'FF3', label: '배양·식물농축', title: 'Foodform® 배양 영양소 · 식물농축물', en: 'FOODFORM® CULTURED & PLANT CONCENTRATE' }
+  ];
+  function foodformGroup(p) {
+    var n = compact(p && p.name);
+    var id = /inyeast/.test(n) ? 'yeast' : /lactobacillus/.test(n) ? 'lactobacillus' : 'other';
+    for (var i = 0; i < FOODFORM_GROUPS.length; i++) if (FOODFORM_GROUPS[i].id === id) return { id: id, order: i, group: FOODFORM_GROUPS[i], label: FOODFORM_GROUPS[i].label };
+  }
 
   var manual = {};
   sameProduct.forEach(function (group, i) { group.forEach(function (id) { manual[id] = 'same:' + i; }); });
@@ -120,6 +136,8 @@
     HIDE_DUPLICATES_ON_SITE: HIDE_DUPLICATES_ON_SITE,
     FOODFORM_LABEL: 'Foodform®',
     isFoodform: isFoodform,
+    FOODFORM_GROUPS: FOODFORM_GROUPS,
+    foodformGroup: foodformGroup,
     dedupe: dedupe,
     siteProducts: siteProducts,
     sameProduct: sameProduct,
