@@ -169,6 +169,8 @@
 
     const table=node('table',undefined,'brochure-table'),group=node('colgroup'),head=node('thead'),labels=node('tr'),body=node('tbody');
     const weights={catalogType:9,category:13,name:18,marker:14,spec:14,packaging:8,origin:8,function:16,efficacy:16,application:16,process:12,stock:7};
+    // Foodform® 페이지: 국내 식품분류·대분류가 한두 값으로 병합되므로 그 폭을 줄이고 긴 영문 제품명에 폭을 더 줍니다(한 장 배치 시 글자 크기 확보).
+    if(section&&section.key==='foodform')Object.assign(weights,{catalogType:8,category:8,name:29});
     const numberCol=node('col');numberCol.style.width='8mm';group.append(numberCol);
     const fixedCols=[['catalogType','국내 식품분류'],['category','대분류'],['name','제품명 / 코드']];
     const totalWeight=fixedCols.concat(cols).reduce((n,[key])=>n+(weights[key]||12),0);

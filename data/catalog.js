@@ -21,7 +21,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "AF0002",
-    "name": "게엑기스-100",
+    "name": "게엑기스(100)",
     "category": "조미 원료",
     "subcategory": "수산물엑기스",
     "marker": "",
@@ -40,7 +40,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "AF0003",
-    "name": "게엑기스DW",
+    "name": "게엑기스(DW)",
     "category": "조미 원료",
     "subcategory": "수산물엑기스",
     "marker": "",
@@ -59,7 +59,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "AF0004",
-    "name": "게엑기스-디",
+    "name": "게엑기스(D)",
     "category": "조미 원료",
     "subcategory": "수산물엑기스",
     "marker": "",
@@ -78,7 +78,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "AF0005",
-    "name": "꽃게농축액-에스",
+    "name": "꽃게농축액(S)",
     "category": "조미 원료",
     "subcategory": "수산물엑기스",
     "marker": "",
@@ -116,7 +116,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "AF0007",
-    "name": "꿀분말20",
+    "name": "꿀분말(20)",
     "category": "당류·감미료",
     "subcategory": "벌꿀",
     "marker": "",
@@ -420,7 +420,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0004",
-    "name": "Vitamin K1 in Alfalfa Concentrate",
+    "name": "Foodform® Vitamin K1 in Alfalfa Concentrate",
     "category": "식물추출물",
     "subcategory": "식물농축물",
     "marker": "Vitamin K1",
@@ -458,7 +458,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0006",
-    "name": "가시오가피농축액 65brix",
+    "name": "가시오가피농축액(65brix)",
     "category": "식물추출물",
     "subcategory": "기타 식물추출물",
     "marker": "",
@@ -477,7 +477,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0007",
-    "name": "가시오가피농축액 65brix",
+    "name": "가시오가피농축액(65brix)",
     "category": "식물추출물",
     "subcategory": "기타 식물추출물",
     "marker": "",
@@ -515,7 +515,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0009",
-    "name": "계피농축액F",
+    "name": "계피농축액(F)",
     "category": "식물추출물",
     "subcategory": "기타 식물추출물",
     "marker": "",
@@ -534,7 +534,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0010",
-    "name": "과라나추출분말 (1%) - 일반식 사용가능",
+    "name": "과라나추출분말(1%, 일반식품 사용 가능)",
     "category": "식물추출물",
     "subcategory": "과라나추출물",
     "marker": "Caffeine / 카페인",
@@ -553,7 +553,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0011",
-    "name": "과라나추출분말 (1%) - 일반식 사용가능",
+    "name": "과라나추출분말(1%, 일반식품 사용 가능)",
     "category": "식물추출물",
     "subcategory": "과라나추출물",
     "marker": "Caffeine / 카페인",
@@ -572,7 +572,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0012",
-    "name": "과라나추출분말 (1%) - 일반식 사용가능",
+    "name": "과라나추출분말(1%, 일반식품 사용 가능)",
     "category": "식물추출물",
     "subcategory": "과라나추출물",
     "marker": "Caffeine / 카페인",
@@ -591,7 +591,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0013",
-    "name": "과라나추출분말 (20%이상)",
+    "name": "과라나추출분말(20% 이상)",
     "category": "식물추출물",
     "subcategory": "과라나추출물",
     "marker": "Caffeine / 카페인",
@@ -610,7 +610,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0014",
-    "name": "과라나추출분말 (20%이상)",
+    "name": "과라나추출분말(20% 이상)",
     "category": "식물추출물",
     "subcategory": "과라나추출물",
     "marker": "Caffeine / 카페인",
@@ -629,7 +629,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0015",
-    "name": "납작복숭아 추출분말",
+    "name": "납작복숭아추출분말",
     "category": "식물추출물",
     "subcategory": "과일추출물",
     "marker": "",
@@ -648,7 +648,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0016",
-    "name": "납작복숭아 추출분말",
+    "name": "납작복숭아추출분말",
     "category": "식물추출물",
     "subcategory": "과일추출물",
     "marker": "",
@@ -667,7 +667,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0017",
-    "name": "녹차추출분말H",
+    "name": "녹차추출분말(H)",
     "category": "식물추출물",
     "subcategory": "녹차추출물",
     "marker": "",
@@ -743,7 +743,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0021",
-    "name": "도라지농축액 90%",
+    "name": "도라지농축액(90%)",
     "category": "식물추출물",
     "subcategory": "기타 식물추출물",
     "marker": "",
@@ -933,7 +933,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0031",
-    "name": "미배아발효추출분말 (GABA 15%)",
+    "name": "미배아발효추출분말(GABA 15%)",
     "category": "식물추출물",
     "subcategory": "곡물추출물",
     "marker": "GABA / 감마아미노부티르산",
@@ -970,25 +970,6 @@ window.ECHO_PRODUCTS = [
     "visible": true
   },
   {
-    "id": "BE0033",
-    "name": "밀크시슬",
-    "category": "식물추출물",
-    "subcategory": "밀크씨슬추출물",
-    "marker": "Silymarin / 실리마린",
-    "spec": "",
-    "function": "",
-    "application": "Beverage / 음료; Powdered Drink / 분말음료; Jelly / 젤리",
-    "form": "",
-    "process": "",
-    "origin": "미국",
-    "packaging": "25kg/박스",
-    "stock": "미정",
-    "efficacy": "실리마린 함유, 간 건강 및 항산화 작용에 도움",
-    "catalogType": "건강기능식품",
-    "catalogGroup": "",
-    "visible": true
-  },
-  {
     "id": "BE0034",
     "name": "밀크시슬",
     "category": "식물추출물",
@@ -997,8 +978,8 @@ window.ECHO_PRODUCTS = [
     "spec": "",
     "function": "",
     "application": "Beverage / 음료; Powdered Drink / 분말음료; Jelly / 젤리",
-    "form": "",
-    "process": "",
+    "form": "Powder / 분말",
+    "process": "Extracted / 추출",
     "origin": "인도",
     "packaging": "25kg",
     "stock": "미정",
@@ -1016,8 +997,8 @@ window.ECHO_PRODUCTS = [
     "spec": "",
     "function": "",
     "application": "Beverage / 음료; Powdered Drink / 분말음료; Jelly / 젤리",
-    "form": "",
-    "process": "",
+    "form": "Powder / 분말",
+    "process": "Extracted / 추출",
     "origin": "미국",
     "packaging": "500kg",
     "stock": "미정",
@@ -1028,7 +1009,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0036",
-    "name": "밀크시슬추출분말(수용성)",
+    "name": "밀크시슬",
     "category": "식물추출물",
     "subcategory": "밀크씨슬추출물",
     "marker": "Silymarin / 실리마린",
@@ -1047,7 +1028,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0037",
-    "name": "바나바잎추출분말(코르솔산1%)",
+    "name": "바나바잎추출분말(코로솔산 1%)",
     "category": "식물추출물",
     "subcategory": "기타 식물추출물",
     "marker": "Corosolic Acid / 코로솔산",
@@ -1256,7 +1237,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0048",
-    "name": "생강추출농축액 52Brix 이상",
+    "name": "생강추출농축액(52brix 이상)",
     "category": "식물추출물",
     "subcategory": "기타 식물추출물",
     "marker": "",
@@ -1293,27 +1274,8 @@ window.ECHO_PRODUCTS = [
     "visible": true
   },
   {
-    "id": "BE0050",
-    "name": "세인트존스워트 추출분말(멜라토닌1%)",
-    "category": "식물추출물",
-    "subcategory": "허브추출물",
-    "marker": "Melatonin / 멜라토닌",
-    "spec": "1%",
-    "function": "",
-    "application": "",
-    "form": "Powder / 분말",
-    "process": "Extracted / 추출",
-    "origin": "미국",
-    "packaging": "25kg/bag",
-    "stock": "미정",
-    "efficacy": "멜라토닌 함유, 수면·휴식 및 편안한 컨디션 유지에 도움",
-    "catalogType": "일반식품",
-    "catalogGroup": "기능성부원료",
-    "visible": true
-  },
-  {
-    "id": "BE0051",
-    "name": "세인트존스워트추출분말(멜라토닌2%)",
+    "id": "BE0052",
+    "name": "세인트존스워트추출분말(멜라토닌 2%)",
     "category": "식물추출물",
     "subcategory": "허브추출물",
     "marker": "Melatonin / 멜라토닌",
@@ -1331,27 +1293,8 @@ window.ECHO_PRODUCTS = [
     "visible": true
   },
   {
-    "id": "BE0052",
-    "name": "세인트존스워트추출분말(멜라토닌2%)",
-    "category": "식물추출물",
-    "subcategory": "허브추출물",
-    "marker": "Melatonin / 멜라토닌",
-    "spec": "2%",
-    "function": "",
-    "application": "",
-    "form": "Powder / 분말",
-    "process": "Extracted / 추출",
-    "origin": "미국",
-    "packaging": "25kg/드럼",
-    "stock": "미정",
-    "efficacy": "멜라토닌 함유, 수면·휴식 및 편안한 컨디션 유지에 도움",
-    "catalogType": "일반식품",
-    "catalogGroup": "기능성부원료",
-    "visible": true
-  },
-  {
     "id": "BE0053",
-    "name": "수박과피추출물분말",
+    "name": "수박과피추출분말",
     "category": "식물추출물",
     "subcategory": "과일추출물",
     "marker": "",
@@ -1370,7 +1313,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0054",
-    "name": "수용성밀크씨슬",
+    "name": "밀크시슬(수용성)",
     "category": "식물추출물",
     "subcategory": "밀크씨슬추출물",
     "marker": "Silymarin / 실리마린",
@@ -1598,7 +1541,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0066",
-    "name": "원지추출분말 SR-24367",
+    "name": "원지추출분말(SR-24367)",
     "category": "식물추출물",
     "subcategory": "기타 식물추출물",
     "marker": "",
@@ -1693,7 +1636,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0071",
-    "name": "타트체리추출분말(멜라토닌 함량 2%)",
+    "name": "타트체리추출분말(멜라토닌 2%)",
     "category": "식물추출물",
     "subcategory": "과일추출물",
     "marker": "Melatonin / 멜라토닌",
@@ -1731,7 +1674,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0073",
-    "name": "피세틴 라임추출물분말(피세틴 10%)",
+    "name": "라임추출분말(피세틴 10%)",
     "category": "식물추출물",
     "subcategory": "과일추출물",
     "marker": "Fisetin / 피세틴",
@@ -1788,7 +1731,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0076",
-    "name": "헛개나무열매농축액 52brix",
+    "name": "헛개나무열매농축액(52brix)",
     "category": "식물추출물",
     "subcategory": "헛개나무열매추출물",
     "marker": "",
@@ -1845,7 +1788,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0079",
-    "name": "화이트토마토추출분말 (멜라토닌 함량 2%)",
+    "name": "화이트토마토추출분말(멜라토닌 2%)",
     "category": "식물추출물",
     "subcategory": "채소추출물",
     "marker": "Melatonin / 멜라토닌",
@@ -1883,7 +1826,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "CH0002",
-    "name": "난소화성말토덱스트린 (화이버솔-2)",
+    "name": "난소화성말토덱스트린(화이버솔-2)",
     "category": "식이섬유",
     "subcategory": "난소화성말토덱스트린",
     "marker": "Total Dietary Fiber / 총 식이섬유",
@@ -2244,7 +2187,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "CH0021",
-    "name": "프락토올리고당 (GOFOS P95 GL)",
+    "name": "프락토올리고당(GOFOS P95 GL)",
     "category": "당류·감미료",
     "subcategory": "올리고당",
     "marker": "Fructooligosaccharides / 프락토올리고당",
@@ -2358,7 +2301,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "DC0001",
-    "name": "(리포좀) 이노시톨",
+    "name": "이노시톨(리포좀)",
     "category": "기타 원료",
     "subcategory": "이노시톨",
     "marker": "Inositol; Isomer / 이노시톨·이성질체",
@@ -2643,7 +2586,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "FM0007",
-    "name": "Foodform® GTF Chromium 10-20kg/15kg",
+    "name": "Foodform® GTF Chromium (10-20kg/15kg)",
     "category": "유산균·효모",
     "subcategory": "영양성분 함유 배양물",
     "marker": "GTF Chromium",
@@ -2795,7 +2738,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "FM0015",
-    "name": "Foodform® Selenium",
+    "name": "Foodform® Selenium (1,400-1,650㎍/g)",
     "category": "유산균·효모",
     "subcategory": "영양성분 함유 배양물",
     "marker": "Selenium",
@@ -2814,7 +2757,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "FM0016",
-    "name": "Foodform® Selenium",
+    "name": "Foodform® Selenium (950㎍/g)",
     "category": "유산균·효모",
     "subcategory": "영양성분 함유 배양물",
     "marker": "Selenium",
@@ -2909,7 +2852,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "FM0021",
-    "name": "Foodform® Vitamin B12(Cyanocobalmin) in Yeast",
+    "name": "Foodform® Vitamin B12(Cyanocobalamin) in Yeast",
     "category": "유산균·효모",
     "subcategory": "영양효모",
     "marker": "Vitamin B12(Cyanocobalmin)",
@@ -3004,7 +2947,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "FM0026",
-    "name": "Foodform® Vitamin B5(Pantothenic) in Yeast",
+    "name": "Foodform® Vitamin B5(Pantothenic Acid) in Yeast",
     "category": "유산균·효모",
     "subcategory": "영양효모",
     "marker": "Vitamin B5(Pantothenic)",
@@ -3061,7 +3004,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "FM0029",
-    "name": "Foodform® Vitamin B9 (Folic acid) Lactobacillus",
+    "name": "Foodform® Vitamin B9(Folic acid) Lactobacillus",
     "category": "유산균·효모",
     "subcategory": "유산균 배양물",
     "marker": "Vitamin B9 (Folic acid)",
@@ -3099,7 +3042,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "FM0031",
-    "name": "Foodform® Vitamin E (D-ALPHA TOCOPHERYL ACETATE) Lactobacillus",
+    "name": "Foodform® Vitamin E(D-Alpha Tocopheryl Acetate) Lactobacillus",
     "category": "유산균·효모",
     "subcategory": "유산균 배양물",
     "marker": "Vitamin E (D-ALPHA TOCOPHERYL ACETATE)",
@@ -3156,7 +3099,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "FM0034",
-    "name": "R-11 (L.rhamnosus)",
+    "name": "R-11 (L. rhamnosus)",
     "category": "유산균·효모",
     "subcategory": "유산균",
     "marker": "Strain; CFU/g; 유통기한 말 CFU",
@@ -3175,7 +3118,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "FM0035",
-    "name": "R-175(L.longum)",
+    "name": "R-175 (B. longum)",
     "category": "유산균·효모",
     "subcategory": "유산균",
     "marker": "Strain; CFU/g; 유통기한 말 CFU",
@@ -3194,7 +3137,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "FM0036",
-    "name": "R-52 (L.helviticus)",
+    "name": "R-52 (L. helveticus)",
     "category": "유산균·효모",
     "subcategory": "유산균",
     "marker": "Strain; CFU/g; 유통기한 말 CFU",
@@ -3403,7 +3346,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "LI0002",
-    "name": "레시틴분말(해바라기유래) INNO PCP 20 SUN",
+    "name": "해바라기레시틴분말(INNO PCP 20 SUN)",
     "category": "유화제",
     "subcategory": "레시틴",
     "marker": "Total Phospholipids; Phosphatidylcholine / 총인지질·PC",
@@ -3441,7 +3384,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "LI0004",
-    "name": "옥타코사놀 60%",
+    "name": "옥타코사놀(60%)",
     "category": "기타 원료",
     "subcategory": "옥타코사놀",
     "marker": "Octacosanol / 옥타코사놀",
@@ -3574,7 +3517,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "LI0011",
-    "name": "포스파티딜세린20F",
+    "name": "포스파티딜세린(20F)",
     "category": "기타 원료",
     "subcategory": "포스파티딜세린",
     "marker": "Phosphatidylserine / PS",
@@ -3593,7 +3536,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "LI0012",
-    "name": "해바라기레시틴 분말(Nulec©-P SUN 700)",
+    "name": "해바라기레시틴분말(Nulec©-P SUN 700)",
     "category": "유화제",
     "subcategory": "레시틴",
     "marker": "Total Phospholipids; Phosphatidylcholine / 총인지질·PC",
@@ -3669,7 +3612,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MI0003",
-    "name": "밀크칼슘 (=유청칼슘)",
+    "name": "밀크칼슘(유청칼슘)",
     "category": "미네랄",
     "subcategory": "칼슘",
     "marker": "Calcium; Phosphorus / 칼슘·인",
@@ -3688,7 +3631,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0001",
-    "name": "10곡통곡물발효효소분말2x",
+    "name": "10곡통곡물발효효소분말(2x)",
     "category": "곡물·두류 원료",
     "subcategory": "곡물발효분말",
     "marker": "곡물 조성; 효소 활성(활성 표시 시)",
@@ -3764,7 +3707,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0005",
-    "name": "레몬향분말M",
+    "name": "레몬향분말(M)",
     "category": "향료",
     "subcategory": "식품향료",
     "marker": "",
@@ -3783,7 +3726,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0006",
-    "name": "레몬향분말SG",
+    "name": "레몬향분말(SG)",
     "category": "향료",
     "subcategory": "식품향료",
     "marker": "",
@@ -3802,7 +3745,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0007",
-    "name": "레몬향분말SH (SD제품)",
+    "name": "레몬향분말(SH, SD제품)",
     "category": "향료",
     "subcategory": "식품향료",
     "marker": "",
@@ -3821,7 +3764,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0008",
-    "name": "레몬향분말SR",
+    "name": "레몬향분말(SR)",
     "category": "향료",
     "subcategory": "식품향료",
     "marker": "",
@@ -3897,7 +3840,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0012",
-    "name": "믹스베리분말((베리믹스과일혼합분말 원료3)",
+    "name": "믹스베리분말(베리믹스과일혼합분말 원료3)",
     "category": "과일·채소 원료",
     "subcategory": "혼합과일분말",
     "marker": "",
@@ -3935,7 +3878,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0014",
-    "name": "베리믹스과일혼합분말(프락토올리고당 0.1% 포함, 그래뉼X)",
+    "name": "베리믹스과일혼합분말(프락토올리고당 0.1% 포함, 비그래뉼)",
     "category": "과일·채소 원료",
     "subcategory": "혼합과일분말",
     "marker": "과일 배합비; FOS(표기 시)",
@@ -3973,7 +3916,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0016",
-    "name": "비타민D혼합제제 (비건)",
+    "name": "비타민D혼합제제(비건)",
     "category": "비타민",
     "subcategory": "비타민 프리믹스",
     "marker": "",
@@ -3992,7 +3935,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0017",
-    "name": "비타민미네랄믹스-AK",
+    "name": "비타민미네랄믹스(AK)",
     "category": "비타민·미네랄 프리믹스",
     "subcategory": "비타민·미네랄 혼합분말",
     "marker": "",
@@ -4011,7 +3954,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0018",
-    "name": "비타민복합mb",
+    "name": "비타민복합(mb)",
     "category": "비타민",
     "subcategory": "비타민 프리믹스",
     "marker": "",
@@ -4068,7 +4011,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0021",
-    "name": "식물혼합농축액72",
+    "name": "식물혼합농축액(72)",
     "category": "식물추출물",
     "subcategory": "혼합식물추출물",
     "marker": "",
@@ -4144,7 +4087,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0025",
-    "name": "요거트혼합분말100L",
+    "name": "요거트혼합분말(100L)",
     "category": "유가공 원료",
     "subcategory": "요거트분말",
     "marker": "",
@@ -4201,7 +4144,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0028",
-    "name": "유산균 완제품 (=17종 100억 프로바이오틱스, 아연 )",
+    "name": "유산균 완제품(17종 100억 프로바이오틱스, 아연)",
     "category": "완제품",
     "subcategory": "유산균 제품",
     "marker": "균주별 생균수; 아연; 셀레늄(표기 제품)",
@@ -4220,7 +4163,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0029",
-    "name": "유산균 완제품 (=17종 100억 프로바이오틱스, 아연 ,셀레늄)",
+    "name": "유산균 완제품(17종 100억 프로바이오틱스, 아연, 셀레늄)",
     "category": "완제품",
     "subcategory": "유산균 제품",
     "marker": "균주별 생균수; 아연; 셀레늄(표기 제품)",
@@ -4239,7 +4182,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "MX0030",
-    "name": "칼슘혼합제제 (Solfa-Ca1000S)",
+    "name": "칼슘혼합제제(Solfa-Ca1000S)",
     "category": "미네랄",
     "subcategory": "칼슘 혼합제제",
     "marker": "",
@@ -4505,7 +4448,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0007",
-    "name": "대추농축액 65brix",
+    "name": "대추농축액(65brix)",
     "category": "과일·채소 원료",
     "subcategory": "과즙농축액",
     "marker": "",
@@ -4600,7 +4543,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0012",
-    "name": "딸기농축액s",
+    "name": "딸기농축액(S)",
     "category": "과일·채소 원료",
     "subcategory": "과즙농축액",
     "marker": "",
@@ -4676,7 +4619,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0016",
-    "name": "레몬과즙분말 SR-24247",
+    "name": "레몬과즙분말(SR-24247)",
     "category": "과일·채소 원료",
     "subcategory": "과일분말",
     "marker": "",
@@ -4942,7 +4885,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0030",
-    "name": "바나나농축과즙",
+    "name": "바나나농축액",
     "category": "과일·채소 원료",
     "subcategory": "과즙농축액",
     "marker": "",
@@ -5037,7 +4980,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0035",
-    "name": "배착즙액 / 9brix",
+    "name": "배착즙액(9brix)",
     "category": "과일·채소 원료",
     "subcategory": "과즙",
     "marker": "",
@@ -5094,7 +5037,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0038",
-    "name": "백포도농축액 68brix",
+    "name": "백포도농축액(68brix)",
     "category": "과일·채소 원료",
     "subcategory": "과즙농축액",
     "marker": "",
@@ -5170,7 +5113,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0042",
-    "name": "복숭아농축액(Clear type)",
+    "name": "복숭아농축액(클리어타입)",
     "category": "과일·채소 원료",
     "subcategory": "과즙농축액",
     "marker": "",
@@ -5208,7 +5151,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0044",
-    "name": "부추농축분말 24017",
+    "name": "부추농축분말(24017)",
     "category": "과일·채소 원료",
     "subcategory": "채소분말",
     "marker": "",
@@ -5246,7 +5189,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0046",
-    "name": "블랙사파이어농축액 40brix",
+    "name": "블랙사파이어농축액(40brix)",
     "category": "과일·채소 원료",
     "subcategory": "과즙농축액",
     "marker": "",
@@ -5474,7 +5417,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0058",
-    "name": "세인트존스워트분말(멜라토닌1%)",
+    "name": "세인트존스워트추출분말(멜라토닌 1%)",
     "category": "차·허브 원료",
     "subcategory": "허브분말",
     "marker": "Melatonin / 멜라토닌",
@@ -5484,7 +5427,7 @@ window.ECHO_PRODUCTS = [
     "form": "Powder / 분말",
     "process": "",
     "origin": "미국",
-    "packaging": "25kg",
+    "packaging": "25kg/drum",
     "stock": "미정",
     "efficacy": "멜라토닌 함유를 표방하는 수면건강 지원",
     "catalogType": "일반식품",
@@ -5493,7 +5436,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0059",
-    "name": "세인트존스워트분말(멜라토닌3%)",
+    "name": "세인트존스워트추출분말(멜라토닌 3%)",
     "category": "차·허브 원료",
     "subcategory": "허브분말",
     "marker": "Melatonin / 멜라토닌",
@@ -5503,7 +5446,7 @@ window.ECHO_PRODUCTS = [
     "form": "Powder / 분말",
     "process": "",
     "origin": "미국",
-    "packaging": "25kg",
+    "packaging": "25kg/drum",
     "stock": "미정",
     "efficacy": "멜라토닌 함유를 표방하는 수면건강 지원",
     "catalogType": "일반식품",
@@ -5607,7 +5550,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0065",
-    "name": "알로에베라겔파우더 100:1",
+    "name": "알로에베라겔파우더(100:1)",
     "category": "식물추출물",
     "subcategory": "알로에겔분말",
     "marker": "Aloe Polysaccharides; Aloin / 알로에 다당체·알로인",
@@ -5626,7 +5569,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0066",
-    "name": "알로에베라겔파우더 200:1",
+    "name": "알로에베라겔파우더(200:1)",
     "category": "식물추출물",
     "subcategory": "알로에겔분말",
     "marker": "Aloe Polysaccharides; Aloin / 알로에 다당체·알로인",
@@ -5683,7 +5626,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0069",
-    "name": "양파농축액s",
+    "name": "양파농축액(S)",
     "category": "과일·채소 원료",
     "subcategory": "채소농축액",
     "marker": "",
@@ -5835,7 +5778,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0077",
-    "name": "유기농농축딸기즙",
+    "name": "유기농딸기농축액",
     "category": "과일·채소 원료",
     "subcategory": "과즙농축액",
     "marker": "",
@@ -5854,7 +5797,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0078",
-    "name": "유기농레드와인비니거 8%",
+    "name": "유기농레드와인비니거(8%)",
     "category": "식초",
     "subcategory": "발효식초",
     "marker": "Total Acidity; Acetic Acid / 총산·초산",
@@ -6101,7 +6044,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0091",
-    "name": "인디언구스(암라)베리",
+    "name": "인디언구스베리(암라)",
     "category": "과일·채소 원료",
     "subcategory": "과일",
     "marker": "",
@@ -6253,7 +6196,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0099",
-    "name": "크리스피오트 (=귀리)",
+    "name": "크리스피오트(귀리)",
     "category": "곡물·두류 원료",
     "subcategory": "귀리가공품",
     "marker": "",
@@ -6291,7 +6234,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0101",
-    "name": "파인애플농축액 72brix",
+    "name": "파인애플농축액(72brix)",
     "category": "과일·채소 원료",
     "subcategory": "과즙농축액",
     "marker": "",
@@ -6310,7 +6253,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PF0102",
-    "name": "파인애플농축액 72brix",
+    "name": "파인애플농축액(72brix)",
     "category": "과일·채소 원료",
     "subcategory": "과즙농축액",
     "marker": "",
@@ -6633,7 +6576,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PR0015",
-    "name": "산양유단백분말55",
+    "name": "산양유단백분말(55)",
     "category": "단백질 원료",
     "subcategory": "산양유단백",
     "marker": "Protein; IgG(초유제품 해당 시) / 단백질·IgG",
@@ -6842,7 +6785,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PR0026",
-    "name": "초유단백분말 1080",
+    "name": "초유단백분말(1080)",
     "category": "단백질 원료",
     "subcategory": "초유단백",
     "marker": "Protein; IgG(초유제품 해당 시) / 단백질·IgG",
@@ -6994,7 +6937,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PR0034",
-    "name": "폴리감마글루탐산 (수용성 70%, Na form)",
+    "name": "폴리감마글루탐산(수용성 70%, Na form)",
     "category": "기타 원료",
     "subcategory": "폴리감마글루탐산",
     "marker": "Poly-gamma-glutamic Acid / PGA",
@@ -7070,7 +7013,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "UN0003",
-    "name": "L-글루타치온 3%",
+    "name": "L-글루타치온(3%)",
     "category": "기타 원료",
     "subcategory": "글루타치온",
     "marker": "Glutathione / 글루타치온",
@@ -7089,7 +7032,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "UN0004",
-    "name": "L-글루타치온 60%",
+    "name": "L-글루타치온(60%)",
     "category": "기타 원료",
     "subcategory": "글루타치온",
     "marker": "Glutathione / 글루타치온",
