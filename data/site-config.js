@@ -4,10 +4,10 @@
  * - 확인되지 않은 정보는 null 로 두세요. null 인 항목은 화면과 출력물에 표시되지 않습니다.
  * - 각 항목의 source 는 값의 출처 메모이며 화면에는 표시되지 않습니다.
  *
- * ⚠ 2026-10-23 기준 확인 필요 사항
- *   회사소개서(2026)와 기존 웹사이트(v8.4)의 연락처가 다릅니다. 확인 전까지 기존 웹사이트 값을 유지합니다.
- *   - 전화: 소개서 070-4410-0473 / 웹 070-8652-1774 (현재 표시: 웹 값)
- *   - 이메일: 소개서 info@echot.com (웹 도메인 echotra.com 과 다름) → 확인 전 비공개(null)
+ * 2026-11-10 (v9.4) 회사 확인으로 연락처 변경
+ *   - 전화: 070-8652-1774 → 070-4410-0473
+ *   - 이메일: (비공개) → trade7@echot.co.kr
+ * ⚠ 확인 필요 사항
  *   - 주소: 소개서 '경기도 성남시 분당구 백현로 100, 정자아이파크 1401호'
  *           웹 '# 1401 Jeongja I’PARK 27, Jeongja-dong, Bundang-gu, ...' (현재 표시: 웹 값, 국문 주소는 확인 후 입력)
  */
@@ -22,9 +22,9 @@ window.ECHO_SITE = {
   },
 
   contact: {
-    tel: { label: '070-8652-1774', intl: '+82-70-8652-1774', href: 'tel:+827086521774', source: '기존 웹사이트 v8.4' },
+    tel: { label: '070-4410-0473', intl: '+82-70-4410-0473', href: 'tel:+827044100473', source: '회사 확인 2026-11-10' },
     fax: { label: '031-742-0474', intl: '+82-31-742-0474', href: 'tel:+82317420474', source: '기존 웹사이트 v8.4' },
-    email: null, /* 소개서 표기 info@echot.com — 도메인 확인 후 { label: '...', href: 'mailto:...' } 형태로 입력 */
+    email: { label: 'trade7@echot.co.kr', href: 'mailto:trade7@echot.co.kr', source: '회사 확인 2026-11-10' },
     web: { label: 'www.echotra.com', href: 'https://www.echotra.com', source: '기존 웹사이트 v8.4 · 회사소개서 2026' },
     addressKo: null, /* 소개서 표기: 경기도 성남시 분당구 백현로 100, 정자아이파크 1401호 — 확인 후 입력 */
     addressEn: '# 1401 Jeongja I’PARK 27, Jeongja-dong, Bundang-gu, Seongnam-City, Gyeonggi-do, 13596, South Korea'

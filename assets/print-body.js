@@ -6,6 +6,9 @@
  * - v9.2: 한 분류가 끝나고 페이지에 여백이 남으면 다음 분류를 같은 페이지에 이어서 배치합니다(분류마다 머리띠·표 머리글).
  *   제품 6개 미만인 분류는 나누지 않고, 나눌 때는 앞·뒤 조각이 각각 3행 이상이 되도록 합니다.
  *   '분류마다 새 페이지에서 시작' 항목을 켜면 v9.1처럼 분류마다 새 페이지를 씁니다.
+ * - v9.4: print.js 가 같은 제품명 중복을 정리한 목록을 넘깁니다(data/print-rules.js).
+ *   opts.foodform 이 있으면 Foodform® 제품을 인체 기능 분류에서 빼내 별도 구역(FF)으로 모으고,
+ *   이 구역은 다른 분류와 같은 페이지에 섞지 않습니다(맨 앞 또는 맨 뒤). 각 제품의 기능 분류는 「관련」 태그로 표시합니다.
  */
 (() => {
   'use strict';
@@ -38,6 +41,9 @@
   const svg = (tag, attrs) => { const n = document.createElementNS(SVG_NS, tag); Object.entries(attrs || {}).forEach(([k, v]) => n.setAttribute(k, String(v))); return n; };
   const ko = text => String(text || '').split(';').map(s => s.includes(' / ') ? s.split(' / ').slice(1).join(' / ').trim() : s.trim()).filter(Boolean);
   const pad = n => String(n).padStart(2, '0');
+  /* Foodform® 별도 구역(v9.4). build() 에서 opts.foodform 이 있을 때만 사용합니다. */
+  const BRAND_AREA = { id: 'foodform', no: 'FF', kind: 'brand', name: 'Foodform®', title: 'Foodform® 제품군', en: 'FOODFORM® SERIES', hint: '효모 · 유산균 · 식물농축물 기반 영양 원료' };
+  let brandArea = null; // 이번 출력에 Foodform® 구역이 있으면 BRAND_AREA
 
   /* ---------- 인체 그래픽 (단색 벡터 · viewBox 100×200) ---------- */
   function bodyMap(areas) {
@@ -111,7 +117,9 @@
         if (fields.has('function')) ko(p.function).forEach(t => chips.append(node('span', t, 'body-tag')));
         if (fields.has('tags')) {
           const c = BF.classify(p);
-          const related = c.tags.map(id => BF.area(id)).filter(Boolean);
+          // Foodform® 구역의 제품은 대표 분류도 함께 「관련」 태그로 보여 줍니다(원래 실릴 기능 분류).
+          const ids = primary === BRAND_AREA.id ? [c.primary].concat(c.tags) : c.tags;
+          const related = ids.map(id => BF.area(id)).filter(a => a && a.kind !== 'review');
           if (related.length) { chips.append(node('span', '관련', 'body-tag-label')); related.forEach(a => chips.append(node('span', `${a.no} ${a.name}`, 'body-tag body-tag--area'))); }
         }
         if (chips.childNodes.length) td.append(chips);
@@ -132,7 +140,8 @@
     const nav = node('aside', undefined, 'body-nav');
     const mapLabel = node('p', 'BODY MAP', 'body-nav__label'); mapLabel.lang = 'en';
     nav.append(mapLabel, bodyMap(areas));
-    if (areas.length && !areas.some(a => a.kind === 'body')) nav.append(node('p', '이 분류는 특정 인체 부위와 연결하지 않습니다.', 'body-map__caption'));
+    if (areas.some(a => a.kind === 'brand') && !areas.some(a => a.kind === 'body')) nav.append(node('p', 'Foodform® 제품의 기능 분류는 표의 「관련」 태그로 표시합니다.', 'body-map__caption'));
+    else if (areas.length && !areas.some(a => a.kind === 'body')) nav.append(node('p', '이 분류는 특정 인체 부위와 연결하지 않습니다.', 'body-map__caption'));
     const indexBlock = (label, list) => {
       nav.append(node('p', label, 'body-nav__label body-nav__label--index'));
       const ol = node('ol', undefined, 'body-index');
@@ -145,6 +154,7 @@
       });
       nav.append(ol);
     };
+    if (brandArea) indexBlock('브랜드 원료', [brandArea]);
     indexBlock('기능 인덱스', BF.areas.filter(a => a.kind === 'body'));
     indexBlock('식품 원료 분류', BF.areas.filter(a => a.kind !== 'body'));
     const legend = node('div', undefined, 'body-legend');
@@ -193,7 +203,7 @@
   function addSection(page, s) {
     const area = s.area, kind = area.kind;
     const sec = node('div', undefined, 'body-section'); sec.dataset.area = area.id; sec.dataset.kind = kind;
-    const band = node('div', undefined, 'body-band' + (kind === 'body' ? '' : kind === 'review' ? ' body-band--review' : ' body-band--general'));
+    const band = node('div', undefined, 'body-band' + (kind === 'body' ? '' : kind === 'brand' ? ' body-band--brand' : kind === 'review' ? ' body-band--review' : ' body-band--general'));
     const bandText = node('div');
     const en = node('p', `${area.no} · ${area.en}`, 'body-band__en'); en.lang = 'en';
     bandText.append(en, node('h2', area.title));
@@ -270,9 +280,14 @@
     // 1) 분류별 묶기 — 각 제품은 대표 분류 한 곳에만 들어갑니다(중복 출력 없음). 분류 안에서는 제품명 가나다순.
     const groups = BF.areas.map(area => ({ area, items: [] }));
     const byArea = new Map(groups.map(g => [g.area.id, g]));
-    products.forEach(p => byArea.get(BF.classify(p).primary).items.push(p));
+    const ff = opts.foodform && typeof opts.foodform.match === 'function' ? opts.foodform : null;
+    const brand = ff ? { area: BRAND_AREA, items: [] } : null;
+    products.forEach(p => (brand && ff.match(p) ? brand : byArea.get(BF.classify(p).primary)).items.push(p));
+    if (brand) { if (ff.position === 'end') groups.push(brand); else groups.unshift(brand); }
     groups.forEach(g => g.items.sort((a, b) => a.name.localeCompare(b.name, 'ko') || a.id.localeCompare(b.id)));
     const used = groups.filter(g => g.items.length);
+    brandArea = brand && brand.items.length ? BRAND_AREA : null;
+    const isolated = g => !!g && g.area.kind === 'brand'; // Foodform® 구역은 다른 분류와 같은 페이지에 두지 않습니다.
     if (!used.length) { sheet.append(node('p', '출력할 제품 범위를 선택하거나 목록에서 제품을 담아 주세요.', 'brochure-empty')); return sheet; }
 
     const host = node('div'); host.id = 'print-measure-body'; host.className = 'body-catalog'; host.setAttribute('aria-hidden', 'true');
@@ -308,10 +323,10 @@
       };
       const trim = (tbody, keep) => { while (tbody.children.length > keep) tbody.lastElementChild.remove(); };
       let number = 0;
-      used.forEach(g => {
+      used.forEach((g, gi) => {
         let rest = g.items.slice();
-        // 2-1) 앞 분류가 끝난 페이지에 여백이 있으면 이어서 시작(종이 절약)
-        if (cur && cur.spec.sections.length && !breakEach) {
+        // 2-1) 앞 분류가 끝난 페이지에 여백이 있으면 이어서 시작(종이 절약). Foodform® 구역 앞뒤는 항상 새 페이지.
+        if (cur && cur.spec.sections.length && !breakEach && !isolated(g) && !isolated(used[gi - 1])) {
           const tbody = startSection(g);
           let count = fill(tbody, rest, number, g, false);
           if (count < rest.length) {
@@ -341,6 +356,7 @@
       let n = 0;
       plan.forEach((pg, i) => {
         const page = makePage({ ...common, areas: pg.sections.map(s => s.group.area), memo: pg.memo ? opts.memo : '', pageNumber: i + 1, pageTotal: total, startPages });
+        if (pg.sections.some(s => s.group.area.kind === 'brand')) page.dataset.section = 'foodform';
         pg.sections.forEach(s => {
           const id = s.group.area.id; seen[id] = (seen[id] || 0) + 1;
           const tbody = addSection(page, { area: s.group.area, cols, groupCount: s.group.items.length, part: seen[id], parts: parts[id] });
@@ -350,7 +366,7 @@
         drawConnectors(page);
         sheet.append(page);
       });
-    } finally { host.remove(); }
+    } finally { host.remove(); brandArea = null; }
     return sheet;
   }
 

@@ -51,6 +51,21 @@
       ||a.name.localeCompare(b.name,'ko')
       ||a.id.localeCompare(b.id);
   }
+  // 제품 정리(v9.4): Foodform® 별도 페이지 · 같은 제품명 한 번만 출력. 규칙은 data/print-rules.js 에서 관리합니다.
+  const Rules=window.EchoPrintRules||null;
+  if(!Rules&&$('print-arrange'))$('print-arrange').hidden=true;
+  const foodformOn=()=>!!Rules&&!!$('print-foodform')&&$('print-foodform').checked;
+  const foodformEnd=()=>!!$('print-foodform-position')&&$('print-foodform-position').value==='end';
+  const dedupeOn=()=>!!Rules&&!!$('print-dedupe')&&$('print-dedupe').checked;
+  function printable(){const list=selected();return dedupeOn()?Rules.dedupe(list):{items:list,removed:[],groups:[]};}
+  /* 출력 구역: Foodform® 제품은 다른 제품과 섞지 않고 별도 페이지에 모읍니다(위치: 맨 앞 / 맨 뒤). */
+  function printSections(items){
+    const sorted=items.slice().sort(printSort);
+    if(!foodformOn())return [{key:'main',label:'',products:sorted}];
+    const foodform={key:'foodform',label:`${Rules.FOODFORM_LABEL} 제품`,products:sorted.filter(Rules.isFoodform)};
+    const main={key:'main',label:'',products:sorted.filter(p=>!Rules.isFoodform(p))};
+    return (foodformEnd()?[main,foodform]:[foodform,main]).filter(s=>s.products.length);
+  }
   function renderBodyFields(){
     const note=node('p','','print-field-note');
     $('print-columns').replaceChildren(node('legend','인체 기능형 출력 항목 · NO. / 제품명은 고정 · 아래 항목은 선택'));
@@ -132,10 +147,14 @@
     for(let i=0;i<count;i++){const size=base+(i<extra?1:0);result.push(values.slice(offset,offset+size));offset+=size;}
     return result;
   }
-  function buildPage(products,cols,pageNumber,pageTotal,startIndex){
+  function buildPage(products,cols,pageNumber,pageTotal,startIndex,section){
     const page=node('article',undefined,'brochure-page landscape-auto'),header=node('header',undefined,'brochure-header');
+    if(section){page.dataset.fitGroup=section.key;if(section.key!=='main')page.classList.add(`brochure-page--${section.key}`);}
     const logo=node('img');logo.src='assets/echo-trading-logo.svg';logo.alt='Echo Trading';logo.className='brochure-logo';
-    const titleBox=node('div',undefined,'brochure-title');titleBox.append(node('p',company.slogan||'Global Ingredients. Reliable Solutions.','brochure-kicker'),node('h1',$('print-title').value.trim()||'제품 소개자료'));
+    const titleBox=node('div',undefined,'brochure-title'),titleRow=node('div',undefined,'brochure-title-row');
+    titleRow.append(node('h1',$('print-title').value.trim()||'제품 소개자료'));
+    if(section&&section.label)titleRow.append(node('span',`${section.label} · ${section.products.length}개`,'brochure-section'));
+    titleBox.append(node('p',company.slogan||'Global Ingredients. Reliable Solutions.','brochure-kicker'),titleRow);
     const customer=$('print-customer').value.trim();if(customer)titleBox.append(node('p',`${customer} 귀중`,'brochure-customer'));
     const pageMeta=node('div',undefined,'brochure-page-meta');pageMeta.append(node('strong',`${pageNumber}`),node('span',`/ ${pageTotal}`));
     header.append(logo,titleBox,pageMeta);page.append(header);
@@ -184,42 +203,54 @@
     if(!footer)return 0;
     return Math.max(0,footer.getBoundingClientRect().top-table.getBoundingClientRect().top);
   }
+  /* 페이지 묶음(data-fit-group: foodform / main)마다 따로 글자 크기를 맞춥니다. 반환: 맞추지 못한 묶음 이름 Set */
+  function fitGroups(root,selector){
+    const groups=new Map();
+    root.querySelectorAll(selector).forEach(page=>{const key=page.dataset.fitGroup||'main';if(!groups.has(key))groups.set(key,[]);groups.get(key).push(page);});
+    return groups;
+  }
   function fitLandscape(root){
-    const originals=[...root.querySelectorAll('.landscape-auto')];
-    if(!originals.length)return true;
+    const failed=new Set(),groups=fitGroups(root,'.landscape-auto');
+    if(!groups.size)return failed;
     const host=node('div');host.id='print-measure-landscape';host.setAttribute('aria-hidden','true');document.body.append(host);
     // safety: 실제 인쇄 엔진의 줄바꿈 차이로 마지막 행이 잘리지 않도록 표 아래에 약 1.6mm 여유를 둡니다.
-    const minFont=4.4,maxFont=6.65,safety=6;let common=maxFont,fits=true;
+    const minFont=4.4,maxFont=6.65,safety=6;
     try{
-      originals.forEach(original=>{
-        const page=original.cloneNode(true);host.replaceChildren(page);
-        const table=page.querySelector('.brochure-table');
-        page.style.setProperty('--landscape-font',minFont+'pt');
-        page.style.setProperty('--landscape-head-font',Math.max(4.4,minFont-.05)+'pt');
-        let available=landscapeAvailableHeight(page,table);
-        if(available<=safety||table.getBoundingClientRect().height>available-safety){fits=false;return;}
-        let low=minFont,high=maxFont;
-        for(let i=0;i<14;i++){
-          const size=(low+high)/2;page.style.setProperty('--landscape-font',size+'pt');page.style.setProperty('--landscape-head-font',Math.max(4.4,size-.05)+'pt');
-          available=landscapeAvailableHeight(page,table);
-          if(table.getBoundingClientRect().height<=available-safety)low=size;else high=size;
+      groups.forEach((originals,key)=>{
+        let common=maxFont,fits=true;
+        for(const original of originals){
+          const page=original.cloneNode(true);host.replaceChildren(page);
+          const table=page.querySelector('.brochure-table');
+          page.style.setProperty('--landscape-font',minFont+'pt');
+          page.style.setProperty('--landscape-head-font',Math.max(4.4,minFont-.05)+'pt');
+          let available=landscapeAvailableHeight(page,table);
+          if(available<=safety||table.getBoundingClientRect().height>available-safety){fits=false;break;}
+          let low=minFont,high=maxFont;
+          for(let i=0;i<14;i++){
+            const size=(low+high)/2;page.style.setProperty('--landscape-font',size+'pt');page.style.setProperty('--landscape-head-font',Math.max(4.4,size-.05)+'pt');
+            available=landscapeAvailableHeight(page,table);
+            if(table.getBoundingClientRect().height<=available-safety)low=size;else high=size;
+          }
+          common=Math.min(common,Math.floor(low*100)/100);
         }
-        common=Math.min(common,Math.floor(low*100)/100);
+        if(!fits){failed.add(key);return;}
+        originals.forEach(page=>{
+          page.style.setProperty('--landscape-font',common+'pt');page.style.setProperty('--landscape-head-font',Math.max(4.4,common-.05)+'pt');
+          const table=page.querySelector('.brochure-table');
+          table.style.setProperty('height','auto','important');
+          table.style.setProperty('align-self','stretch','important');
+        });
       });
-      if(!fits)return false;
-      originals.forEach(page=>{
-        page.style.setProperty('--landscape-font',common+'pt');page.style.setProperty('--landscape-head-font',Math.max(4.4,common-.05)+'pt');
-        const table=page.querySelector('.brochure-table');
-        table.style.setProperty('height','auto','important');
-        table.style.setProperty('align-self','stretch','important');
-      });
-      return true;
+      return failed;
     }finally{host.remove();}
   }
-  function buildCompactPage(products,cols,index,total,startIndex){
+  function buildCompactPage(products,cols,index,total,startIndex,section){
     const page=node('article',undefined,'compact-page');
+    if(section){page.dataset.fitGroup=section.key;if(section.key!=='main')page.classList.add(`compact-page--${section.key}`);}
     const header=node('header',undefined,'compact-header'),logo=node('img');logo.src='assets/echo-trading-logo.svg';logo.alt='Echo Trading';
-    header.append(logo,node('h1',$('print-title').value.trim()||'제품 소개자료'),node('span',`${index} / ${total}`));page.append(header);
+    header.append(logo,node('h1',$('print-title').value.trim()||'제품 소개자료'));
+    if(section&&section.label)header.append(node('span',`${section.label} · ${section.products.length}개`,'compact-section'));
+    header.append(node('span',`${index} / ${total}`,'compact-page-no'));page.append(header);
     const content=node('div',undefined,'compact-content'),flow=node('div',undefined,'compact-flow');content.append(flow);
     if($('print-customer').value.trim())flow.append(node('p',`${$('print-customer').value.trim()} 귀중`,'compact-customer'));
     if(index===1&&$('print-memo').value.trim())flow.append(node('p',$('print-memo').value.trim(),'compact-memo'));
@@ -252,52 +283,60 @@
     return page;
   }
   function fitCompact(root){
-    const originals=[...root.querySelectorAll('.compact-page')];
-    if(!originals.length)return true;
+    const failed=new Set(),groups=fitGroups(root,'.compact-page');
+    if(!groups.size)return failed;
     const host=node('div');host.id='print-measure';host.setAttribute('aria-hidden','true');document.body.append(host);
-    const minFont=4.2,maxFont=7.2;let common=maxFont,fits=true;
+    const minFont=4.2,maxFont=7.2;
     try{
-      originals.forEach(original=>{
-        const page=original.cloneNode(true);host.replaceChildren(page);
-        const content=page.querySelector('.compact-content'),flow=page.querySelector('.compact-flow'),table=page.querySelector('.compact-table');
-        table.style.height='auto';
-        const top=page.querySelector('.compact-header').getBoundingClientRect().height+6;
-        content.style.top=top+'px';original.querySelector('.compact-content').style.top=top+'px';
-        const available=content.getBoundingClientRect().height-4;
-        if(available<=0){fits=false;return;}
-        page.style.setProperty('--compact-font',minFont+'pt');
-        if(flow.getBoundingClientRect().height>available){fits=false;return;}
-        let low=minFont,high=maxFont;
-        for(let i=0;i<14;i++){
-          const size=(low+high)/2;page.style.setProperty('--compact-font',size+'pt');
-          if(flow.getBoundingClientRect().height<=available)low=size;else high=size;
+      groups.forEach((originals,key)=>{
+        let common=maxFont,fits=true;
+        for(const original of originals){
+          const page=original.cloneNode(true);host.replaceChildren(page);
+          const content=page.querySelector('.compact-content'),flow=page.querySelector('.compact-flow'),table=page.querySelector('.compact-table');
+          table.style.height='auto';
+          const top=page.querySelector('.compact-header').getBoundingClientRect().height+6;
+          content.style.top=top+'px';original.querySelector('.compact-content').style.top=top+'px';
+          const available=content.getBoundingClientRect().height-4;
+          if(available<=0){fits=false;break;}
+          page.style.setProperty('--compact-font',minFont+'pt');
+          if(flow.getBoundingClientRect().height>available){fits=false;break;}
+          let low=minFont,high=maxFont;
+          for(let i=0;i<14;i++){
+            const size=(low+high)/2;page.style.setProperty('--compact-font',size+'pt');
+            if(flow.getBoundingClientRect().height<=available)low=size;else high=size;
+          }
+          common=Math.min(common,Math.floor(low*100)/100);
         }
-        common=Math.min(common,Math.floor(low*100)/100);
+        if(!fits){failed.add(key);return;}
+        originals.forEach(page=>page.style.setProperty('--compact-font',common+'pt'));
+        originals.forEach(page=>{
+          const content=page.querySelector('.compact-content'),table=page.querySelector('.compact-table');
+          table.style.height='auto';
+          const tableTop=table.offsetTop;
+          // offsetHeight 는 미리보기 확대·축소(transform)의 영향을 받지 않습니다.
+          const target=Math.max(table.offsetHeight,content.clientHeight-tableTop);
+          table.style.height=Math.floor(target)+'px';
+        });
       });
-      if(!fits)return false;
-      originals.forEach(page=>page.style.setProperty('--compact-font',common+'pt'));
-      originals.forEach(page=>{
-        const content=page.querySelector('.compact-content'),flow=page.querySelector('.compact-flow'),table=page.querySelector('.compact-table');
-        table.style.height='auto';
-        const tableTop=table.offsetTop;
-        // offsetHeight 는 미리보기 확대·축소(transform)의 영향을 받지 않습니다.
-        const target=Math.max(table.offsetHeight,content.clientHeight-tableTop);
-        table.style.height=Math.floor(target)+'px';
-      });
-      return true;
+      return failed;
     }finally{host.remove();}
   }
   function buildBodySheet(){
-    return BodyPrint.build(selected(),{fields:fieldMemory.body,title:$('print-title').value.trim()||BodyPrint.DEFAULT_TITLE,customer:$('print-customer').value.trim(),memo:$('print-memo').value.trim(),companyName,contactLine,printDate:printDate()});
+    const foodform=foodformOn()?{position:foodformEnd()?'end':'start',label:Rules.FOODFORM_LABEL,match:Rules.isFoodform}:null;
+    return BodyPrint.build(printable().items,{fields:fieldMemory.body,title:$('print-title').value.trim()||BodyPrint.DEFAULT_TITLE,customer:$('print-customer').value.trim(),memo:$('print-memo').value.trim(),companyName,contactLine,printDate:printDate(),foodform});
   }
-  function buildSheet(pageCountOverride=null){
+  const maxPerPage=()=>portrait()?50:25;
+  // Foodform® 구역은 한 장에 모으는 것부터 시도합니다(넘치면 자동으로 장수를 늘림). 나머지는 페이지당 최대 개수 기준.
+  const firstPageCount=section=>section.key==='foodform'?1:Math.max(1,Math.ceil(section.products.length/maxPerPage()));
+  function buildSheet(sections=[],counts=new Map()){
     if(bodyMode())return buildBodySheet();
-    const products=selected().sort(printSort),cols=columns(),sheet=node('div',undefined,'brochure');
-    if(!products.length){sheet.append(node('p','출력할 제품 범위를 선택하거나 목록에서 제품을 담아 주세요.','brochure-empty'));return sheet;}
-    const maxPerPage=portrait()?50:25;
-    const pageCount=pageCountOverride||Math.max(1,Math.ceil(products.length/maxPerPage)),pages=balancedChunks(products,pageCount);let offset=0;
+    const cols=columns(),sheet=node('div',undefined,'brochure');
+    if(!sections.some(s=>s.products.length)){sheet.append(node('p','출력할 제품 범위를 선택하거나 목록에서 제품을 담아 주세요.','brochure-empty'));return sheet;}
     if(portrait())sheet.classList.add('compact-brochure');
-    pages.forEach((items,i)=>{sheet.append(portrait()?buildCompactPage(items,cols,i+1,pages.length,offset):buildPage(items,cols,i+1,pages.length,offset));offset+=items.length;});
+    const plan=[];
+    sections.forEach(section=>balancedChunks(section.products,counts.get(section.key)||firstPageCount(section)).forEach(items=>plan.push({section,items})));
+    let offset=0;
+    plan.forEach(({section,items},i)=>{sheet.append(portrait()?buildCompactPage(items,cols,i+1,plan.length,offset,section):buildPage(items,cols,i+1,plan.length,offset,section));offset+=items.length;});
     return sheet;
   }
   function buildPreview(){
@@ -307,25 +346,49 @@
     $('print-preview').classList.toggle('portrait-preview',portrait()||body);
     $('print-preview').classList.toggle('body-preview',body);
     if($('print-layout-note'))$('print-layout-note').textContent=body
-      ?'인체 기능·원료 종류 분류별로 묶어 출력합니다. 한 분류가 끝나고 여백이 남으면 다음 분류를 같은 페이지에 이어 배치해 종이를 아낍니다(분류마다 새 페이지는 아래 「페이지 구성」에서 선택). 실제 행 높이를 측정해 페이지당 최대 22개까지 배치하며 글자 크기는 줄이지 않습니다. 분류는 원료 탐색용 참고 분류입니다.'
-      :'가로형은 페이지당 최대 25개, 세로형은 최대 50개까지 배치합니다. 두 방향 모두 필요한 최소 장수를 자동 계산하고 각 페이지 표 높이를 인쇄영역에 맞춰 자동 확장합니다.';
+      ?'인체 기능·원료 종류 분류별로 묶어 출력합니다. Foodform® 별도 페이지를 켜면 Foodform® 제품은 기능 분류 대신 전용 구역(FF)에 모이고 각 제품의 기능 분류는 「관련」 태그로 표시합니다. 한 분류가 끝나고 여백이 남으면 다음 분류를 같은 페이지에 이어 배치해 종이를 아낍니다(분류마다 새 페이지는 아래 「페이지 구성」에서 선택). 실제 행 높이를 측정해 페이지당 최대 22개까지 배치하며 글자 크기는 줄이지 않습니다. 분류는 원료 탐색용 참고 분류입니다.'
+      :'가로형은 페이지당 최대 25개, 세로형은 최대 50개까지 배치합니다. 두 방향 모두 필요한 최소 장수를 자동 계산하고 각 페이지 표 높이를 인쇄영역에 맞춰 자동 확장합니다. Foodform® 별도 페이지는 개수 제한 없이 한 장에 모으는 것을 먼저 시도하고(그 페이지만 글자 크기를 따로 맞춤), 넘칠 때만 장수를 늘립니다.';
     $('print-help').textContent=body
       ?'A4 세로 · 분류별 배치(여백이 남으면 여러 분류를 한 페이지에) · 페이지당 최대 22개 · 순번은 출력 목록 기준 1부터 연속. 인쇄창에서 용지 A4, 배율 100%(기본), 배경 그래픽 켜기를 선택해 주세요.'
       :portrait()
       ?'A4 세로 · 페이지당 최대 50개 · 최소 장수 자동 계산 · No./국내 식품분류/대분류 고정. PDF 저장 시 브라우저 머리글·바닥글을 꺼 주세요.'
       :'A4 가로 · 페이지당 최대 25개 · 최소 장수 자동 계산 · No./국내 식품분류/대분류/제품명·코드 고정 · 분류 셀 자동 병합. PDF 저장 시 배경 그래픽을 켜고 브라우저 머리글·바닥글을 꺼 주세요.';
+    const result=printable(),dropped=new Map(result.removed.map(r=>[r.product.id,r.keptAs]));
+    const sections=printSections(result.items);
     $('print-chosen').replaceChildren();
-    selected().sort(printSort).forEach(p=>{const item=node('li');item.append(node('span',`${p.name} · ${p.id}`));const remove=node('button','제외');remove.type='button';remove.setAttribute('aria-label',`${p.name} 선택 제외`);remove.addEventListener('click',()=>{activePreset='';chosen.delete(p.id);sync();updatePresetButtons();buildPreview();});item.append(remove);$('print-chosen').append(item);});
+    selected().sort(printSort).forEach(p=>{
+      const item=node('li'),kept=dropped.get(p.id);item.append(node('span',`${p.name} · ${p.id}`));
+      if(kept){item.classList.add('is-duplicate');item.append(node('small',`같은 제품명 · ${kept.id}로 1개만 출력`,'print-chosen-note'));}
+      const remove=node('button','제외');remove.type='button';remove.setAttribute('aria-label',`${p.name} 선택 제외`);remove.addEventListener('click',()=>{activePreset='';chosen.delete(p.id);sync();updatePresetButtons();buildPreview();});item.append(remove);$('print-chosen').append(item);
+    });
     if(chosen.size&&body)$('print-preview').replaceChildren(buildBodySheet());
     else if(chosen.size){
-      const maxPerPage=portrait()?50:25,fit=portrait()?fitCompact:fitLandscape;
-      let pageCount=Math.max(1,Math.ceil(chosen.size/maxPerPage)),ok=false;
-      while(pageCount<=chosen.size&&!ok){$('print-preview').replaceChildren(buildSheet(pageCount));ok=fit($('print-preview'));if(!ok)pageCount++;}
-      if(!ok){$('print-preview').replaceChildren(buildSheet(chosen.size));fit($('print-preview'));}
+      const fit=portrait()?fitCompact:fitLandscape;
+      const counts=new Map(sections.map(section=>[section.key,firstPageCount(section)]));
+      // 구역마다 넘치면 그 구역의 장수만 하나씩 늘려 다시 맞춥니다.
+      for(let guard=0;guard<1000;guard++){
+        $('print-preview').replaceChildren(buildSheet(sections,counts));
+        const failed=fit($('print-preview'));
+        if(!failed.size)break;
+        let grew=false;
+        sections.forEach(section=>{const n=counts.get(section.key);if(failed.has(section.key)&&n<section.products.length){counts.set(section.key,n+1);grew=true;}});
+        if(!grew)break;
+      }
     }else $('print-preview').replaceChildren(buildSheet());
     $('print-now').disabled=!chosen.size;
-    const pages=$('print-preview').querySelectorAll(body?BodyPrint.pageSelector:portrait()?'.compact-page':'.brochure-page').length;
-    $('print-selection-total').textContent=`출력 제품 ${chosen.size}개 · ${pages}페이지`;
+    const pageNodes=[...$('print-preview').querySelectorAll(body?BodyPrint.pageSelector:portrait()?'.compact-page':'.brochure-page')],pages=pageNodes.length;
+    const outCount=result.items.length;
+    $('print-selection-total').textContent=`출력 제품 ${outCount}개 · ${pages}페이지`+(result.removed.length?` · 같은 제품명 ${result.removed.length}개 제외 (선택 ${chosen.size}개)`:'');
+    if($('print-arrange-note')){
+      const notes=[];
+      const ffCount=Rules?result.items.filter(Rules.isFoodform).length:0;
+      if(foodformOn()&&ffCount){
+        const ffPages=pageNodes.filter(page=>page.dataset.fitGroup==='foodform'||page.dataset.section==='foodform').length;
+        notes.push(`${Rules.FOODFORM_LABEL} ${ffCount}개 → 별도 ${ffPages}페이지(${foodformEnd()?'맨 뒤':'맨 앞'})`);
+      }else if(foodformOn()&&chosen.size)notes.push(`선택한 제품 중 ${Rules.FOODFORM_LABEL} 제품이 없습니다`);
+      if(dedupeOn()&&chosen.size)notes.push(result.removed.length?`같은 제품명 ${result.removed.length}개 제외(제외 제품은 아래 「출력 제품」 목록에 표시)`:'같은 제품명 중복 없음');
+      $('print-arrange-note').textContent=notes.join(' · ');
+    }
     $('print-page-count-label').textContent=`전체 분량 · ${pages}장 자동`;
     if(dialog.open)applyZoom();
   }
@@ -360,6 +423,7 @@
   document.querySelectorAll('[data-open-print]').forEach(button=>button.addEventListener('click',openDialog));
   $('close-print').addEventListener('click',()=>dialog.close());
   ['print-title','print-customer','print-memo'].forEach(id=>$(id).addEventListener('input',buildPreview));
+  ['print-foodform','print-foodform-position','print-dedupe'].forEach(id=>{if($(id))$(id).addEventListener('change',()=>{if(id==='print-foodform'&&$('print-foodform-position'))$('print-foodform-position').disabled=!$('print-foodform').checked;buildPreview();});});
   function preparePrint(){
     if(!chosen.size||printPrepared)return;
     const sheet=$('print-preview').firstElementChild.cloneNode(true);

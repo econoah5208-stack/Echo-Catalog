@@ -5,10 +5,11 @@
 //   node scripts/verify_catalog.mjs
 //   node scripts/verify_catalog.mjs --compare catalog-import.json      # Excel 변환 결과와 필드 단위 비교
 //   node scripts/verify_catalog.mjs --expect 일반식품=300,건강기능식품=42,식품첨가물=43,일반원료=179,기능성부원료=121
+//   node scripts/verify_catalog.mjs --duplicates   # 인쇄 시 한 번만 출력되는 같은 제품명 묶음 전체 보기
 //
 // 점검 항목: 제품 수·코드 중복, 공개 필드 화이트리스트(제조사·가격 등 비공개 필드 차단),
 // 국내 식품분류·일반식품 하위 분류 수치, 32개 대분류 → 8개 원료 분야 매핑 누락, 원산지 국가 수,
-// 공개값 안의 내부 메모 의심 문구.
+// 공개값 안의 내부 메모 의심 문구, 인체 기능 분류, 출력 정리 규칙(Foodform® 별도 페이지 · 같은 제품명 중복).
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -20,7 +21,7 @@ const option = name => { const i = args.indexOf(name); return i >= 0 ? args[i + 
 
 const context = { window: {} };
 vm.createContext(context);
-for (const file of ['data/catalog.js', 'data/taxonomy.js', 'data/site-config.js', 'data/body-functions.js']) {
+for (const file of ['data/catalog.js', 'data/taxonomy.js', 'data/site-config.js', 'data/body-functions.js', 'data/print-rules.js']) {
   vm.runInContext(await readFile(path.join(root, file), 'utf8'), context, { filename: file });
 }
 const products = context.window.ECHO_PRODUCTS;
@@ -100,6 +101,19 @@ if (bfData && bf) {
   if (bodyTotal !== products.length) errors.push(`인체 기능 분류 합계(${bodyTotal})가 전체 제품 수와 다릅니다`);
 } else warnings.push('data/body-functions.js 를 불러오지 못했습니다(인체 기능형 출력 불가)');
 
+// 6-2. 출력 정리 규칙(data/print-rules.js) — 인쇄 / PDF 저장 시 Foodform® 별도 페이지 · 같은 제품명 한 번만 출력
+const pr = context.window.EchoPrintRules;
+let printSummary = null;
+if (pr) {
+  const listed = [...pr.sameProduct.flat(), ...pr.keepSeparate];
+  listed.filter(id => !ids.includes(id)).forEach(id => errors.push(`print-rules.js 에 있는 제품코드가 데이터에 없습니다: ${id}`));
+  listed.filter((id, i) => listed.indexOf(id) !== i).forEach(id => errors.push(`print-rules.js 에서 제품코드가 두 번 이상 지정되었습니다: ${id}`));
+  pr.sameProduct.forEach(g => { if (g.length < 2) warnings.push(`print-rules.js sameProduct 묶음에 제품이 1개뿐입니다: ${g.join(', ')}`); });
+  const visible = products.filter(p => p.visible !== false);
+  const d = pr.dedupe(visible);
+  printSummary = { foodform: visible.filter(pr.isFoodform).length, out: d.items.length, removed: d.removed.length, groups: d.groups };
+} else warnings.push('data/print-rules.js 를 불러오지 못했습니다(Foodform® 별도 페이지·중복 제거 없이 출력)');
+
 // 7. Excel 변환 결과와 비교
 const compareFile = option('--compare');
 if (compareFile) {
@@ -132,6 +146,11 @@ line('원료 분야 합계', `${areaTotal}개`);
 line('해외 원산지 국가', `${countries.size}개국`);
 if (bfData) line(`인체 기능 분류(${bfData.areas.length})`, bfData.areas.map(a => `${a.no} ${a.name} ${bodyCounts[a.id] || 0}`).join(' · '));
 line('Stock 운용', Object.entries(count(products, p => p.stock)).map(([k, v]) => `${k} ${v}`).join(' / '));
+if (printSummary) {
+  line('Foodform® 제품', `${printSummary.foodform}개 (인쇄 시 별도 페이지)`);
+  line('같은 제품명(전체 출력 시)', `${printSummary.groups.length}묶음 · ${printSummary.removed}개 제외 → ${printSummary.out}개 출력`);
+  if (args.includes('--duplicates')) printSummary.groups.forEach(g => console.log(`    ${g[0].id} ${g[0].name.replace(/\s+/g, ' ')}  ← 제외 ${g.slice(1).map(p => p.id + (p.name !== g[0].name ? ` (${p.name.replace(/\s+/g, ' ')})` : '')).join(', ')}`));
+}
 if (warnings.length) { console.log(`\n확인 필요 ${warnings.length}건`); warnings.forEach(w => console.log('  - ' + w)); }
 if (errors.length) { console.log(`\n오류 ${errors.length}건`); errors.forEach(e => console.log('  ✕ ' + e)); process.exit(1); }
 console.log('\n오류 없음');
