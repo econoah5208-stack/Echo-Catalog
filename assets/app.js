@@ -1,10 +1,17 @@
 /* 고객 화면: 제품 검색·분류·목록·상세보기.
  * data/catalog.js(제품), data/taxonomy.js(원료 분야 매핑), data/site-config.js(연락처)를 사용합니다.
+ * v9.4: data/catalog-rules.js 규칙으로 같은 제품명 중복 제품은 대표 1개만 보여 줍니다(숨긴 제품코드로 검색해도 대표 제품이 나옴).
  * 원료 분야(8개)와 국내 식품분류(건강기능식품·일반식품·식품첨가물)는 서로 다른 탐색 축입니다. */
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const items = Array.isArray(window.ECHO_PRODUCTS) ? window.ECHO_PRODUCTS.filter(p => p.visible !== false) : [];
+  const rules = window.EchoCatalogRules || null;
+  const source = Array.isArray(window.ECHO_PRODUCTS) ? window.ECHO_PRODUCTS : [];
+  const siteList = rules ? rules.siteProducts(source) : { items: source.filter(p => p.visible !== false), removed: [], aliasOf: {} };
+  const items = siteList.items;
+  const aliasOf = siteList.aliasOf || {};
+  const hiddenCodes = new Map(); // 대표 제품코드 → 숨긴 제품코드들(검색용)
+  siteList.removed.forEach(r => { const list = hiddenCodes.get(r.keptAs.id) || []; list.push(r.product.id); hiddenCodes.set(r.keptAs.id, list); });
   const tax = window.EchoTaxonomy || { groups: [], group: () => null, groupOf: () => '' };
   const site = window.ECHO_SITE || {};
   const pageSize = 50;
@@ -19,7 +26,7 @@
   const el = (tag, text, cls) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (cls) node.className = cls; return node; };
   const icon = path => { const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg'), p = document.createElementNS(ns, 'path'); svg.setAttribute('width', '14'); svg.setAttribute('height', '14'); svg.setAttribute('viewBox', '0 0 16 16'); svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '1.8'); svg.setAttribute('aria-hidden', 'true'); p.setAttribute('d', path); svg.append(p); return svg; };
   const areaById = new Map(items.map(p => [p.id, tax.groupOf(p)]));
-  const corpus = new Map(items.map(p => [p.id, normalized(Object.values(p).join(' '))]));
+  const corpus = new Map(items.map(p => [p.id, normalized(Object.values(p).concat(hiddenCodes.get(p.id) || []).join(' '))]));
   const areaOf = p => areaById.get(p.id) || '';
   const areaName = id => (tax.group(id) || {}).name || '';
   const isMobile = () => window.matchMedia('(max-width: 960px)').matches;
@@ -337,7 +344,7 @@
       if (options.scroll !== false) document.getElementById('catalog').scrollIntoView({ block: 'start', behavior: 'auto' });
       if (options.focusSearch) $('search').focus({ preventScroll: true });
     },
-    showProduct(id) { const p = items.find(x => x.id === id); if (p) detail(p); },
+    showProduct(id) { const key = aliasOf[id] || id; const p = items.find(x => x.id === key); if (p) detail(p); },
     count(filters = {}) { return results({ ...blank, ...filters }).length; }
   };
 

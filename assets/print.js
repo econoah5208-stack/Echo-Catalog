@@ -2,7 +2,9 @@
 (() => {
   'use strict';
   const $=id=>document.getElementById(id);
-  const all=(window.ECHO_PRODUCTS||[]).filter(p=>p.visible!==false);
+  // v9.4: 홈페이지 목록과 같은 기준(data/catalog-rules.js — 같은 제품명 중복은 대표 1개)으로 출력 범위를 정합니다.
+  const Rules=window.EchoCatalogRules||window.EchoPrintRules||null;
+  const all=Rules?Rules.siteProducts(window.ECHO_PRODUCTS||[]).items:(window.ECHO_PRODUCTS||[]).filter(p=>p.visible!==false);
   const byId=new Map(all.map(p=>[p.id,p]));
   const chosen=new Set();
   let pageIds=[],returnToPreview=false,oldTitle='',activePreset='',printPrepared=false;
@@ -51,9 +53,14 @@
       ||a.name.localeCompare(b.name,'ko')
       ||a.id.localeCompare(b.id);
   }
-  // 제품 정리(v9.4): Foodform® 별도 페이지 · 같은 제품명 한 번만 출력. 규칙은 data/print-rules.js 에서 관리합니다.
-  const Rules=window.EchoPrintRules||null;
+  // 제품 정리(v9.4): Foodform® 별도 페이지 · 같은 제품명 한 번만 출력. 규칙은 data/catalog-rules.js 에서 관리합니다.
   if(!Rules&&$('print-arrange'))$('print-arrange').hidden=true;
+  // 홈페이지 목록에서 이미 중복을 뺀 경우 출력 쪽 선택 항목은 숨기고 안내만 표시합니다.
+  if(Rules&&Rules.HIDE_DUPLICATES_ON_SITE&&$('print-dedupe')){
+    const label=$('print-dedupe').closest('label'),hidden=Rules.siteProducts(window.ECHO_PRODUCTS||[]).removed.length;
+    label.hidden=true;
+    label.after(node('p',`같은 제품명 중복 제품은 홈페이지 목록과 출력 모두 1개만 표시됩니다${hidden?` (현재 ${hidden}개 숨김)`:''}. 규격·함량이 다르면 각각 표시합니다.`,'print-arrange__info'));
+  }
   const foodformOn=()=>!!Rules&&!!$('print-foodform')&&$('print-foodform').checked;
   const foodformEnd=()=>!!$('print-foodform-position')&&$('print-foodform-position').value==='end';
   const dedupeOn=()=>!!Rules&&!!$('print-dedupe')&&$('print-dedupe').checked;
@@ -386,7 +393,7 @@
         const ffPages=pageNodes.filter(page=>page.dataset.fitGroup==='foodform'||page.dataset.section==='foodform').length;
         notes.push(`${Rules.FOODFORM_LABEL} ${ffCount}개 → 별도 ${ffPages}페이지(${foodformEnd()?'맨 뒤':'맨 앞'})`);
       }else if(foodformOn()&&chosen.size)notes.push(`선택한 제품 중 ${Rules.FOODFORM_LABEL} 제품이 없습니다`);
-      if(dedupeOn()&&chosen.size)notes.push(result.removed.length?`같은 제품명 ${result.removed.length}개 제외(제외 제품은 아래 「출력 제품」 목록에 표시)`:'같은 제품명 중복 없음');
+      if(dedupeOn()&&chosen.size&&!(Rules&&Rules.HIDE_DUPLICATES_ON_SITE))notes.push(result.removed.length?`같은 제품명 ${result.removed.length}개 제외(제외 제품은 아래 「출력 제품」 목록에 표시)`:'같은 제품명 중복 없음');
       $('print-arrange-note').textContent=notes.join(' · ');
     }
     $('print-page-count-label').textContent=`전체 분량 · ${pages}장 자동`;

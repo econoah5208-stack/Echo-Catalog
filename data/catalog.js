@@ -477,7 +477,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0007",
-    "name": "가시오가피농축액 65bx",
+    "name": "가시오가피농축액 65brix",
     "category": "식물추출물",
     "subcategory": "기타 식물추출물",
     "marker": "",
@@ -1503,7 +1503,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "BE0061",
-    "name": "여주추출물분말",
+    "name": "여주추출분말",
     "category": "식물추출물",
     "subcategory": "채소추출물",
     "marker": "",
@@ -6690,7 +6690,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PR0018",
-    "name": "엘라스틴 (=프로라스틴)",
+    "name": "엘라스틴",
     "category": "콜라겐·펩타이드",
     "subcategory": "엘라스틴",
     "marker": "Elastin; Peptide Profile / 엘라스틴·펩타이드 조성",
@@ -6709,7 +6709,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PR0019",
-    "name": "엘라스틴 (Nutraceuticals)",
+    "name": "엘라스틴",
     "category": "콜라겐·펩타이드",
     "subcategory": "엘라스틴",
     "marker": "Elastin; Peptide Profile / 엘라스틴·펩타이드 조성",
@@ -6747,7 +6747,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PR0021",
-    "name": "저분자피쉬콜라겐(3000D->2000D)",
+    "name": "저분자피쉬콜라겐(2000D)",
     "category": "콜라겐·펩타이드",
     "subcategory": "콜라겐",
     "marker": "Collagen/Protein; Molecular Weight / 콜라겐·단백질·분자량",
@@ -6975,7 +6975,7 @@ window.ECHO_PRODUCTS = [
   },
   {
     "id": "PR0033",
-    "name": "폴리감마글루탐산 (PGA)",
+    "name": "폴리감마글루탐산",
     "category": "기타 원료",
     "subcategory": "폴리감마글루탐산",
     "marker": "Poly-gamma-glutamic Acid / PGA",

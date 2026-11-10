@@ -50,7 +50,7 @@
     {
       id: 'lipids', no: '06', name: '유지·지질 소재', en: 'Oils & Lipids',
       desc: '정제어유, 레시틴, 식물성 유지와 지질 계열 소재',
-      highlights: ['LI0007', 'LI0012', 'LI0009'],
+      highlights: ['LI0008', 'LI0012', 'LI0009'], // v9.4: LI0007 은 같은 제품명 중복으로 숨겨져 LI0008(정제어유 18/12 TG)로 교체
       categories: ['유지류', '유화제']
     },
     {
